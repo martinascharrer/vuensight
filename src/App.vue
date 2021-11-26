@@ -12,6 +12,12 @@ export default defineComponent({
   components: {
     HelloWorld,
   },
+  props: {
+    test: {
+      type: String,
+      default: 'Test',
+    },
+  },
 });
 </script>
 

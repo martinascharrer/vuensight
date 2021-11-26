@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "types": [
+      "vue-eslint-parser",
+      // "express",
+      // "ws",
+      "node"
+    ],
+    "outDir": "../dist"
+  },
+  "include": [
+    "*.ts"
+    // "../../types/index.d.ts"
+  ]
+}
