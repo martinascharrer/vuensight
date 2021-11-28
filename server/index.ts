@@ -1,27 +1,44 @@
-import { readdirSync, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
+import { normalize } from 'path';
 import { parse } from 'vue-eslint-parser';
+// eslint-disable-next-line import/extensions,import/no-unresolved
 import { ESLintProgram } from 'vue-eslint-parser/ast/nodes';
-import Parser from './Parser';
-import { getImportDeclaration, getProps } from './analyzer';
+
+import { getProps } from './analyzer';
+import { getVueFilePaths } from './files';
 
 const parserOption = {
   ecmaVersion: 2018,
   sourceType: 'module',
 };
 
-(() => {
-  Parser.parse();
-  const BASE_DIR = 'C:\\Users\\marti\\Documents\\FH\\Master\\3-semester\\Master Thesis\\vue-component-insight\\src\\';
-  const files = readdirSync(BASE_DIR);
-  const file = readFileSync(BASE_DIR + files[0], { encoding: 'utf-8' });
+type VueComponent = {
+  fullPath: string,
+  fileName: string,
+  file: string,
+  props: string | null,
+}
 
-  // using vue-eslint-parser package.
-  const esLintProgram: ESLintProgram = parse(file, parserOption);
-  if (esLintProgram.tokens) {
-    const props = getProps(esLintProgram.tokens);
-    console.log(props);
-  }
+(async () => {
+  const paths = await getVueFilePaths(process.cwd());
+  console.log(`Found ${paths.length} Vue components`);
 
-  const imports = getImportDeclaration(esLintProgram.body);
-  console.log(imports);
+  const components: VueComponent[] = [];
+  paths.forEach((path: string) => {
+    const pathNormalized = normalize(path);
+    const file = readFileSync(pathNormalized, { encoding: 'utf-8' });
+    const fileName = pathNormalized.replace(normalize(process.cwd()), '');
+    const esLintProgram: ESLintProgram = parse(file, parserOption);
+    const props = esLintProgram.tokens ? getProps(esLintProgram.tokens) : null;
+
+    components.push({
+      fullPath: pathNormalized,
+      file,
+      fileName,
+      props,
+    });
+
+    console.log('component: ', fileName, ', props: ', props);
+  });
+  console.log(`Parsed ${components.length} Vue components`);
 })();
