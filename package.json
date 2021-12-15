@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "bin": {
-    "vci": "bin/vci.ts"
+    "v-insight": "bin/vci.js"
   },
   "repository": {
     "type": "git",
