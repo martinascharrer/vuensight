@@ -1,13 +1,19 @@
-export type Props = {
+import { PropType } from '@vuese/parser';
+
+export type Prop = {
   name: string,
-  type: string | undefined,
+  type: PropType | undefined,
   required: boolean | undefined,
-  default: boolean | undefined,
+  default: string | undefined,
 }
 
-export type Events = {
+export type Event = {
   name: string,
-  params: string,
+  isSync: boolean | undefined,
+}
+
+export type Slot = {
+  name: string,
 }
 
 export type Dependency = {
@@ -19,8 +25,9 @@ export type Dependency = {
 export type VueComponent = {
   fullPath: string,
   fileName: string,
-  file: string,
-  props: string | null, // TODO: use Props[] data-type here (adjust props-retrieval)
-  events: Events[],
+  fileContent: string,
+  props: Prop[],
+  events: Event[],
+  slots: Slot[],
   dependencies: Dependency[],
 }

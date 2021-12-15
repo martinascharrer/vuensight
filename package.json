@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
   "dependencies": {
+    "@vuese/parser": "^2.10.3",
     "commander": "^8.3.0",
     "core-js": "^3.6.5",
     "dependency-cruiser": "^11.0.0",
     "fs": "0.0.1-security",
     "glob": "^7.2.0",
-    "vue": "^3.0.0",
-    "vue-eslint-parser": "^8.0.1"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",

@@ -1,18 +1,11 @@
 import { readFileSync } from 'fs';
 import { normalize } from 'path';
-import { parse } from 'vue-eslint-parser';
-// eslint-disable-next-line import/extensions,import/no-unresolved
-import { ESLintProgram } from 'vue-eslint-parser/ast/nodes';
 
-import { getProps } from './analyzer';
-import { formatDependencies, cruiseComponents } from './dependencies';
-import { getFileNameFromPath, getVueFilePaths } from './files';
 import { VueComponent } from '../types/index.d';
 
-const parserOption = {
-  ecmaVersion: 2018,
-  sourceType: 'module',
-};
+import { formatDependencies, cruiseComponents } from './dependencies';
+import { getFileNameFromPath, getVueFilePaths } from './files';
+import { parseComponent } from './parser';
 
 (async () => {
   const paths = await getVueFilePaths(process.cwd());
@@ -23,23 +16,31 @@ const parserOption = {
     const components: VueComponent[] = [];
     cruiseResult.output.modules.forEach((module) => {
       const pathNormalized = normalize(module.source);
-      const file = readFileSync(pathNormalized, { encoding: 'utf-8' });
+      const fileContent = readFileSync(pathNormalized, { encoding: 'utf-8' });
       const fileName = getFileNameFromPath(pathNormalized);
-      const esLintProgram: ESLintProgram = parse(file, parserOption);
-      const props = esLintProgram.tokens ? getProps(esLintProgram.tokens) : null;
       const dependencies = formatDependencies(module.dependencies);
 
       components.push({
         fullPath: pathNormalized,
-        file,
+        fileContent,
         fileName,
-        props,
+        props: [],
         events: [],
+        slots: [],
         dependencies,
       });
-      console.log('component: ', fileName, ', props: ', props, 'dependencies: ', dependencies);
     });
 
+    components.forEach((component) => {
+      parseComponent(component);
+      console.log(
+        'component: ', component.fileName,
+        'props: ', component.props.length,
+        'events: ', component.events.length,
+        'slots: ', component.slots.length,
+        'dependencies: ', component.dependencies.length,
+      );
+    });
     console.log(`Parsed ${components.length} Vue components`);
   }
 })();
