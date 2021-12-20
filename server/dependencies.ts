@@ -1,8 +1,11 @@
 import {
   cruise, ICruiseOptions, IDependency, IReporterOutput,
 } from 'dependency-cruiser';
+import { JSDOM } from 'jsdom';
+
 import { normalize } from 'path';
-import { Dependency } from '../types/index.d';
+import { Dependency, VueComponent } from '../types/index.d';
+import { kebabize } from './utils';
 
 const DEPCRUISE_OPTIONS: ICruiseOptions = {
   includeOnly: 'src',
@@ -31,4 +34,18 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
     });
   });
   return newDependencies;
+};
+
+// TODO: figure out a smarter way to get the dependency from the array
+//  maybe save the indices in a separate loop beforehand?
+export const getDependencyData = (components: VueComponent[], fullPath: string)
+  : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
+
+export const findDependencyUsages = (template: string, name: string): NodeListOf<Element> => {
+  const { document } = new JSDOM(template).window;
+  let dependencyUsages = document.querySelectorAll(name);
+  if (dependencyUsages.length === 0) {
+    dependencyUsages = document.querySelectorAll(kebabize(name));
+  }
+  return dependencyUsages;
 };

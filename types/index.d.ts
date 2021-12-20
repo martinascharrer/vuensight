@@ -18,13 +18,15 @@ export type Slot = {
 
 export type Dependency = {
   fullPath: string,
-  usedProps: int[], // indexOf used prop
-  usedEvents: int[], // indexOf used event
+  usedProps: number[], // indexOf used prop
+  usedEvents: number[], // indexOf used event
 }
 
 export type VueComponent = {
+  name: string,
   fullPath: string,
   fileName: string,
+  fileType: string,
   fileContent: string,
   props: Prop[],
   events: Event[],

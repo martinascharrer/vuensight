@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseComponent = void 0;
+exports.isPropUsed = exports.parseComponent = void 0;
 const parser_1 = require("@vuese/parser");
+const utils_1 = require("./utils");
 const parseComponent = (component) => {
     try {
         parser_1.parser(component.fileContent, {
@@ -31,7 +32,14 @@ const parseComponent = (component) => {
     }
 };
 exports.parseComponent = parseComponent;
-exports.default = {
-    parseComponent: exports.parseComponent,
+const isPropUsed = (template, prop) => {
+    const propFormats = [prop.name, `:${prop.name}`, `:${utils_1.kebabize(prop.name)}`, utils_1.kebabize(prop.name)];
+    let isUsed = false;
+    propFormats.forEach((format) => {
+        if (!isUsed)
+            isUsed = Boolean(template.attributes.getNamedItem(format));
+    });
+    return isUsed;
 };
+exports.isPropUsed = isPropUsed;
 //# sourceMappingURL=parser.js.map
