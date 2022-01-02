@@ -1,4 +1,4 @@
-import { VueComponent } from '../types/index.d';
+import { VueComponent } from '../types';
 import { getFileNameFromPath } from './files';
 import { getDependencyData } from './dependencies';
 

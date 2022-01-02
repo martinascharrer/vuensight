@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <img alt="Vue logo" src="assets/logo.png">
   <hello-world msg="Test" />
   <Test msg="Test" camel-case="asfd"/>
 </template>

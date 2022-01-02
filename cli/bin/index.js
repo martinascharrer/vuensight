@@ -4,7 +4,7 @@
 (async function main() {
   try {
     // eslint-disable-next-line import/extensions,global-require
-    require('../dist/index.js');
+    require('../../parser/dist'); // TODO: refactor this  - remove global require and include the parser package instead
   } catch (err) {
     console.log(err);
   }

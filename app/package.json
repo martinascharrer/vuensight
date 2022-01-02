@@ -1,7 +1,6 @@
 {
-  "name": "vue-component-insight",
+  "name": "@vue-component-insight/app",
   "version": "0.1.0",
-  "description": "Vue component insight tool.",
   "scripts": {
     "start": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
@@ -9,9 +8,7 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
-  "bin": {
-    "v-insight": "bin/vci.js"
-  },
+  "description": "This is the client application of Vue component insight.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
@@ -26,19 +23,11 @@
   },
   "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
   "dependencies": {
-    "@vuese/parser": "^2.10.3",
-    "commander": "^8.3.0",
     "core-js": "^3.6.5",
-    "dependency-cruiser": "^11.0.0",
-    "fs": "0.0.1-security",
-    "glob": "^7.2.0",
-    "jsdom": "^19.0.0",
     "vue": "^3.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
-    "@types/jsdom": "^16.2.14",
-    "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",

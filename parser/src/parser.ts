@@ -1,5 +1,5 @@
 import { parser } from '@vuese/parser';
-import { VueComponent, Prop } from '../types/index.d';
+import { VueComponent, Prop } from '../types';
 import { kebabize } from './utils';
 
 export const parseComponent = (component: VueComponent): void => {

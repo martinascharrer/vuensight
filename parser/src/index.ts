@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { normalize } from 'path';
 
-import { VueComponent } from '../types/index.d';
+import { VueComponent } from '../types';
 
 import {
   formatDependencies,
@@ -25,7 +25,7 @@ import { printComponent, printDependencies } from './component';
       const fileContent = readFileSync(pathNormalized, { encoding: 'utf-8' });
       const fileName = getFileNameFromPath(pathNormalized);
       const [name, fileType] = fileName.split('.');
-      const dependencies = formatDependencies(module.dependencies);
+      const dependencies = formatDependencies(module.dependencies)
 
       const component = {
         name,

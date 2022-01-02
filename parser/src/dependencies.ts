@@ -4,7 +4,7 @@ import {
 import { JSDOM } from 'jsdom';
 
 import { normalize } from 'path';
-import { Dependency, VueComponent } from '../types/index.d';
+import { Dependency, VueComponent } from '../types';
 import { kebabize } from './utils';
 
 const DEPCRUISE_OPTIONS: ICruiseOptions = {

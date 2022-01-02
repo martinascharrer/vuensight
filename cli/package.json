@@ -1,0 +1,25 @@
+{
+  "name": "@vue-component-insight/cli",
+  "version": "0.1.0",
+  "description": "Vue component insight cli.",
+  "main": "./bin/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+  },
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "bin": {
+    "vinsight": "./bin/index.js"
+  },
+  "keywords": [
+    "cli", "node.js"
+  ],
+  "author": "Martina Scharrer",
+  "license": "(MIT)",
+  "bugs": {
+    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+  },
+  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme"
+}
