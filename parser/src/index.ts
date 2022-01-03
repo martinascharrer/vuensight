@@ -10,7 +10,7 @@ import {
   findDependencyUsages,
 } from './dependencies';
 import { getFileNameFromPath, getTemplate, getVueFilePaths } from './files';
-import { isPropUsed, parseComponent } from './parser';
+import { isPropUsed, isEventUsed, parseComponent } from './parser';
 import { printComponent, printDependencies } from './component';
 
 (async () => {
@@ -58,6 +58,15 @@ import { printComponent, printDependencies } from './component';
                   const isIndexIncluded = dependency.usedProps.includes(propIndex);
                   if (isPropUsed(dependencyUsage, prop) && !isIndexIncluded) {
                     dependency.usedProps.push(propIndex);
+                  }
+                });
+              });
+
+              dependencyData.events.forEach((event, eventIndex) => {
+                dependencyUsages.forEach((dependencyUsage: Element) => {
+                  const isIndexIncluded = dependency.usedEvents.includes(eventIndex);
+                  if (isEventUsed(dependencyUsage, event) && !isIndexIncluded) {
+                    dependency.usedEvents.push(eventIndex);
                   }
                 });
               });

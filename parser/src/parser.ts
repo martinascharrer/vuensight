@@ -1,5 +1,5 @@
 import { parser } from '@vuese/parser';
-import { VueComponent, Prop } from '../types';
+import { VueComponent, Prop, Event } from '../types';
 import { kebabize } from './utils';
 
 export const parseComponent = (component: VueComponent): void => {
@@ -34,6 +34,15 @@ export const isPropUsed = (template: Element, prop: Prop): boolean => {
   const propFormats = [prop.name, `:${prop.name}`, `:${kebabize(prop.name)}`, kebabize(prop.name)];
   let isUsed = false;
   propFormats.forEach((format) => {
+    if (!isUsed) isUsed = Boolean(template.attributes.getNamedItem(format));
+  });
+  return isUsed;
+};
+
+export const isEventUsed = (template: Element, event: Event): boolean => {
+  const eventFormat = [`@${event.name}`, `@${kebabize(event.name)}`];
+  let isUsed = false;
+  eventFormat.forEach((format) => {
     if (!isUsed) isUsed = Boolean(template.attributes.getNamedItem(format));
   });
   return isUsed;

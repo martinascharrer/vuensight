@@ -49,6 +49,14 @@ const component_1 = require("./component");
                                     }
                                 });
                             });
+                            dependencyData.events.forEach((event, eventIndex) => {
+                                dependencyUsages.forEach((dependencyUsage) => {
+                                    const isIndexIncluded = dependency.usedEvents.includes(eventIndex);
+                                    if (parser_1.isEventUsed(dependencyUsage, event) && !isIndexIncluded) {
+                                        dependency.usedEvents.push(eventIndex);
+                                    }
+                                });
+                            });
                         }
                     }
                 }
