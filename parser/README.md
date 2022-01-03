@@ -13,3 +13,8 @@ Run unit tests + coverage
 ```
 npm test
 ```
+
+Run unit test watcher
+```
+npm run test:watch
+```

@@ -4,7 +4,8 @@
   "description": "@vue-component-insight/parser extracts information regarding the dependencies and their used props,events and slots of a given Vue project.",
   "scripts": {
     "build": "tsc -p .",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",

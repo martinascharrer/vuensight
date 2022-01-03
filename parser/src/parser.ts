@@ -40,7 +40,7 @@ export const isPropUsed = (template: Element, prop: Prop): boolean => {
 };
 
 export const isEventUsed = (template: Element, event: Event): boolean => {
-  const eventFormat = [`@${event.name}`, `@${kebabize(event.name)}`];
+  const eventFormat = [`@${event.name}`, `v-on:${event.name}`];
   let isUsed = false;
   eventFormat.forEach((format) => {
     if (!isUsed) isUsed = Boolean(template.attributes.getNamedItem(format));
