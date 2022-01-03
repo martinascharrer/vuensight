@@ -14,7 +14,8 @@
     "vinsight": "./bin/index.js"
   },
   "keywords": [
-    "cli", "node.js"
+    "cli",
+    "node.js"
   ],
   "author": "Martina Scharrer",
   "license": "(MIT)",

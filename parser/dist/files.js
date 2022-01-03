@@ -10,7 +10,10 @@ const getVueFilePaths = (src) => {
     });
 };
 exports.getVueFilePaths = getVueFilePaths;
-const getFileNameFromPath = (path) => path.substring(path.lastIndexOf('\\') + 1, path.length);
+const getFileNameFromPath = (path) => {
+    const lastDirectoryIndex = path.lastIndexOf('\\') !== -1 ? path.lastIndexOf('\\') : path.lastIndexOf('/');
+    return path.substring(lastDirectoryIndex + 1, path.length);
+};
 exports.getFileNameFromPath = getFileNameFromPath;
 const getTemplate = (fileContent) => {
     const templateBody = fileContent.match(/(?<template><template>[\s\S]*<\/template>)/u);

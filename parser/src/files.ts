@@ -8,7 +8,10 @@ export const getVueFilePaths = (src: string): Promise<string[]> => {
   });
 };
 
-export const getFileNameFromPath = (path: string): string => path.substring(path.lastIndexOf('\\') + 1, path.length);
+export const getFileNameFromPath = (path: string): string => {
+  const lastDirectoryIndex = path.lastIndexOf('\\') !== -1 ? path.lastIndexOf('\\') : path.lastIndexOf('/');
+  return path.substring(lastDirectoryIndex + 1, path.length);
+}
 
 export const getTemplate = (fileContent: string): string | null => {
   const templateBody = fileContent.match(/(?<template><template>[\s\S]*<\/template>)/u);
