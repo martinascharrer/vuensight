@@ -3,3 +3,13 @@
 given Vue.js project.
 
 ## Usage
+Compile typescript files to `dist` folder
+```
+npm run build
+```
+
+## Development
+Run unit tests + coverage
+```
+npm test
+```

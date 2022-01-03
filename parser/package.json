@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "@vue-component-insight/parser extracts information regarding the dependencies and their used props,events and slots of a given Vue project.",
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -31,11 +32,19 @@
     "jsdom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.0",
     "@types/jsdom": "^16.2.14",
     "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "eslint": "^6.8.0",
+    "jest": "^27.4.5",
+    "jest-cli": "^27.4.5",
+    "ts-jest": "^27.1.2",
     "typescript": "~4.1.5"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
