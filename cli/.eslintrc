@@ -4,7 +4,7 @@
   "plugins": [
     "@typescript-eslint"
   ],
-  "ignorePatterns": ["dist/*.js"],
+  "ignorePatterns": ["bin/*.js"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",

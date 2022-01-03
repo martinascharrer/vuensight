@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parse = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const dependencies_1 = require("./dependencies");
 const files_1 = require("./files");
 const parser_1 = require("./parser");
 const component_1 = require("./component");
-(async () => {
+const parse = async (directory) => {
     const paths = await files_1.getVueFilePaths(process.cwd());
-    console.log(`Found ${paths.length} Vue components`);
-    const cruiseResult = dependencies_1.cruiseComponents(paths);
+    console.log(`Found ${paths.length} Vue components in total`);
+    const cruiseResult = dependencies_1.cruiseComponents(paths, directory);
     if (cruiseResult && typeof cruiseResult.output !== 'string' && 'modules' in cruiseResult.output) {
         const components = [];
         cruiseResult.output.modules.forEach((module) => {
@@ -68,5 +69,6 @@ const component_1 = require("./component");
         });
         console.log(`Parsed ${components.length} Vue components`);
     }
-})();
+};
+exports.parse = parse;
 //# sourceMappingURL=index.js.map

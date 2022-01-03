@@ -5,16 +5,15 @@ const dependency_cruiser_1 = require("dependency-cruiser");
 const jsdom_1 = require("jsdom");
 const path_1 = require("path");
 const utils_1 = require("./utils");
-const DEPCRUISE_OPTIONS = {
-    includeOnly: 'src',
-};
-const cruiseComponents = (components) => {
+const cruiseComponents = (components, directory = 'src') => {
     let cruiseResult = null;
     try {
-        cruiseResult = dependency_cruiser_1.cruise(components, DEPCRUISE_OPTIONS);
+        cruiseResult = dependency_cruiser_1.cruise(components, {
+            includeOnly: directory,
+        });
     }
     catch (error) {
-        console.error(error);
+        console.error('Something went wrong cruising the project ', error);
     }
     return cruiseResult;
 };

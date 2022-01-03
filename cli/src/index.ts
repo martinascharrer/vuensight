@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
+import { parse } from '@vue-component-insight/parser/dist';
 
 program
     .description('React Bratus CLI')
@@ -9,4 +10,13 @@ program
 
 const dir = program.opts().dir;
 
-console.log(dir, 'HELLO!');
+const init = async () => {
+  try {
+    await parse(dir);
+  } catch (e) {
+    console.error('Something went wrong parsing the project', e);
+  }
+};
+
+init();
+

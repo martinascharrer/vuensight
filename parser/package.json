@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc -p .",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "lint": "eslint . --ext ts"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,6 @@
     "@vuese/parser": "^2.10.3",
     "commander": "^8.3.0",
     "dependency-cruiser": "^11.0.0",
-    "eslint-plugin-import": "^2.25.3",
     "fs": "0.0.1-security",
     "glob": "^7.2.0",
     "jsdom": "^19.0.0"

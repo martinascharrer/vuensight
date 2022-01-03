@@ -9,6 +9,11 @@ npm run build
 ```
 
 ## Development
+Run eslint
+```
+npm run lint
+```
+
 Run unit tests + coverage
 ```
 npm test
