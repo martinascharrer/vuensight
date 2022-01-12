@@ -43,7 +43,7 @@ const isPropUsed = (template, prop) => {
 };
 exports.isPropUsed = isPropUsed;
 const isEventUsed = (template, event) => {
-    const eventFormat = [`@${event.name}`, `@${utils_1.kebabize(event.name)}`];
+    const eventFormat = [`@${event.name}`, `v-on:${event.name}`];
     let isUsed = false;
     eventFormat.forEach((format) => {
         if (!isUsed)

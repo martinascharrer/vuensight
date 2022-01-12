@@ -4,9 +4,8 @@ import { isPropUsed, isEventUsed } from '../../src/parser';
 
 const createComponent = (attribute: string) => {
     const { document } = new JSDOM(`<ComponentName ${attribute}="foo"/>`).window;
-    const element = document.querySelector('ComponentName');
-    return element;
-}
+    return document.querySelector('ComponentName');
+};
 
 describe('parser', () => {
     describe('isPropUsed', () => {
