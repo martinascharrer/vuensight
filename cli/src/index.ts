@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { parse } from '@vue-component-insight/parser/dist';
+import { startServer } from '@vue-component-insight/server/dist';
 
 program
     .description('Vue Component Insight CLI')
@@ -12,7 +12,7 @@ const dir = program.opts().dir;
 
 const init = async () => {
   try {
-    await parse(dir);
+    await startServer(dir);
   } catch (e) {
     console.error('Something went wrong parsing the project', e);
   }

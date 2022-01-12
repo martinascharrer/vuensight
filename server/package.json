@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "@vue-component-insight/parser": "file:../parser"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

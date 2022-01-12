@@ -38,9 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var commander_1 = require("commander");
-var dist_1 = require("@vue-component-insight/parser/dist");
+var dist_1 = require("@vue-component-insight/server/dist");
 commander_1.program
-    .description('React Bratus CLI')
+    .description('Vue Component Insight CLI')
     .option('--dir [dir]', 'specify the directory that should be analyzed', 'src')
     .parse();
 var dir = commander_1.program.opts().dir;
@@ -50,7 +50,7 @@ var init = function () { return __awaiter(void 0, void 0, void 0, function () {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, dist_1.parse)(dir)];
+                return [4 /*yield*/, (0, dist_1.startServer)(dir)];
             case 1:
                 _a.sent();
                 return [3 /*break*/, 3];

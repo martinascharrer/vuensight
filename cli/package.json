@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
   "dependencies": {
-    "@vue-component-insight/parser": "file:../parser",
+    "@vue-component-insight/server": "file:../server",
     "commander": "^8.3.0"
   },
   "devDependencies": {

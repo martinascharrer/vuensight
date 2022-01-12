@@ -13,13 +13,13 @@ import { getFileNameFromPath, getTemplate, getVueFilePaths } from './files';
 import { isPropUsed, isEventUsed, parseComponent } from './parser';
 import { printComponent, printDependencies } from './component';
 
-export const parse = async (directory: string): Promise<void> => {
+export const parse = async (directory: string): Promise<VueComponent[]> => {
   const paths = await getVueFilePaths(process.cwd());
   console.log(`Found ${paths.length} Vue components in total`);
 
+  const components: VueComponent[] = [];
   const cruiseResult = cruiseComponents(paths, directory);
   if (cruiseResult && typeof cruiseResult.output !== 'string' && 'modules' in cruiseResult.output) {
-    const components: VueComponent[] = [];
     cruiseResult.output.modules.forEach((module) => {
       const pathNormalized = normalize(module.source);
       const fileContent = readFileSync(pathNormalized, { encoding: 'utf-8' });
@@ -82,4 +82,6 @@ export const parse = async (directory: string): Promise<void> => {
     });
     console.log(`Parsed ${components.length} Vue components`);
   }
+
+  return components;
 };
