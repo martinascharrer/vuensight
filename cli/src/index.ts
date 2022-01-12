@@ -4,7 +4,7 @@ import { program } from 'commander';
 import { parse } from '@vue-component-insight/parser/dist';
 
 program
-    .description('React Bratus CLI')
+    .description('Vue Component Insight CLI')
     .option('--dir [dir]', 'specify the directory that should be analyzed', 'src')
     .parse();
 
