@@ -10,9 +10,9 @@ const component_1 = require("./component");
 const parse = async (directory) => {
     const paths = await files_1.getVueFilePaths(process.cwd());
     console.log(`Found ${paths.length} Vue components in total`);
+    const components = [];
     const cruiseResult = dependencies_1.cruiseComponents(paths, directory);
     if (cruiseResult && typeof cruiseResult.output !== 'string' && 'modules' in cruiseResult.output) {
-        const components = [];
         cruiseResult.output.modules.forEach((module) => {
             const pathNormalized = path_1.normalize(module.source);
             const fileContent = fs_1.readFileSync(pathNormalized, { encoding: 'utf-8' });
@@ -69,6 +69,7 @@ const parse = async (directory) => {
         });
         console.log(`Parsed ${components.length} Vue components`);
     }
+    return components;
 };
 exports.parse = parse;
 //# sourceMappingURL=index.js.map

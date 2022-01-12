@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -37,29 +36,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var commander_1 = require("commander");
-var dist_1 = require("@vue-component-insight/server/dist");
-commander_1.program
-    .description('Vue Component Insight CLI')
-    .option('--dir [dir]', 'specify the directory that should be analyzed', 'src')
-    .parse();
-var dir = commander_1.program.opts().dir;
-var init = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var e_1;
+exports.startServer = void 0;
+var express = require('express');
+var dist_1 = require("@vue-component-insight/parser/dist");
+var startServer = function (dir) { return __awaiter(void 0, void 0, void 0, function () {
+    var app;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, dist_1.startServer)(dir)];
-            case 1:
-                _a.sent();
-                return [3 /*break*/, 3];
-            case 2:
-                e_1 = _a.sent();
-                console.error('Something went wrong parsing the project', e_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+        app = express();
+        app.listen(4444, function () {
+            console.log('server is listening on port 4444');
+        });
+        app.get('/parse-result', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+            var parseResult;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, (0, dist_1.parse)(dir)];
+                    case 1:
+                        parseResult = _a.sent();
+                        res.json(parseResult);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        return [2 /*return*/];
     });
 }); };
-init();
+exports.startServer = startServer;
