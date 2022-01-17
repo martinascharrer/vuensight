@@ -10,4 +10,4 @@ There is no readily distributed npm-version of this package **yet**. If you want
 dependencies in the parser, server and cli package (e.g. `cd parser` + `npm ci`). Afterwards call `npm link` in the cli package
 and `npm link @vue-component-insight/cli` in the Vue.js project you want to analyze.
 
-Use the cli command `vinsight` to start the tool. It is also possible to specifiy the root directory for parsing: `vinsight --dir exampleDir`.
+Use the cli command `vinsight` to start the tool. It is also possible to specifiy the root directory for parsing (default is src): `vinsight --dir exampleDir`.
