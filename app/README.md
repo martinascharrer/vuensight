@@ -1,4 +1,4 @@
-# vue-component-insight
+# app
 
 ## Project setup
 ```

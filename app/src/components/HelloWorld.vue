@@ -4,16 +4,15 @@
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
-      <button @click="$emit('selected')">click</button>
-      <slot name="test"/>
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest" target="_blank" rel="noopener">unit-jest</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
     </ul>
     <h3>Essential Links</h3>
     <ul>
@@ -35,16 +34,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'HelloWorld',
   props: {
-    msg: {
-      type: String,
-      default: 'Hallo',
-    },
+    msg: String,
   },
-};
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
