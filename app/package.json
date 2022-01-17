@@ -1,30 +1,17 @@
 {
   "name": "@vue-component-insight/app",
   "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
-  "description": "This is the client application of Vue component insight.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
-  },
-  "keywords": [
-    "Vue.js"
-  ],
-  "author": "Martina Scharrer",
-  "license": "(MIT)",
-  "bugs": {
-    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
-  },
-  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
@@ -32,6 +19,7 @@
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
