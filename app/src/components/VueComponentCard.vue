@@ -14,7 +14,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'VueComponent',
+  name: 'VueComponentCard',
   props: {
     component: {
       type: Object,

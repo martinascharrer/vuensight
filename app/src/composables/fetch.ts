@@ -1,24 +1,28 @@
-import { ref } from 'vue';
+import { ref, readonly } from 'vue';
 
 export const useFetch = (fetcher: () => Promise<any>) => {
   const data = ref(null);
   const isLoading = ref(false);
-  const error = ref(null);
+  const isError = ref(false);
 
-  const getData = async () => {
+  const get = async () => {
     isLoading.value = true;
     data.value = null;
-    error.value = null;
+    isError.value = false;
     try {
       data.value = await fetcher();
-    } catch (err) {
-      error.value = err;
+    } catch (e) {
+      isError.value = true;
+      console.error(e);
     }
     isLoading.value = false;
   };
 
   return {
-    data, isLoading, error, getData,
+    data: readonly(data),
+    isLoading: readonly(isLoading),
+    isError: readonly(isError),
+    get,
   };
 };
 
