@@ -10,37 +10,38 @@ import {
   findDependencyUsages,
 } from './dependencies';
 import { getFileNameFromPath, getTemplate, getVueFilePaths } from './files';
-import { isPropUsed, isEventUsed, parseComponent } from './parser';
+import { isPropUsed, isEventUsed, findCommunicationChannels } from './parser';
 import { printComponent, printDependencies } from './component';
 
 export const parse = async (directory: string): Promise<VueComponent[]> => {
   const paths = await getVueFilePaths(process.cwd());
   console.log(`Found ${paths.length} Vue components in total`);
 
-  const components: VueComponent[] = [];
   const cruiseResult = cruiseComponents(paths, directory);
+  const components: VueComponent[] = [];
   if (cruiseResult && typeof cruiseResult.output !== 'string' && 'modules' in cruiseResult.output) {
     cruiseResult.output.modules.forEach((module) => {
-      const pathNormalized = normalize(module.source);
-      const fileContent = readFileSync(pathNormalized, { encoding: 'utf-8' });
-      const fileName = getFileNameFromPath(pathNormalized);
+      const fullPath = normalize(module.source);
+      const fileName = getFileNameFromPath(fullPath);
       const [name, fileType] = fileName.split('.');
-      const dependencies = formatDependencies(module.dependencies);
 
-      const component = {
+      if (fileType !== 'vue') return;
+
+      const fileContent = readFileSync(fullPath, { encoding: 'utf-8' });
+      const dependencies = formatDependencies(module.dependencies);
+      const { props, events, slots } = findCommunicationChannels(fileContent);
+
+      components.push({
         name,
-        fullPath: pathNormalized,
+        fullPath,
         fileContent,
         fileName,
         fileType,
-        props: [],
-        events: [],
-        slots: [],
+        props,
+        events,
+        slots,
         dependencies,
-      };
-
-      parseComponent(component);
-      components.push(component);
+      });
     });
 
     components.forEach((component) => {

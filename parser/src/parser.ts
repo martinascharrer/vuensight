@@ -1,33 +1,18 @@
 import { parser } from '@vuese/parser';
-import { VueComponent, Prop, Event } from '../types';
+import { Prop, Event, CommunicationChannels } from '../types';
 import { kebabize } from './utils';
 
-export const parseComponent = (component: VueComponent): void => {
+export const findCommunicationChannels = (fileContent: string): CommunicationChannels => {
+  const communicationChannels: CommunicationChannels = { props: [], events: [], slots: [] };
   try {
-    parser(component.fileContent, {
-      onProp: (prop) => {
-        component.props.push({
-          name: prop.name,
-          type: prop.type,
-          required: prop.required,
-          default: prop.default,
-        });
-      },
-      onEvent: (event) => {
-        component.events.push({
-          name: event.name,
-          isSync: event.isSync,
-        });
-      },
-      onSlot: (slot) => {
-        component.slots.push({
-          name: slot.name,
-        });
-      },
-    });
+    const { props, events, slots } = parser(fileContent);
+    if (props) communicationChannels.props = props;
+    if (events) communicationChannels.events = events;
+    if (slots)  communicationChannels.slots = slots ;
   } catch (e) {
     console.error('Error parsing components with vuese.', e);
   }
+  return communicationChannels;
 };
 
 export const isPropUsed = (template: Element, prop: Prop): boolean => {

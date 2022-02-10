@@ -2,9 +2,9 @@ import { PropType } from '@vuese/parser';
 
 export type Prop = {
   name: string,
-  type: PropType | undefined,
-  required: boolean | undefined,
-  default: string | undefined,
+  type: PropType,
+  required?: boolean,
+  default?: string,
 }
 
 export type Event = {
@@ -14,6 +14,12 @@ export type Event = {
 
 export type Slot = {
   name: string,
+}
+
+export type CommunicationChannels = {
+  props: Prop[],
+  events: Event[],
+  slots: Slot[],
 }
 
 export type Dependency = {
