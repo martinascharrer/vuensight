@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findDependencyUsages = exports.getDependencyData = exports.formatDependencies = exports.cruiseComponents = void 0;
+exports.findDependencyInstances = exports.getDependencyData = exports.formatDependencies = exports.findDependencies = void 0;
 const dependency_cruiser_1 = require("dependency-cruiser");
 const jsdom_1 = require("jsdom");
 const path_1 = require("path");
 const utils_1 = require("./utils");
-const cruiseComponents = (components, directory = 'src') => {
+const findDependencies = (components, directory = 'src') => {
     let cruiseResult = null;
     try {
         cruiseResult = dependency_cruiser_1.cruise(components, {
@@ -17,7 +17,7 @@ const cruiseComponents = (components, directory = 'src') => {
     }
     return cruiseResult;
 };
-exports.cruiseComponents = cruiseComponents;
+exports.findDependencies = findDependencies;
 const formatDependencies = (dependencies) => {
     const newDependencies = [];
     dependencies.forEach((dependency) => {
@@ -25,6 +25,7 @@ const formatDependencies = (dependencies) => {
             fullPath: path_1.normalize(dependency.resolved),
             usedEvents: [],
             usedProps: [],
+            usedSlots: [],
         });
     });
     return newDependencies;
@@ -34,13 +35,10 @@ exports.formatDependencies = formatDependencies;
 //  maybe save the indices in a separate loop beforehand?
 const getDependencyData = (components, fullPath) => components.find((component) => component.fullPath === fullPath);
 exports.getDependencyData = getDependencyData;
-const findDependencyUsages = (template, name) => {
+const findDependencyInstances = (template, name) => {
     const { document } = new jsdom_1.JSDOM(template).window;
-    let dependencyUsages = document.querySelectorAll(name);
-    if (dependencyUsages.length === 0) {
-        dependencyUsages = document.querySelectorAll(utils_1.kebabize(name));
-    }
-    return dependencyUsages;
+    const dependencyUsages = [...document.querySelectorAll(name)];
+    return dependencyUsages.concat([...document.querySelectorAll(utils_1.kebabize(name))]);
 };
-exports.findDependencyUsages = findDependencyUsages;
+exports.findDependencyInstances = findDependencyInstances;
 //# sourceMappingURL=dependencies.js.map

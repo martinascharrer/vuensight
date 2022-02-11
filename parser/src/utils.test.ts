@@ -1,4 +1,4 @@
-import { kebabize } from '../../src/utils';
+import { kebabize } from './utils';
 
 describe('utils', () => {
     describe('kebabize', () => {

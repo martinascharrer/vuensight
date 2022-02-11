@@ -1,16 +1,17 @@
-import { parser } from '@vuese/parser';
-import { Prop, Event, CommunicationChannels } from '../types';
+import { parse } from 'vue-docgen-api';
+
+import { Prop, Event, CommunicationChannels, Slot } from '../types';
 import { kebabize } from './utils';
 
-export const findCommunicationChannels = (fileContent: string): CommunicationChannels => {
+export const findCommunicationChannels = async (fileContent: string): Promise<CommunicationChannels> => {
   const communicationChannels: CommunicationChannels = { props: [], events: [], slots: [] };
   try {
-    const { props, events, slots } = parser(fileContent);
+    const { props, events, slots } = await parse(fileContent);
     if (props) communicationChannels.props = props;
     if (events) communicationChannels.events = events;
-    if (slots)  communicationChannels.slots = slots ;
+    if (slots)  communicationChannels.slots = slots;
   } catch (e) {
-    console.error('Error parsing components with vuese.', e);
+    console.error('Something went wrong while parsing the components.', e);
   }
   return communicationChannels;
 };
@@ -27,8 +28,22 @@ export const isPropUsed = (template: Element, prop: Prop): boolean => {
 export const isEventUsed = (template: Element, event: Event): boolean => {
   const eventFormat = [`@${event.name}`, `v-on:${event.name}`];
   let isUsed = false;
-  eventFormat.forEach((format) => {
-    if (!isUsed) isUsed = Boolean(template.attributes.getNamedItem(format));
-  });
+  eventFormat.forEach((format) => (isUsed = isUsed || Boolean(template.attributes.getNamedItem(format))));
   return isUsed;
+};
+
+
+export const isSlotUsed = (template: Element, slot: Slot): boolean => {
+  const slotFormat = [`#${slot.name}`, `v-slot:${slot.name}`];
+  let isUsed = false;
+  slotFormat.forEach((format) => (isUsed = isUsed || Boolean(template.innerHTML.includes(format))));
+  return isUsed;
+};
+
+export const getUsedChannels = <Channel>(dependencyInstances: Element[], channels: Channel[], validator: (instance: Element, channel: Channel) => boolean): number[] => {
+  const usedChannels = new Set<number>();
+  channels.forEach((channel, index) => {
+    dependencyInstances.forEach((dependencyUsage) => validator(dependencyUsage, channel) && usedChannels.add(index));
+  });
+  return [...usedChannels];
 };

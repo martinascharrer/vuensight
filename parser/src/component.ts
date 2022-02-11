@@ -17,6 +17,7 @@ export const printDependencies = (component: VueComponent, components: VueCompon
     const dependencyComponent = getDependencyData(components, dependency.fullPath);
     const propsFormatted:string[] = [];
     const eventsFormatted:string[] = [];
+    const slotsFormatted:string[] = [];
     if (dependencyComponent) {
       dependency.usedProps.forEach((propIndex) => {
         propsFormatted.push(dependencyComponent.props[propIndex].name);
@@ -24,8 +25,12 @@ export const printDependencies = (component: VueComponent, components: VueCompon
       dependency.usedEvents.forEach((eventIndex) => {
         eventsFormatted.push(dependencyComponent.events[eventIndex].name);
       });
+      dependency.usedSlots.forEach((slotIndex) => {
+        slotsFormatted.push(dependencyComponent.slots[slotIndex].name);
+      });
     }
     if (dependency.usedProps.length > 0) console.log(`     uses props of ${getFileNameFromPath(dependency.fullPath)}: ${propsFormatted.join(', ')}`);
     if (dependency.usedEvents.length > 0) console.log(`     uses events of ${getFileNameFromPath(dependency.fullPath)}: ${eventsFormatted.join(', ')}`);
+    if (dependency.usedSlots.length > 0) console.log(`     uses slots of ${getFileNameFromPath(dependency.fullPath)}: ${slotsFormatted.join(', ')}`);
   });
 };

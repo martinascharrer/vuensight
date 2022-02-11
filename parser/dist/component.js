@@ -12,6 +12,7 @@ const printDependencies = (component, components) => {
         const dependencyComponent = dependencies_1.getDependencyData(components, dependency.fullPath);
         const propsFormatted = [];
         const eventsFormatted = [];
+        const slotsFormatted = [];
         if (dependencyComponent) {
             dependency.usedProps.forEach((propIndex) => {
                 propsFormatted.push(dependencyComponent.props[propIndex].name);
@@ -19,11 +20,16 @@ const printDependencies = (component, components) => {
             dependency.usedEvents.forEach((eventIndex) => {
                 eventsFormatted.push(dependencyComponent.events[eventIndex].name);
             });
+            dependency.usedSlots.forEach((slotIndex) => {
+                slotsFormatted.push(dependencyComponent.slots[slotIndex].name);
+            });
         }
         if (dependency.usedProps.length > 0)
             console.log(`     uses props of ${files_1.getFileNameFromPath(dependency.fullPath)}: ${propsFormatted.join(', ')}`);
         if (dependency.usedEvents.length > 0)
             console.log(`     uses events of ${files_1.getFileNameFromPath(dependency.fullPath)}: ${eventsFormatted.join(', ')}`);
+        if (dependency.usedSlots.length > 0)
+            console.log(`     uses slots of ${files_1.getFileNameFromPath(dependency.fullPath)}: ${slotsFormatted.join(', ')}`);
     });
 };
 exports.printDependencies = printDependencies;

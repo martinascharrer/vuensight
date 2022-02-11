@@ -7,7 +7,7 @@ import { normalize } from 'path';
 import { Dependency, VueComponent } from '../types';
 import { kebabize } from './utils';
 
-export const cruiseComponents = (components: string[], directory = 'src'):IReporterOutput | null => {
+export const findDependencies = (components: string[], directory = 'src'):IReporterOutput | null => {
   let cruiseResult: IReporterOutput | null = null;
   try {
     cruiseResult = cruise(
@@ -29,6 +29,7 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
       fullPath: normalize(dependency.resolved),
       usedEvents: [],
       usedProps: [],
+      usedSlots: [],
     });
   });
   return newDependencies;
@@ -39,11 +40,8 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
 export const getDependencyData = (components: VueComponent[], fullPath: string)
   : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
 
-export const findDependencyUsages = (template: string, name: string): NodeListOf<Element> => {
+export const findDependencyInstances = (template: string, name: string): Element[] => {
   const { document } = new JSDOM(template).window;
-  let dependencyUsages = document.querySelectorAll(name);
-  if (dependencyUsages.length === 0) {
-    dependencyUsages = document.querySelectorAll(kebabize(name));
-  }
-  return dependencyUsages;
+  const dependencyUsages = [...document.querySelectorAll(name)];
+  return dependencyUsages.concat([...document.querySelectorAll(kebabize(name))]);
 };
