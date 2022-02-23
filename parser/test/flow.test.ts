@@ -1,10 +1,11 @@
 import { parse } from '../src';
+import { normalize } from 'path';
 
 describe('parse', () => {
     it('should return data about dependencies and communication channels when parsing a Vue project', async () => {
         const expectedParseResult = [{
             name: 'Child',
-            fullPath: 'test/project/Child.vue',
+            fullPath: normalize('test/project/Child.vue'),
             fileName: 'Child.vue',
             fileType: 'vue',
             fileContent: expect.any(String),
@@ -23,7 +24,7 @@ describe('parse', () => {
             dependencies: [],
         }, {
             name: 'Parent',
-            fullPath: 'test/project/Parent.vue',
+            fullPath: normalize('test/project/Parent.vue'),
             fileName: 'Parent.vue',
             fileType: 'vue',
             events: [],
@@ -31,7 +32,7 @@ describe('parse', () => {
             slots: [],
             fileContent: expect.any(String),
             dependencies: [{
-                fullPath: 'test/project/Child.vue',
+                fullPath: normalize('test/project/Child.vue'),
                 usedProps: [0],
                 usedEvents: [0],
                 usedSlots: [0],
