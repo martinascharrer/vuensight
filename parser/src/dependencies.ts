@@ -1,5 +1,5 @@
 import {
-  cruise, IDependency, IReporterOutput,
+  cruise, IDependency, IReporterOutput, IModule
 } from 'dependency-cruiser';
 import { JSDOM } from 'jsdom';
 
@@ -7,7 +7,7 @@ import { normalize } from 'path';
 import { Dependency, VueComponent } from '../types';
 import { kebabize } from './utils';
 
-export const findDependencies = (components: string[], directory = 'src'):IReporterOutput | null => {
+export const findDependencies = (components: string[], directory = 'src'):IModule[] | null => {
   let cruiseResult: IReporterOutput | null = null;
   try {
     cruiseResult = cruise(
@@ -19,20 +19,18 @@ export const findDependencies = (components: string[], directory = 'src'):IRepor
   } catch (error) {
     console.error('Something went wrong cruising the project ', error);
   }
-  return cruiseResult;
+  if (cruiseResult && typeof cruiseResult?.output !== 'string') return cruiseResult?.output?.modules;
+  return null;
 };
 
 export const formatDependencies = (dependencies: IDependency[]): Dependency[] => {
-  const newDependencies: Dependency[] = [];
-  dependencies.forEach((dependency) => {
-    newDependencies.push({
+  return dependencies.map((dependency) => ({
       fullPath: normalize(dependency.resolved),
       usedEvents: [],
       usedProps: [],
       usedSlots: [],
-    });
-  });
-  return newDependencies;
+    })
+  );
 };
 
 // TODO: figure out a smarter way to get the dependency from the array

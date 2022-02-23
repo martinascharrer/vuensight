@@ -15,20 +15,18 @@ const findDependencies = (components, directory = 'src') => {
     catch (error) {
         console.error('Something went wrong cruising the project ', error);
     }
-    return cruiseResult;
+    if (cruiseResult && typeof cruiseResult?.output !== 'string')
+        return cruiseResult?.output?.modules;
+    return null;
 };
 exports.findDependencies = findDependencies;
 const formatDependencies = (dependencies) => {
-    const newDependencies = [];
-    dependencies.forEach((dependency) => {
-        newDependencies.push({
-            fullPath: path_1.normalize(dependency.resolved),
-            usedEvents: [],
-            usedProps: [],
-            usedSlots: [],
-        });
-    });
-    return newDependencies;
+    return dependencies.map((dependency) => ({
+        fullPath: path_1.normalize(dependency.resolved),
+        usedEvents: [],
+        usedProps: [],
+        usedSlots: [],
+    }));
 };
 exports.formatDependencies = formatDependencies;
 // TODO: figure out a smarter way to get the dependency from the array
