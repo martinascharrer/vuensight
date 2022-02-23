@@ -9,7 +9,7 @@ const printComponent = (component) => {
 exports.printComponent = printComponent;
 const printDependencies = (component, components) => {
     component.dependencies.forEach((dependency) => {
-        const dependencyComponent = dependencies_1.getDependencyData(components, dependency.fullPath);
+        const dependencyComponent = dependencies_1.getComponentData(components, dependency.fullPath);
         const propsFormatted = [];
         const eventsFormatted = [];
         const slotsFormatted = [];

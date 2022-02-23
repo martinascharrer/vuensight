@@ -35,7 +35,7 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
 
 // TODO: figure out a smarter way to get the dependency from the array
 //  maybe save the indices in a separate loop beforehand?
-export const getDependencyData = (components: VueComponent[], fullPath: string)
+export const getComponentData = (components: VueComponent[], fullPath: string)
   : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
 
 export const findDependencyInstances = (template: string, name: string): Element[] => {

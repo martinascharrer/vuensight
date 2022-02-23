@@ -1,6 +1,6 @@
 import { VueComponent } from '../types';
 import { getFileNameFromPath } from './files';
-import { getDependencyData } from './dependencies';
+import { getComponentData } from './dependencies';
 
 export const printComponent = (component: VueComponent): void => {
   console.log(
@@ -14,7 +14,7 @@ export const printComponent = (component: VueComponent): void => {
 
 export const printDependencies = (component: VueComponent, components: VueComponent[]): void => {
   component.dependencies.forEach((dependency) => {
-    const dependencyComponent = getDependencyData(components, dependency.fullPath);
+    const dependencyComponent = getComponentData(components, dependency.fullPath);
     const propsFormatted:string[] = [];
     const eventsFormatted:string[] = [];
     const slotsFormatted:string[] = [];
