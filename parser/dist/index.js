@@ -1,24 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parse = void 0;
-const dependencies_1 = require("./dependencies");
-const files_1 = require("./files");
-const parser_1 = require("./parser");
-const component_1 = require("./component");
-const parse = async (directory) => {
-    const paths = await files_1.getVueFilePaths(process.cwd());
-    console.log(`Found ${paths.length} Vue components in total`);
+const dependencies_1 = require("./vue/dependencies");
+const files_1 = require("./utils/files");
+const parser_1 = require("./vue/parser");
+const parse = async (directory, fileType = 'vue') => {
+    const paths = await files_1.getFilePathsByType(process.cwd(), fileType);
     const modules = dependencies_1.findDependencies(paths, directory);
     if (!modules)
         return new Array();
-    const components = await parser_1.getComponents(modules);
-    const componentsFullyAnalyzed = parser_1.getFullyAnalyzedComponents(components);
-    componentsFullyAnalyzed.forEach((component) => {
-        component_1.printComponent(component);
-        component_1.printDependencies(component, components);
-    });
-    console.log(`Parsed ${components.length} Vue components`);
-    return componentsFullyAnalyzed;
+    const components = await parser_1.analyzeComponents(modules);
+    return parser_1.analyzeCommunicationChannelUsage(components);
 };
 exports.parse = parse;
 //# sourceMappingURL=index.js.map

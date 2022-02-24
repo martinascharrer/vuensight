@@ -1,27 +1,13 @@
 import { VueComponent } from '../types';
 
-import {
-  findDependencies,
-} from './dependencies';
-import { getVueFilePaths } from './files';
-import { getComponents, getFullyAnalyzedComponents } from './parser';
-import { printComponent, printDependencies } from './component';
+import { findDependencies } from './vue/dependencies';
+import { getFilePathsByType } from './utils/files';
+import { analyzeComponents, analyzeCommunicationChannelUsage } from './vue/parser';
 
-export const parse = async (directory: string): Promise<VueComponent[]> => {
-  const paths = await getVueFilePaths(process.cwd());
-  console.log(`Found ${paths.length} Vue components in total`);
-
+export const parse = async (directory: string, fileType = 'vue'): Promise<VueComponent[]> => {
+  const paths = await getFilePathsByType(process.cwd(), fileType);
   const modules = findDependencies(paths, directory);
   if (!modules) return new Array<VueComponent>();
-
-  const components: VueComponent[] = await getComponents(modules);
-  const componentsFullyAnalyzed: VueComponent[] = getFullyAnalyzedComponents(components);
-
-  componentsFullyAnalyzed.forEach((component) => {
-    printComponent(component);
-    printDependencies(component, components);
-  });
-  console.log(`Parsed ${components.length} Vue components`);
-
-  return componentsFullyAnalyzed;
+  const components: VueComponent[] = await analyzeComponents(modules);
+  return analyzeCommunicationChannelUsage(components);
 };

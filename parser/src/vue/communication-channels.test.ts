@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 
-import { isPropUsed, isEventUsed, isSlotUsed, getUsedChannels } from '../src/parser';
+import { isPropUsed, isEventUsed, isSlotUsed, getUsedChannels } from './communication-channels';
 
 const createComponent = (template: string) => {
     const { document } = new JSDOM(template).window;

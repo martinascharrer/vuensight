@@ -1,13 +1,16 @@
-import { readFileSync } from 'fs';
-import { normalize } from 'path';
 import { parse } from 'vue-docgen-api';
-import { IModule } from 'dependency-cruiser';
+import { JSDOM } from 'jsdom';
 
-import { Prop, Event, CommunicationChannels, Slot, Dependency, VueComponent } from '../types';
+import { CommunicationChannels, Dependency, Event, Prop, Slot, VueComponent } from '../../types';
 
-import { kebabize } from './utils';
-import { getTemplate, getFileNameFromPath } from './files';
-import { formatDependencies, findDependencyInstances, getComponentData } from './dependencies';
+import { kebabize } from '../utils/kababize';
+
+export const findDependencyInstancesInTemplate = (template: string, name: string): Element[] => {
+  const { document } = new JSDOM(template).window;
+  const dependencyUsagesCamelCase = Array.from(document.querySelectorAll(name));
+  const dependencyUsagesKebabCase = Array.from(document.querySelectorAll(kebabize(name)));
+  return [...dependencyUsagesCamelCase, ...dependencyUsagesKebabCase];
+};
 
 export const findCommunicationChannels = async (fileContent: string): Promise<CommunicationChannels> => {
   const communicationChannels: CommunicationChannels = { props: [], events: [], slots: [] };
@@ -21,30 +24,6 @@ export const findCommunicationChannels = async (fileContent: string): Promise<Co
     console.error('Something went wrong while parsing the components.', e);
   }
   return communicationChannels;
-};
-
-export const getComponents = async (modules: IModule[]): Promise<VueComponent[]> => {
-  return await Promise.all(modules.map(async (module) => {
-    const fullPath = normalize(module.source);
-    const fileName = getFileNameFromPath(fullPath);
-    const [name, fileType] = fileName.split('.');
-
-    const fileContent = readFileSync(fullPath, {encoding: 'utf-8'});
-    const dependencies = formatDependencies(module.dependencies);
-    const { props, events, slots } = await findCommunicationChannels(fullPath);
-
-    return {
-      name,
-      fullPath,
-      fileContent,
-      fileName,
-      fileType,
-      props: props ?? [],
-      events: events ?? [],
-      slots: slots ?? [],
-      dependencies,
-    };
-  }));
 };
 
 export const isPropUsed = (template: Element, prop: Prop): boolean => {
@@ -80,28 +59,11 @@ export const getUsedChannels = <Channel>(dependencyInstances: Element[], channel
 };
 
 export const getDependencyWithUsedChannelsAnalysis = (template: string, { name, fullPath, props, events, slots }: VueComponent): Dependency => {
-  const dependencyInstances = findDependencyInstances(template, name);
+  const dependencyInstances = findDependencyInstancesInTemplate(template, name);
   return {
     fullPath,
     usedProps: getUsedChannels(dependencyInstances, props, isPropUsed),
     usedEvents: getUsedChannels(dependencyInstances, events, isEventUsed),
     usedSlots: getUsedChannels(dependencyInstances, slots, isSlotUsed)
   };
-};
-
-export const getFullyAnalyzedComponents = (components: VueComponent[]): VueComponent[] => {
-  return components.map((component) => {
-    const dependencies = component.dependencies.map((dependency) => {
-      const dependencyData = getComponentData(components, dependency.fullPath);
-      if (dependencyData && dependencyData.fileType === 'vue') {
-        const template = getTemplate(component.fileContent);
-        if (template) return getDependencyWithUsedChannelsAnalysis(template, dependencyData);
-      }
-      return dependency;
-    });
-    return {
-      ...component,
-      dependencies,
-    };
-  });
 };

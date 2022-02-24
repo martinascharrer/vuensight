@@ -1,11 +1,9 @@
+import { normalize } from 'path';
 import {
   cruise, IDependency, IReporterOutput, IModule
 } from 'dependency-cruiser';
-import { JSDOM } from 'jsdom';
 
-import { normalize } from 'path';
-import { Dependency, VueComponent } from '../types';
-import { kebabize } from './utils';
+import { Dependency } from '../../types';
 
 export const findDependencies = (components: string[], directory = 'src'):IModule[] | null => {
   let cruiseResult: IReporterOutput | null = null;
@@ -31,15 +29,4 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
       usedSlots: [],
     })
   );
-};
-
-// TODO: figure out a smarter way to get the dependency from the array
-//  maybe save the indices in a separate loop beforehand?
-export const getComponentData = (components: VueComponent[], fullPath: string)
-  : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
-
-export const findDependencyInstances = (template: string, name: string): Element[] => {
-  const { document } = new JSDOM(template).window;
-  const dependencyUsages = [...document.querySelectorAll(name)];
-  return dependencyUsages.concat([...document.querySelectorAll(kebabize(name))]);
 };
