@@ -1,75 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parse = void 0;
-const fs_1 = require("fs");
-const path_1 = require("path");
-const dependencies_1 = require("./dependencies");
-const files_1 = require("./files");
-const parser_1 = require("./parser");
-const component_1 = require("./component");
-const parse = async (directory) => {
-    const paths = await files_1.getVueFilePaths(process.cwd());
-    console.log(`Found ${paths.length} Vue components in total`);
-    const components = [];
-    const cruiseResult = dependencies_1.cruiseComponents(paths, directory);
-    if (cruiseResult && typeof cruiseResult.output !== 'string' && 'modules' in cruiseResult.output) {
-        cruiseResult.output.modules.forEach((module) => {
-            const pathNormalized = path_1.normalize(module.source);
-            const fileContent = fs_1.readFileSync(pathNormalized, { encoding: 'utf-8' });
-            const fileName = files_1.getFileNameFromPath(pathNormalized);
-            const [name, fileType] = fileName.split('.');
-            const dependencies = dependencies_1.formatDependencies(module.dependencies);
-            const component = {
-                name,
-                fullPath: pathNormalized,
-                fileContent,
-                fileName,
-                fileType,
-                props: [],
-                events: [],
-                slots: [],
-                dependencies,
-            };
-            parser_1.parseComponent(component);
-            components.push(component);
-        });
-        components.forEach((component) => {
-            component.dependencies.forEach((dependency) => {
-                const dependencyData = dependencies_1.getDependencyData(components, dependency.fullPath);
-                if (dependencyData && dependencyData.fileType === 'vue') {
-                    const template = files_1.getTemplate(component.fileContent);
-                    if (template) {
-                        const dependencyUsages = dependencies_1.findDependencyUsages(template, dependencyData.name);
-                        const isDependencyUsed = dependencyUsages.length > 0;
-                        if (isDependencyUsed) {
-                            dependencyData.props.forEach((prop, propIndex) => {
-                                dependencyUsages.forEach((dependencyUsage) => {
-                                    const isIndexIncluded = dependency.usedProps.includes(propIndex);
-                                    if (parser_1.isPropUsed(dependencyUsage, prop) && !isIndexIncluded) {
-                                        dependency.usedProps.push(propIndex);
-                                    }
-                                });
-                            });
-                            dependencyData.events.forEach((event, eventIndex) => {
-                                dependencyUsages.forEach((dependencyUsage) => {
-                                    const isIndexIncluded = dependency.usedEvents.includes(eventIndex);
-                                    if (parser_1.isEventUsed(dependencyUsage, event) && !isIndexIncluded) {
-                                        dependency.usedEvents.push(eventIndex);
-                                    }
-                                });
-                            });
-                        }
-                    }
-                }
-            });
-        });
-        components.forEach((component) => {
-            component_1.printComponent(component);
-            component_1.printDependencies(component, components);
-        });
-        console.log(`Parsed ${components.length} Vue components`);
-    }
-    return components;
+const dependencies_1 = require("./vue/dependencies");
+const files_1 = require("./utils/files");
+const parser_1 = require("./vue/parser");
+const parse = async (directory, fileType = 'vue') => {
+    const paths = await files_1.getFilePathsByType(process.cwd(), fileType);
+    const modules = dependencies_1.findDependencies(paths, directory);
+    if (!modules)
+        return new Array();
+    const components = await parser_1.analyzeComponents(modules);
+    return parser_1.analyzeCommunicationChannelUsage(components);
 };
 exports.parse = parse;
 //# sourceMappingURL=index.js.map

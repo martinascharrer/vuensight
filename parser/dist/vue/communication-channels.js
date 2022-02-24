@@ -1,12 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFullyAnalyzedComponents = exports.getDependencyWithUsedChannelsAnalysis = exports.getUsedChannels = exports.isSlotUsed = exports.isEventUsed = exports.isPropUsed = exports.getComponents = exports.findCommunicationChannels = void 0;
-const fs_1 = require("fs");
-const path_1 = require("path");
+exports.getDependencyWithUsedChannelsAnalysis = exports.getUsedChannels = exports.isSlotUsed = exports.isEventUsed = exports.isPropUsed = exports.findCommunicationChannels = exports.findDependencyInstancesInTemplate = void 0;
 const vue_docgen_api_1 = require("vue-docgen-api");
-const utils_1 = require("./utils");
-const files_1 = require("./files");
-const dependencies_1 = require("./dependencies");
+const jsdom_1 = require("jsdom");
+const kababize_1 = require("../utils/kababize");
+const findDependencyInstancesInTemplate = (template, name) => {
+    const { document } = new jsdom_1.JSDOM(template).window;
+    const dependencyUsagesCamelCase = Array.from(document.querySelectorAll(name));
+    const dependencyUsagesKebabCase = Array.from(document.querySelectorAll(kababize_1.kebabize(name)));
+    return [...dependencyUsagesCamelCase, ...dependencyUsagesKebabCase];
+};
+exports.findDependencyInstancesInTemplate = findDependencyInstancesInTemplate;
 const findCommunicationChannels = async (fileContent) => {
     const communicationChannels = { props: [], events: [], slots: [] };
     try {
@@ -25,30 +29,8 @@ const findCommunicationChannels = async (fileContent) => {
     return communicationChannels;
 };
 exports.findCommunicationChannels = findCommunicationChannels;
-const getComponents = async (modules) => {
-    return await Promise.all(modules.map(async (module) => {
-        const fullPath = path_1.normalize(module.source);
-        const fileName = files_1.getFileNameFromPath(fullPath);
-        const [name, fileType] = fileName.split('.');
-        const fileContent = fs_1.readFileSync(fullPath, { encoding: 'utf-8' });
-        const dependencies = dependencies_1.formatDependencies(module.dependencies);
-        const { props, events, slots } = await exports.findCommunicationChannels(fullPath);
-        return {
-            name,
-            fullPath,
-            fileContent,
-            fileName,
-            fileType,
-            props: props ?? [],
-            events: events ?? [],
-            slots: slots ?? [],
-            dependencies,
-        };
-    }));
-};
-exports.getComponents = getComponents;
 const isPropUsed = (template, prop) => {
-    const propFormats = [prop.name, `:${prop.name}`, `:${utils_1.kebabize(prop.name)}`, utils_1.kebabize(prop.name)];
+    const propFormats = [prop.name, `:${prop.name}`, `:${kababize_1.kebabize(prop.name)}`, kababize_1.kebabize(prop.name)];
     let isUsed = false;
     propFormats.forEach((format) => {
         if (!isUsed)
@@ -80,7 +62,7 @@ const getUsedChannels = (dependencyInstances, channels, validator) => {
 };
 exports.getUsedChannels = getUsedChannels;
 const getDependencyWithUsedChannelsAnalysis = (template, { name, fullPath, props, events, slots }) => {
-    const dependencyInstances = dependencies_1.findDependencyInstances(template, name);
+    const dependencyInstances = exports.findDependencyInstancesInTemplate(template, name);
     return {
         fullPath,
         usedProps: exports.getUsedChannels(dependencyInstances, props, exports.isPropUsed),
@@ -89,22 +71,4 @@ const getDependencyWithUsedChannelsAnalysis = (template, { name, fullPath, props
     };
 };
 exports.getDependencyWithUsedChannelsAnalysis = getDependencyWithUsedChannelsAnalysis;
-const getFullyAnalyzedComponents = (components) => {
-    return components.map((component) => {
-        const dependencies = component.dependencies.map((dependency) => {
-            const dependencyData = dependencies_1.getComponentData(components, dependency.fullPath);
-            if (dependencyData && dependencyData.fileType === 'vue') {
-                const template = files_1.getTemplate(component.fileContent);
-                if (template)
-                    return exports.getDependencyWithUsedChannelsAnalysis(template, dependencyData);
-            }
-            return dependency;
-        });
-        return {
-            ...component,
-            dependencies,
-        };
-    });
-};
-exports.getFullyAnalyzedComponents = getFullyAnalyzedComponents;
-//# sourceMappingURL=parser.js.map
+//# sourceMappingURL=communication-channels.js.map
