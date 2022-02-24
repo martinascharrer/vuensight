@@ -23,7 +23,6 @@ const findCommunicationChannels = async (fileContent) => {
             communicationChannels.slots = slots;
     }
     catch (e) {
-        console.log('HERE');
         console.error('Something went wrong while parsing the components.', e);
     }
     return communicationChannels;

@@ -2,7 +2,7 @@ import { VueComponent } from '../types';
 
 import { findDependencies } from './vue/dependencies';
 import { getFilePathsByType } from './utils/files';
-import { analyzeComponents, analyzeCommunicationChannelUsage } from './vue/parser';
+import { analyzeComponents, analyzeCommunicationChannelUsage } from './vue/analyzer';
 
 export const parse = async (directory: string, fileType = 'vue'): Promise<VueComponent[]> => {
   const paths = await getFilePathsByType(process.cwd(), fileType);

@@ -20,7 +20,6 @@ export const findCommunicationChannels = async (fileContent: string): Promise<Co
     if (events) communicationChannels.events = events;
     if (slots)  communicationChannels.slots = slots;
   } catch (e) {
-    console.log('HERE');
     console.error('Something went wrong while parsing the components.', e);
   }
   return communicationChannels;

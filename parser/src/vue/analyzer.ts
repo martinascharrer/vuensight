@@ -20,7 +20,8 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
 
     const fileContent = readFileSync(fullPath, {encoding: 'utf-8'});
     const dependencies = formatDependencies(module.dependencies);
-    const { props, events, slots } = await findCommunicationChannels(fullPath);
+    const { props, events, slots } = fileType === 'vue' ? await findCommunicationChannels(fullPath)
+      : {props: [], events: [], slots: []};
 
     return {
       name,
@@ -28,10 +29,9 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
       fileContent,
       fileName,
       fileType,
-      props: props ?? [],
-      events: events ?? [],
-      slots: slots ??
-        [],
+      props: props,
+      events: events,
+      slots: slots,
       dependencies,
     };
   }));

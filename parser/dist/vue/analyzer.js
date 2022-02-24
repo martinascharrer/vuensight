@@ -16,17 +16,17 @@ const analyzeComponents = async (modules) => {
         const [name, fileType] = fileName.split('.');
         const fileContent = fs_1.readFileSync(fullPath, { encoding: 'utf-8' });
         const dependencies = dependencies_1.formatDependencies(module.dependencies);
-        const { props, events, slots } = await communication_channels_1.findCommunicationChannels(fullPath);
+        const { props, events, slots } = fileType === 'vue' ? await communication_channels_1.findCommunicationChannels(fullPath)
+            : { props: [], events: [], slots: [] };
         return {
             name,
             fullPath,
             fileContent,
             fileName,
             fileType,
-            props: props ?? [],
-            events: events ?? [],
-            slots: slots ??
-                [],
+            props: props,
+            events: events,
+            slots: slots,
             dependencies,
         };
     }));
@@ -50,4 +50,4 @@ const analyzeCommunicationChannelUsage = (components) => {
     });
 };
 exports.analyzeCommunicationChannelUsage = analyzeCommunicationChannelUsage;
-//# sourceMappingURL=parser.js.map
+//# sourceMappingURL=analyzer.js.map
