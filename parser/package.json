@@ -25,11 +25,9 @@
   },
   "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
   "dependencies": {
-    "@types/glob": "^7.2.0",
     "commander": "^8.3.0",
     "dependency-cruiser": "^11.0.0",
     "fs": "0.0.1-security",
-    "glob": "^7.2.0",
     "jsdom": "^19.0.0",
     "vue-docgen-api": "^4.44.15"
   },

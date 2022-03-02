@@ -5,14 +5,26 @@ import {
 
 import { Dependency } from '../../types';
 
-export const findDependencies = (components: string[], directory = 'src'):IModule[] | null => {
+export const findDependencies = (directory = 'src', fileType: string):IModule[] | null => {
   let cruiseResult: IReporterOutput | null = null;
   try {
     cruiseResult = cruise(
-      components,
-      {
-        includeOnly: directory,
-      },
+        [directory],
+        {
+          includeOnly: `.${fileType}`,
+          exclude: ['node_modules'],
+          doNotFollow: {
+             path: 'node_modules',
+             dependencyTypes: [
+                'npm',
+                'npm-dev',
+                'npm-optional',
+                'npm-peer',
+                'npm-bundled',
+                'npm-no-pkg',
+             ],
+          },
+        },
     );
   } catch (error) {
     console.error('Something went wrong cruising the project ', error);
@@ -27,6 +39,5 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
       usedEvents: [],
       usedProps: [],
       usedSlots: [],
-    })
-  );
+  }));
 };

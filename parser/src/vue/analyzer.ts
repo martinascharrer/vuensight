@@ -18,7 +18,12 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
     const fileName = getFileNameFromPath(fullPath);
     const [name, fileType] = fileName.split('.');
 
-    const fileContent = readFileSync(fullPath, {encoding: 'utf-8'});
+    let fileContent = '';
+    try {
+      fileContent = readFileSync(fullPath, {encoding: 'utf-8'});
+    } catch (e) {
+      console.error(e);
+    }
     const dependencies = formatDependencies(module.dependencies);
     const { props, events, slots } = fileType === 'vue' ? await findCommunicationChannels(fullPath)
       : {props: [], events: [], slots: []};
