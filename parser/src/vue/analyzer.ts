@@ -12,6 +12,9 @@ import { findCommunicationChannels, getDependencyWithUsedChannelsAnalysis } from
 export const findComponentData = (components: VueComponent[], fullPath: string)
   : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
 
+export const findComponentDataByString = (components: VueComponent[], string: string)
+    : VueComponent | undefined => components.find((component) => component.fullPath.includes(string));
+
 export const analyzeComponents = async (modules: IModule[]): Promise<VueComponent[]> => {
   return await Promise.all(modules.map(async (module) => {
     const fullPath = normalize(module.source);

@@ -3,7 +3,9 @@ import {
   cruise, IDependency, IReporterOutput, IModule
 } from 'dependency-cruiser';
 
-import { Dependency } from '../../types';
+import { Dependency, VueComponent } from '../../types';
+
+import { findComponentDataByString } from './analyzer';
 
 export const findDependencies = (directory = 'src', fileType: string):IModule[] | null => {
   let cruiseResult: IReporterOutput | null = null;
@@ -41,3 +43,27 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
       usedSlots: [],
   }));
 };
+
+// temporal (!) workaround for sanitizing path aliases with '@' that cannot be resolved by dependency-cruiser
+export const sanitizeUnresolvedDependencyPaths = (components: VueComponent[]): VueComponent[] => {
+    return components.map((component) => {
+        const newDependencies = component.dependencies.map((dependency) => {
+            const isWebPackAlias = dependency.fullPath.includes('@/');
+            let path = dependency.fullPath;
+            if (isWebPackAlias) {
+                const slicedPath = dependency.fullPath.slice(2, dependency.fullPath.length);
+                const dependencyComponent = findComponentDataByString(components, slicedPath);
+                path = dependencyComponent?.fullPath || dependency.fullPath;
+            }
+            return {
+                ...dependency,
+                fullPath: path,
+            };
+        });
+        return {
+            ...component,
+            dependencies: newDependencies,
+        };
+    });
+};
+
