@@ -7,7 +7,7 @@ import { VueComponent } from '../../types';
 import { getFileNameFromPath } from '../utils/files';
 import { getTemplateContent } from '../utils/template';
 import { formatDependencies } from './dependencies';
-import { findCommunicationChannels, getDependencyWithUsedChannelsAnalysis } from './communication-channels';
+import { parseComponentFile, getDependencyWithUsedChannelsAnalysis } from './communication-channels';
 
 export const findComponentData = (components: VueComponent[], fullPath: string)
   : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
@@ -28,18 +28,17 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
       console.error(e);
     }
     const dependencies = formatDependencies(module.dependencies);
-    const { props, events, slots } = fileType === 'vue' ? await findCommunicationChannels(fullPath)
-      : {props: [], events: [], slots: []};
+    const parsedComponentData = fileType === 'vue' ? await parseComponentFile(fullPath) : null;
 
     return {
-      name,
+      name: parsedComponentData?.name && parsedComponentData?.name !== name ?  parsedComponentData?.name : name,
       fullPath,
       fileContent,
       fileName,
       fileType,
-      props: props,
-      events: events,
-      slots: slots,
+      props: parsedComponentData?.props ?? [],
+      events: parsedComponentData?.events ?? [],
+      slots: parsedComponentData?.slots ?? [],
       dependencies,
     };
   }));

@@ -1,5 +1,3 @@
-export type CommunicationChannel = Prop | Event;
-
 export type Prop = {
   name: string,
   type?: { name: string; func?: boolean | undefined; } | undefined,
@@ -14,12 +12,6 @@ export type Event = {
 
 export type Slot = {
   name: string,
-}
-
-export type CommunicationChannels = {
-  props: Prop[],
-  events: Event[],
-  slots: Slot[],
 }
 
 export type Dependency = {

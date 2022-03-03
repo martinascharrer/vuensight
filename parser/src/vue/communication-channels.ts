@@ -1,7 +1,7 @@
 import { parse } from 'vue-docgen-api';
 import { JSDOM } from 'jsdom';
 
-import { CommunicationChannels, Dependency, Event, Prop, Slot, VueComponent } from '../../types';
+import { Dependency, Event, Prop, Slot, VueComponent } from '../../types';
 
 import { kebabize } from '../utils/kababize';
 
@@ -12,17 +12,14 @@ export const findDependencyInstancesInTemplate = (template: string, name: string
   return [...dependencyUsagesCamelCase, ...dependencyUsagesKebabCase];
 };
 
-export const findCommunicationChannels = async (fileContent: string): Promise<CommunicationChannels> => {
-  const communicationChannels: CommunicationChannels = { props: [], events: [], slots: [] };
-  try {
-    const { props, events, slots } = await parse(fileContent);
-    if (props) communicationChannels.props = props;
-    if (events) communicationChannels.events = events;
-    if (slots)  communicationChannels.slots = slots;
+export const parseComponentFile = async (filePath: string): Promise<Partial<VueComponent> | null> => {
+ try {
+    const { displayName: name, props, events, slots } = await parse(filePath);
+    return { name, props, events, slots };
   } catch (e) {
     console.error('Something went wrong while parsing the components.', e);
   }
-  return communicationChannels;
+  return null;
 };
 
 export const isPropUsed = (template: Element, prop: Prop): boolean => {
