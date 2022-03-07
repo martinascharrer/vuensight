@@ -21,7 +21,6 @@ import {
   defineComponent,
   ComputedRef,
   computed,
-  watchEffect,
 } from 'vue';
 import * as parserService from '@/services/parser';
 
@@ -57,7 +56,7 @@ export default defineComponent({
         copy.forEach((component: VueComponent) => {
           if (!component.fullPath.includes('.js')) {
             temp.nodes.push({ id: component.fullPath, title: component.name, size: 30 });
-            component.dependencies.forEach((dependency: Dependency, index) => {
+            component.dependencies.forEach((dependency: Dependency) => {
               if (!dependency.fullPath.includes('.js')) {
                 temp.links.push({ source: component.fullPath, target: dependency.fullPath });
               }
@@ -68,7 +67,6 @@ export default defineComponent({
       }
       return null;
     });
-    watchEffect(() => console.log(forceGraphData.value));
 
     return {
       data,

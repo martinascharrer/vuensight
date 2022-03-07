@@ -2,28 +2,10 @@
   <div ref="graphRef"></div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref, onMounted } from 'vue';
 import * as d3 from 'd3';
-
-interface SimNode extends d3.SimulationNodeDatum {
-    id: string;
-    group: number;
-    r: number;
-}
-
-interface SimLink extends d3.SimulationLinkDatum<SimNode> {
-  source: string;
-  target: string;
-    value: number;
-    d: number;
-    s: number;
-}
-
-interface Graph {
-    nodes: SimNode[];
-    links: SimLink[];
-}
+import * as cola from 'webcola';
 
 export default defineComponent({
   name: 'ForceGraph',
@@ -35,86 +17,111 @@ export default defineComponent({
   },
   setup(props) {
     const graphRef = ref(null);
+    const width = 800;
+    const height = 400;
 
     onMounted(() => {
-      // eslint-disable-next-line max-len
-      const simulation: d3.Simulation<SimNode, SimLink> = d3.forceSimulation<SimNode>(props.data.nodes);
-
-      let forceCharge: d3.ForceManyBody<SimNode>;
-      forceCharge = d3.forceManyBody<SimNode>();
-      forceCharge = forceCharge.strength(-10);
-      simulation
-        .force('charge', forceCharge);
-      simulation
-        .force('link', d3.forceLink<SimNode, SimLink>(props.data.links).id((d) => d.id).distance(50))
-        .force('center', d3.forceCenter(150, 150));
+      const nodes = props.data.nodes.map((d) => Object.create(d));
+      const index = new Map(nodes.map((d) => [d.id, d]));
+      const links = props.data.links.map((d) => Object.assign(Object.create(d), {
+        source: index.get(d.source),
+        target: index.get(d.target),
+      }));
 
       const svg = d3.select(graphRef.value)
         .append('svg')
-        .attr('viewBox', [0, 0, 300, 300])
+        .attr('viewBox', [0, 0, width, height])
         .attr('class', 'svg');
 
-      const link = svg.selectAll('path.link')
-        .data(props.data.links)
+      const g = svg.append('g');
+
+      const layout = cola.d3adaptor(d3)
+        .size([width, height])
+        .nodes(nodes)
+        .links(links)
+        .flowLayout('y', 30)
+        .avoidOverlaps(true)
+        .symmetricDiffLinkLengths(20)
+        .start(20, 20, 20);
+
+      const link = g.append('g')
+        .attr('stroke', '#999')
+        .attr('stroke-opacity', 0.6)
+        .selectAll('line')
+        .data(links)
         .enter()
-        .append('path')
+        .append('line')
         .attr('class', 'link');
 
-      const node = svg.selectAll('.node')
-        .data(props.data.nodes)
+      let selectedNode = null;
+
+      const node = g.append('g')
+        .selectAll('g')
+        .data(nodes)
         .enter()
         .append('g')
         .attr('class', 'node')
-        .style('text-anchor', 'middle');
+        .call(layout.drag)
+        .on('click', function () {
+          if (selectedNode) selectedNode.classed('node--selected', false);
+          selectedNode = d3.select(this).classed('node--selected', true);
+        });
 
       node.append('circle')
-        .attr('r', 10)
+        .attr('r', 15)
         .attr('class', 'circle');
 
-      node.append('text')
+      const label = node.append('g')
         .attr('dy', 2)
         .attr('dx', 0)
-        .attr('class', 'label')
+        .attr('class', 'label');
+
+      label.append('text')
+        .attr('dy', 2)
+        .attr('dx', 0)
+        .attr('class', 'label__text')
         .text((d) => d.title);
 
-      const drag = (sim: d3.Simulation<SimNode, SimLink>) => {
-        const dragstarted = (event: d3.D3DragEvent<Element, SimNode, any>) => {
-          if (!event.active) sim.alphaTarget(0.3).restart();
-          // eslint-disable-next-line no-param-reassign
-          event.subject.fx = event.subject.x;
-          // eslint-disable-next-line no-param-reassign
-          event.subject.fy = event.subject.y;
-        };
+      label.insert('rect', '.label__text')
+        .attr('width', function () {
+          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          return bbox.width + 2;
+        })
+        .attr('height', function () {
+          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          return bbox.height;
+        })
+        .attr('x', function () {
+          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          return bbox.x - 1;
+        })
+        .attr('y', function () {
+          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          return bbox.y;
+        })
+        .attr('class', 'label__background');
 
-        const dragged = (event: d3.D3DragEvent<Element, SimNode, any>) => {
-          // eslint-disable-next-line no-param-reassign
-          event.subject.fx = event.x;
-          // eslint-disable-next-line no-param-reassign
-          event.subject.fy = event.y;
-        };
+      layout.on('tick', () => {
+        link
+          .attr('x1', (d) => d.source.x)
+          .attr('y1', (d) => d.source.y)
+          .attr('x2', (d) => d.target.x)
+          .attr('y2', (d) => d.target.y);
 
-        const dragended = (event: d3.D3DragEvent<Element, SimNode, any>) => {
-          if (!event.active) sim.alphaTarget(0);
-          // eslint-disable-next-line no-param-reassign
-          event.subject.fx = null;
-          // eslint-disable-next-line no-param-reassign
-          event.subject.fy = null;
-        };
-
-        return d3.drag<Element, SimNode>()
-          .on('start', dragstarted)
-          .on('drag', dragged)
-          .on('end', dragended);
-      };
-
-      node.call(drag(simulation));
-
-      simulation.on('tick', () => {
         node.attr('transform', (d) => `translate(${d.x},${d.y})`);
-        link.attr('d', (d) => d3.line()([
-          [d.source.x, d.source.y],
-          [d.target.x, d.target.y]]));
       });
+
+      function zoomed() {
+        g.attr('transform', d3.event.transform);
+      }
+
+      const zoom = d3.zoom()
+        .scaleExtent([0.4, 8])
+        .on('zoom', zoomed);
+
+      svg.call(zoom);
+
+      return svg.node();
     });
 
     return {
@@ -126,28 +133,50 @@ export default defineComponent({
 
 <style>
 .svg {
-  width: 50vw;
+    width: 100vw;
+    height: 70vh;
+    background: #eeeeee;
+    cursor: grab;
+}
+
+.node {
+    text-anchor: middle;
+}
+
+.node--selected .circle, .node--selected .label__background {
+    fill: #ffc45d;
 }
 
 .link {
-  stroke: lightgray;
+    stroke: #cdcdcd;
 }
 
 .circle {
-  fill: #bbe8f2;
-  stroke: #97c6d1;
-  stroke-width: 1px;
-  cursor: grab;
+    fill: #fff;
+    stroke: #cdcdcd;
+    stroke-width: 1px;
+    cursor: pointer;
 }
 
 .circle--small {
-  fill: #62acbd;
+    fill: #62acbd;
 }
 
 .label {
-  font-family: sans-serif;
-  font-size: 0.4rem;
-  fill: #4f4f4f;
-  cursor: grab;
+    fill: #fff;
+    border-radius: 5px;
+    height: 0.4rem;
+    width: 100px;
+}
+
+.label__text {
+    font-family: sans-serif;
+    font-size: 0.4rem;
+    fill: #4f4f4f;
+}
+
+.label__background {
+    fill: #fff;
+    rx: 2px;
 }
 </style>
