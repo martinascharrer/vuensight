@@ -2,11 +2,15 @@
     <layout-split-view>
         <p v-if="isLoading">... loading</p>
         <p v-else-if="isError">Something went wrong parsing your project.</p>
-        <force-graph v-else-if="forceGraphData" :data="forceGraphData"/>
+        <force-graph
+            v-else-if="forceGraphData"
+            :data="forceGraphData"
+            @selected="selectComponent"
+            @unselected="selectedComponent = null"
+        />
         <template #aside>
-            <sidebar-communication :component="{ name: 'CardTestComponent' }">
-                <p>please select a component</p>
-            </sidebar-communication>
+            <sidebar-communication v-if="selectedComponent" :component="selectedComponent" />
+            <p v-else>Select a component!</p>
         </template>
     </layout-split-view>
 </template>
@@ -16,6 +20,7 @@ import {
   defineComponent,
   ComputedRef,
   computed,
+  ref,
 } from 'vue';
 import * as parserService from '@/services/parser';
 
@@ -26,7 +31,7 @@ import SidebarCommunication from '@/components/SidebarCommunication.vue';
 import { useFetch } from '@/composables/fetch';
 
 import {
-  ForceLayout, VueComponent, Dependency, Link, Node,
+  ForceLayout, VueComponent, Dependency, Link,
 } from '@/types/index.d';
 
 export default defineComponent({
@@ -44,29 +49,41 @@ export default defineComponent({
       isError,
     } = useFetch(parserService.get);
 
+    const selectedComponent = ref<VueComponent | null>(null);
+
+    const selectComponent = (fullPath: string) => {
+      const copy = data.value as unknown as VueComponent[];
+      selectedComponent.value = copy.find((component) => component.fullPath === fullPath) ?? null;
+    };
+
     getParserData();
 
+    const formatDataForForceLayout = (originalData: VueComponent[]) => {
+      const nodes: VueComponent[] = [];
+      const links: Link[] = [];
+      originalData.forEach((component: VueComponent) => {
+        nodes.push(component);
+        component.dependencies.forEach(
+          (dependency: Dependency) => links.push({
+            source: component.fullPath,
+            target: dependency.fullPath,
+          }),
+        );
+      });
+      return { nodes, links };
+    };
+
     const forceGraphData: ComputedRef<ForceLayout | null> = computed(() => {
-      if (data && data.value !== null && data) {
-        const copy = data.value as unknown as VueComponent[];
-        const temp: ForceLayout = { nodes: [] as Node[], links: [] as Link[] };
-        copy.forEach((component: VueComponent) => {
-          if (!component.fullPath.includes('.js')) {
-            temp.nodes.push({ id: component.fullPath, title: component.name, size: 30 });
-            component.dependencies.forEach((dependency: Dependency) => {
-              if (!dependency.fullPath.includes('.js')) {
-                temp.links.push({ source: component.fullPath, target: dependency.fullPath });
-              }
-            });
-          }
-        });
-        return temp;
+      if (data && data.value !== null) {
+        return formatDataForForceLayout(data.value as unknown as VueComponent[]);
       }
       return null;
     });
 
     return {
       data,
+      selectComponent,
+      selectedComponent,
       isLoading,
       isError,
       forceGraphData,

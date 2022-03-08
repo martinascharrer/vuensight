@@ -19,23 +19,17 @@ export type VueComponent = {
   fileName: string,
   fileType: string,
   fileContent: string,
+  props: Prop[],
   events: Event[],
   slots: Slot[],
   dependencies: Dependency[],
 }
-
-export type Node = {
-  id: string,
-  title: string,
-  size: number,
-}
-
 export type Link = {
   source: string,
   target: string,
 }
 
 export type ForceLayout = {
-  nodes: Node[],
+  nodes: VueComponent[],
   links: Link[],
 }

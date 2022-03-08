@@ -2,7 +2,11 @@
   <div class="sidebarCommunication">
       <h2>{{ component.name }}</h2>
       <p>some info about this component</p>
-      <card-communication-channel :channel="{ name:'Test' }" />
+      <card-communication-channel
+          v-for="prop in component.props"
+          :key="prop.name"
+          :channel="prop"
+      />
   </div>
 </template>
 
