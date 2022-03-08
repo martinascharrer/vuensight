@@ -2,11 +2,10 @@
     <layout-split-view>
         <p v-if="isLoading">... loading</p>
         <p v-else-if="isError">Something went wrong parsing your project.</p>
-        <force-graph v-else-if="forceGraphData" :data="forceGraphData"/>
+        <force-graph v-else-if="forceGraphData" :data="forceGraphData" @selected="selectComponent"/>
         <template #aside>
-            <sidebar-communication :component="{ name: 'CardTestComponent' }">
-                <p>please select a component</p>
-            </sidebar-communication>
+            <sidebar-communication v-if="selectedComponent" :component="selectedComponent" />
+            <p v-else>Select a component!</p>
         </template>
     </layout-split-view>
 </template>
@@ -16,6 +15,7 @@ import {
   defineComponent,
   ComputedRef,
   computed,
+  ref,
 } from 'vue';
 import * as parserService from '@/services/parser';
 
@@ -44,6 +44,12 @@ export default defineComponent({
       isError,
     } = useFetch(parserService.get);
 
+    const selectedComponent = ref<VueComponent | null>(null);
+
+    const selectComponent = (fullPath: string) => {
+      const copy = data.value as unknown as VueComponent[];
+      selectedComponent.value = copy.find((component) => component.fullPath === fullPath) ?? null;
+    };
     getParserData();
 
     const forceGraphData: ComputedRef<ForceLayout | null> = computed(() => {
@@ -67,6 +73,8 @@ export default defineComponent({
 
     return {
       data,
+      selectComponent,
+      selectedComponent,
       isLoading,
       isError,
       forceGraphData,
