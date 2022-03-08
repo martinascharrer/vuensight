@@ -1,0 +1,37 @@
+:root {
+    font-size: 16px;
+
+    --font-size--xs: 0.5em;
+    --font-size--s: 0.75em;
+    --font-size--m: 1em;
+    --font-size--l: 1.125em;
+    --font-size--xl: 1.25em;
+    --font-size--2xl: 1.5em;
+    --font-size--3xl: 2em;
+    --font-size--4xl: 2.75em;
+
+}
+
+@font-face {
+    font-family: NotoSans;
+    src: url('../fonts/NotoSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: NotoSans;
+    font-weight: bold;
+    src: url('../fonts/NotoSans-Bold.ttf');
+}
+
+@font-face {
+    font-family: NotoSans;
+    font-style: italic;
+    src: url('../fonts/NotoSans-Italic.ttf');
+}
+
+@font-face {
+    font-family: NotoSans;
+    font-style: italic;
+    font-weight: bold;
+    src: url('../fonts/NotoSans-BoldItalic.ttf');
+}

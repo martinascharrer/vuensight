@@ -1,5 +1,5 @@
 <template>
-  <div ref="graphRef"></div>
+  <svg ref="graphRef" class="forceGraph"></svg>
 </template>
 
 <script>
@@ -29,7 +29,6 @@ export default defineComponent({
       }));
 
       const svg = d3.select(graphRef.value)
-        .append('svg')
         .attr('viewBox', [0, 0, width, height])
         .attr('class', 'svg');
 
@@ -131,29 +130,39 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss">
+.forceGraph {
+}
+
 .svg {
-    width: 100vw;
-    height: 70vh;
-    background: #eeeeee;
+    height: 100%;
+    width: 100%;
+    background: var(--grey-10);
     cursor: grab;
 }
 
 .node {
     text-anchor: middle;
-}
 
-.node--selected .circle, .node--selected .label__background {
-    fill: #ffc45d;
+    &--selected {
+        .circle,
+        .label__background {
+            fill: var(--yellow-30);
+        }
+
+        .circle {
+            stroke: var(--yellow-50);
+        }
+    }
 }
 
 .link {
-    stroke: #cdcdcd;
+    stroke: var(--grey-20);
 }
 
 .circle {
-    fill: #fff;
-    stroke: #cdcdcd;
+    fill: white;
+    stroke: var(--grey-20);
     stroke-width: 1px;
     cursor: pointer;
 }
@@ -163,20 +172,16 @@ export default defineComponent({
 }
 
 .label {
-    fill: #fff;
-    border-radius: 5px;
-    height: 0.4rem;
-    width: 100px;
-}
+    cursor: pointer;
 
-.label__text {
-    font-family: sans-serif;
-    font-size: 0.4rem;
-    fill: #4f4f4f;
-}
+    &__text {
+        font-size: var(--font-size--xs);
+        fill: var(--navy-90);
+    }
 
-.label__background {
-    fill: #fff;
-    rx: 2px;
+    &__background {
+        fill: white;
+        rx: 2px;
+    }
 }
 </style>
