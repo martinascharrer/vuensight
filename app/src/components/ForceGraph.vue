@@ -120,7 +120,7 @@ export default defineComponent({
           d3.selectAll('.node:not(.node--selected, .node--selected-dependent)').classed('node--greyed-out', true);
           d3.selectAll('.link:not(.link--selected').classed('link--greyed-out', true);
 
-          emit('selected', data.index);
+          emit('selected', data.fullPath);
         });
 
       node.append('circle')
