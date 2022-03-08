@@ -1,5 +1,5 @@
 <template>
-  <div ref="graphRef"></div>
+  <svg ref="graphRef" class="forceGraph"></svg>
 </template>
 
 <script>
@@ -29,7 +29,6 @@ export default defineComponent({
       }));
 
       const svg = d3.select(graphRef.value)
-        .append('svg')
         .attr('viewBox', [0, 0, width, height])
         .attr('class', 'svg');
 
@@ -132,9 +131,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.forceGraph {
+}
+
 .svg {
-    width: 100vw;
-    height: 70vh;
+    height: 100%;
+    width: 100%;
     background: var(--grey-10);
     cursor: grab;
 }
