@@ -7,6 +7,10 @@ import { defineComponent, ref, onMounted } from 'vue';
 import * as d3 from 'd3';
 import * as cola from 'webcola';
 
+const NODE_SIZE = 25;
+const SMALL_CIRCLE_RADIUS = 3;
+const DISTANCE_BETWEEN_SMALL_CIRCLES = 5;
+
 export default defineComponent({
   name: 'ForceGraph',
   props: {
@@ -14,18 +18,45 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    width: {
+      type: Number,
+      default: 500,
+    },
+    height: {
+      type: Number,
+      default: 500,
+    },
   },
   setup(props, { emit }) {
     const graphRef = ref(null);
-    const width = 800;
-    const height = 400;
+    const selectedNode = ref('');
 
-    const unselect = () => {
+    const unselectAllNodes = () => {
+      emit('unselected');
       d3.selectAll('.node--selected').classed('node--selected', false);
       d3.selectAll('.node--selected-dependent').classed('node--selected-dependent', false);
       d3.selectAll('.link--selected').classed('link--selected', false);
       d3.selectAll('.node--greyed-out').classed('node--greyed-out', false);
       d3.selectAll('.link--greyed-out').classed('link--greyed-out', false);
+      d3.selectAll('.circle--small').remove();
+    };
+
+    const getCirclePositionFactor = (index) => (index / NODE_SIZE)
+        * (SMALL_CIRCLE_RADIUS / 2) * DISTANCE_BETWEEN_SMALL_CIRCLES;
+
+    const drawCommunicationChannelCircles = () => {
+      d3.selectAll('.node--selected-dependent')
+        .append('g')
+        .selectAll('.circle--small')
+        .data((data) => data.dependencies.find(
+          (dependency) => dependency.fullPath === selectedNode.value,
+        ).usedProps)
+        .enter()
+        .append('circle')
+        .attr('r', SMALL_CIRCLE_RADIUS)
+        .attr('cx', (d, i) => NODE_SIZE * Math.cos(getCirclePositionFactor(i) - Math.PI * 0.5))
+        .attr('cy', (d, i) => NODE_SIZE * Math.sin(getCirclePositionFactor(i) - Math.PI * 0.5))
+        .attr('class', 'circle--small');
     };
 
     onMounted(() => {
@@ -37,16 +68,16 @@ export default defineComponent({
       }));
 
       const svg = d3.select(graphRef.value)
-        .attr('viewBox', [0, 0, width, height])
+        .attr('viewBox', [0, 0, props.width, props.height])
         .attr('class', 'svg')
         .on('click', () => {
-          unselect();
+          unselectAllNodes();
         });
 
       const g = svg.append('g');
 
       const layout = cola.d3adaptor(d3)
-        .size([width, height])
+        .size([props.width, props.height])
         .nodes(nodes)
         .links(links)
         .flowLayout('y', 30)
@@ -72,8 +103,9 @@ export default defineComponent({
         .call(layout.drag)
         .on('click', function (data) {
           d3.event.stopPropagation();
+          unselectAllNodes();
 
-          unselect();
+          selectedNode.value = data.id;
 
           // highlight selected node + dependents
           d3.select(this).classed('node--selected', true);
@@ -82,6 +114,7 @@ export default defineComponent({
             d3.select(`#node-${dependent.source.index}`).classed('node--selected-dependent', true);
             d3.select(`#link-${dependent.source.index}-${dependent.target.index}`).classed('link--selected', true);
           });
+          drawCommunicationChannelCircles();
 
           // grey out everything else
           d3.selectAll('.node:not(.node--selected, .node--selected-dependent)').classed('node--greyed-out', true);
@@ -91,7 +124,7 @@ export default defineComponent({
         });
 
       node.append('circle')
-        .attr('r', 15)
+        .attr('r', 20)
         .attr('class', 'circle');
 
       const label = node.append('g')
@@ -144,8 +177,6 @@ export default defineComponent({
         .on('zoom', zoomed);
 
       svg.call(zoom);
-
-      return svg.node();
     });
 
     return {
@@ -184,6 +215,7 @@ export default defineComponent({
     }
 
     &--greyed-out {
+        opacity: 50%;
         .circle {
             stroke: none;
         }
@@ -215,7 +247,8 @@ export default defineComponent({
     transition: fill 200ms;
 
     &--small {
-        fill: var(--mint-50);
+        fill: var(--mint-grey);
+        stroke: var(--mint-50);
     }
 }
 

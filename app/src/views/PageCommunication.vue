@@ -2,7 +2,12 @@
     <layout-split-view>
         <p v-if="isLoading">... loading</p>
         <p v-else-if="isError">Something went wrong parsing your project.</p>
-        <force-graph v-else-if="forceGraphData" :data="forceGraphData" @selected="selectComponent"/>
+        <force-graph
+            v-else-if="forceGraphData"
+            :data="forceGraphData"
+            @selected="selectComponent"
+            @unselected="selectedComponent = null"
+        />
         <template #aside>
             <sidebar-communication v-if="selectedComponent" :component="selectedComponent" />
             <p v-else>Select a component!</p>
@@ -58,7 +63,13 @@ export default defineComponent({
         const temp: ForceLayout = { nodes: [] as Node[], links: [] as Link[] };
         copy.forEach((component: VueComponent) => {
           if (!component.fullPath.includes('.js')) {
-            temp.nodes.push({ id: component.fullPath, title: component.name, size: 30 });
+            temp.nodes.push({
+              id: component.fullPath,
+              title: component.name,
+              size: 30,
+              props: component.props,
+              dependencies: component.dependencies,
+            });
             component.dependencies.forEach((dependency: Dependency) => {
               if (!dependency.fullPath.includes('.js')) {
                 temp.links.push({ source: component.fullPath, target: dependency.fullPath });

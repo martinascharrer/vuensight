@@ -19,6 +19,7 @@ export type VueComponent = {
   fileName: string,
   fileType: string,
   fileContent: string,
+  props: Prop[],
   events: Event[],
   slots: Slot[],
   dependencies: Dependency[],
@@ -28,6 +29,8 @@ export type Node = {
   id: string,
   title: string,
   size: number,
+  props: Prop[],
+  dependencies: Dependency[],
 }
 
 export type Link = {
