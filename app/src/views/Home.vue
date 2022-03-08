@@ -1,11 +1,12 @@
 <template>
     <div class="home">
         <p v-if="isLoading">... loading</p>
-        <p v-else-if="error">Something went wrong parsing your project.</p>
+        <p v-else-if="isError">Something went wrong parsing your project.</p>
         <div v-else>
+            <force-graph v-if="forceGraphData" :data="forceGraphData"/>
             <p>Total amount of components: {{ data.length }}</p>
             <div class="component-list">
-                <vue-component
+                <vue-component-card
                     v-for="component in data"
                     :key="component.name"
                     :component="component"
@@ -16,32 +17,62 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { getParsedData } from '@/api';
+import {
+  defineComponent,
+  ComputedRef,
+  computed,
+} from 'vue';
+import * as parserService from '@/services/parser';
 
-import VueComponent from '@/components/VueComponent.vue';
+import ForceGraph from '@/components/ForceGraph.vue';
+import VueComponentCard from '@/components/VueComponentCard.vue';
 
 import { useFetch } from '@/composables/fetch';
+
+import {
+  ForceLayout, VueComponent, Dependency, Link, Node,
+} from '@/types/index.d';
 
 export default defineComponent({
   name: 'Home',
   components: {
-    VueComponent,
+    ForceGraph,
+    VueComponentCard,
   },
   setup() {
     const {
       data,
-      getData,
+      get: getParserData,
       isLoading,
-      error,
-    } = useFetch(getParsedData);
+      isError,
+    } = useFetch(parserService.get);
 
-    getData();
+    getParserData();
+
+    const forceGraphData: ComputedRef<ForceLayout | null> = computed(() => {
+      if (data && data.value !== null && data) {
+        const copy = data.value as unknown as VueComponent[];
+        const temp: ForceLayout = { nodes: [] as Node[], links: [] as Link[] };
+        copy.forEach((component: VueComponent) => {
+          if (!component.fullPath.includes('.js')) {
+            temp.nodes.push({ id: component.fullPath, title: component.name, size: 30 });
+            component.dependencies.forEach((dependency: Dependency) => {
+              if (!dependency.fullPath.includes('.js')) {
+                temp.links.push({ source: component.fullPath, target: dependency.fullPath });
+              }
+            });
+          }
+        });
+        return temp;
+      }
+      return null;
+    });
 
     return {
       data,
       isLoading,
-      error,
+      isError,
+      forceGraphData,
     };
   },
 });

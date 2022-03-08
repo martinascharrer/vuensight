@@ -12,7 +12,7 @@
     "lint": "eslint . --ext ts"
   },
   "bin": {
-    "vinsight": "./bin/index.js"
+    "vue-insight": "./bin/index.js"
   },
   "keywords": [
     "cli",
