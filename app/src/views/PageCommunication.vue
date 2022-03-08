@@ -31,7 +31,7 @@ import SidebarCommunication from '@/components/SidebarCommunication.vue';
 import { useFetch } from '@/composables/fetch';
 
 import {
-  ForceLayout, VueComponent, Dependency, Link, Node,
+  ForceLayout, VueComponent, Dependency, Link,
 } from '@/types/index.d';
 
 export default defineComponent({
@@ -55,29 +55,27 @@ export default defineComponent({
       const copy = data.value as unknown as VueComponent[];
       selectedComponent.value = copy.find((component) => component.fullPath === fullPath) ?? null;
     };
+
     getParserData();
 
+    const formatDataForForceLayout = (originalData: VueComponent[]) => {
+      const nodes: VueComponent[] = [];
+      const links: Link[] = [];
+      originalData.forEach((component: VueComponent) => {
+        nodes.push(component);
+        component.dependencies.forEach(
+          (dependency: Dependency) => links.push({
+            source: component.fullPath,
+            target: dependency.fullPath,
+          }),
+        );
+      });
+      return { nodes, links };
+    };
+
     const forceGraphData: ComputedRef<ForceLayout | null> = computed(() => {
-      if (data && data.value !== null && data) {
-        const copy = data.value as unknown as VueComponent[];
-        const temp: ForceLayout = { nodes: [] as Node[], links: [] as Link[] };
-        copy.forEach((component: VueComponent) => {
-          if (!component.fullPath.includes('.js')) {
-            temp.nodes.push({
-              id: component.fullPath,
-              title: component.name,
-              size: 30,
-              props: component.props,
-              dependencies: component.dependencies,
-            });
-            component.dependencies.forEach((dependency: Dependency) => {
-              if (!dependency.fullPath.includes('.js')) {
-                temp.links.push({ source: component.fullPath, target: dependency.fullPath });
-              }
-            });
-          }
-        });
-        return temp;
+      if (data && data.value !== null) {
+        return formatDataForForceLayout(data.value as unknown as VueComponent[]);
       }
       return null;
     });

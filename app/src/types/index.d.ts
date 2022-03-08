@@ -24,21 +24,12 @@ export type VueComponent = {
   slots: Slot[],
   dependencies: Dependency[],
 }
-
-export type Node = {
-  id: string,
-  title: string,
-  size: number,
-  props: Prop[],
-  dependencies: Dependency[],
-}
-
 export type Link = {
   source: string,
   target: string,
 }
 
 export type ForceLayout = {
-  nodes: Node[],
+  nodes: VueComponent[],
   links: Link[],
 }

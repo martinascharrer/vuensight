@@ -60,8 +60,8 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      const nodes = props.data.nodes.map((d) => Object.create(d));
-      const index = new Map(nodes.map((d) => [d.id, d]));
+      const nodes = props.data.nodes.map((d) => ({ ...d, id: d.fullPath }));
+      const index = new Map(nodes.map((d) => [d.fullPath, d]));
       const links = props.data.links.map((d) => Object.assign(Object.create(d), {
         source: index.get(d.source),
         target: index.get(d.target),
@@ -105,7 +105,7 @@ export default defineComponent({
           d3.event.stopPropagation();
           unselectAllNodes();
 
-          selectedNode.value = data.id;
+          selectedNode.value = data.fullPath;
 
           // highlight selected node + dependents
           d3.select(this).classed('node--selected', true);
@@ -120,7 +120,7 @@ export default defineComponent({
           d3.selectAll('.node:not(.node--selected, .node--selected-dependent)').classed('node--greyed-out', true);
           d3.selectAll('.link:not(.link--selected').classed('link--greyed-out', true);
 
-          emit('selected', data.id);
+          emit('selected', data.index);
         });
 
       node.append('circle')
@@ -136,7 +136,7 @@ export default defineComponent({
         .attr('dy', 2)
         .attr('dx', 0)
         .attr('class', 'label__text')
-        .text((d) => d.title);
+        .text((d) => d.name);
 
       label.insert('rect', '.label__text')
         .attr('fill', 'white')
