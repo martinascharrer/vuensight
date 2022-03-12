@@ -117,6 +117,7 @@ export default defineComponent({
         .attr('id', (d) => `node-${d.index}`)
         .attr('class', 'node')
         .call(layout.drag)
+      // eslint-disable-next-line func-names
         .on('click', function (data) {
           d3.event.stopPropagation();
           resetNodeSelection();
@@ -156,18 +157,22 @@ export default defineComponent({
 
       label.insert('rect', '.node__labelText')
         .attr('fill', 'white')
+      // eslint-disable-next-line func-names
         .attr('width', function () {
           const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.width + 2;
         })
+      // eslint-disable-next-line func-names
         .attr('height', function () {
           const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.height;
         })
+      // eslint-disable-next-line func-names
         .attr('x', function () {
           const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.x - 1;
         })
+      // eslint-disable-next-line func-names
         .attr('y', function () {
           const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.y;

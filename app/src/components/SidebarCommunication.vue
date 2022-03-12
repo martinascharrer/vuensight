@@ -6,15 +6,18 @@
           v-for="prop in component.props"
           :key="prop.name"
           :channel="prop"
-          @click="$emit('channelSelected', prop);"
+          :is-selected="selectedChannel ? selectedChannel.name === prop.name : null"
+          @click="selectChannel(prop)"
       />
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent, ref, PropType } from 'vue';
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
+
+import { Prop, VueComponent } from '@/types/index.d';
 
 export default defineComponent({
   name: 'SidebarCommunication',
@@ -23,9 +26,20 @@ export default defineComponent({
   },
   props: {
     component: {
-      type: Object,
+      type: Object as PropType<VueComponent>,
       required: true,
     },
+  },
+  setup(props, { emit }) {
+    const selectedChannel = ref<Prop | null>(null);
+    const selectChannel = (channel: Prop) => {
+      selectedChannel.value = channel;
+      emit('channelSelected', selectedChannel.value);
+    };
+    return {
+      selectChannel,
+      selectedChannel,
+    };
   },
 });
 </script>
@@ -34,7 +48,7 @@ export default defineComponent({
 .sidebarCommunication {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing--m);
+    gap: var(--spacing--l);
     height: 100%;
 }
 </style>

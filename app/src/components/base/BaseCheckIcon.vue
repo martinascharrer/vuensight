@@ -1,0 +1,50 @@
+<template>
+    <svg
+        class="baseCheckIcon"
+        :class="{ 'baseCheckIcon--selected': isChecked }"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 12.19 18"
+    >
+        <path
+            class="baseCheckIcon__check"
+            d="M4.7 12.83a1 1 0 0 1-.71-.3L1.3 9.81c-.39-.4-.38-1.03.01-1.42.39-.38 1.03-.38
+            1.41.01l1.97 1.99 4.77-4.92a.987.987 0 0 1 1.41-.02c.4.38.41 1.02.02 1.41l-5.48
+            5.65c-.18.2-.48.29-.71.32z"
+        />
+    </svg>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'BaseCheckIcon',
+  props: {
+    isChecked: {
+      type: Boolean,
+      default: false,
+    },
+  },
+});
+</script>
+
+<style lang="scss">
+.baseCheckIcon {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: var(--border-radius--l);
+    background: var(--grey-10);
+
+    &__check {
+        fill: var(--grey-50);
+    }
+
+    &--selected {
+        background: var(--mint-50);
+
+        .baseCheckIcon__check {
+            fill: white;
+        }
+    }
+}
+</style>
