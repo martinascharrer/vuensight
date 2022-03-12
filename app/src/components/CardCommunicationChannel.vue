@@ -10,6 +10,7 @@
                     :is-checked="isSelected"
                 > </base-check-icon>
                 <p>{{ channel.name }}</p>
+                <base-badge>3</base-badge>
             </div>
         </template>
         <template v-if="channel.type">
@@ -27,6 +28,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
+import BaseBadge from '@/components/base/BaseBadge.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseCheckIcon from '@/components/base/BaseCheckIcon.vue';
 import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
@@ -46,6 +48,7 @@ export default defineComponent({
     },
   },
   components: {
+    BaseBadge,
     BaseCard,
     BaseCheckIcon,
     BaseDelimiter,

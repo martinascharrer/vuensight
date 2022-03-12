@@ -248,7 +248,7 @@ export default defineComponent({
     }
 
     &__labelText {
-        font-size: var(--font-size--xs);
+        font-size: var(--font-size--2xs);
         fill: var(--navy-90);
     }
 
