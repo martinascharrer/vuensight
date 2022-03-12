@@ -1,3 +1,10 @@
+export type Prop = {
+  name: string,
+  type?: { name: string; func?: boolean | undefined; } | undefined,
+  required?: boolean,
+  default?: string,
+}
+
 export type Event = {
   name: string,
   isSync: boolean | undefined,

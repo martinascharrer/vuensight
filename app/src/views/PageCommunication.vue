@@ -4,12 +4,18 @@
         <p v-else-if="isError">Something went wrong parsing your project.</p>
         <force-graph
             v-else-if="forceGraphData"
+            :selected-component="selectedComponent"
+            :selected-channel="selectedChannel"
             :data="forceGraphData"
             @selected="selectComponent"
             @unselected="selectedComponent = null"
         />
         <template #aside>
-            <sidebar-communication v-if="selectedComponent" :component="selectedComponent" />
+            <sidebar-communication
+                v-if="selectedComponent"
+                :component="selectedComponent"
+                @channelSelected="selectChannel"
+            />
             <p v-else>Select a component!</p>
         </template>
     </layout-split-view>
@@ -31,7 +37,7 @@ import SidebarCommunication from '@/components/SidebarCommunication.vue';
 import { useFetch } from '@/composables/fetch';
 
 import {
-  ForceLayout, VueComponent, Dependency, Link,
+  ForceLayout, VueComponent, Dependency, Link, Prop,
 } from '@/types/index.d';
 
 export default defineComponent({
@@ -48,15 +54,18 @@ export default defineComponent({
       isLoading,
       isError,
     } = useFetch(parserService.get);
+    getParserData();
 
     const selectedComponent = ref<VueComponent | null>(null);
-
     const selectComponent = (fullPath: string) => {
       const copy = data.value as unknown as VueComponent[];
       selectedComponent.value = copy.find((component) => component.fullPath === fullPath) ?? null;
     };
 
-    getParserData();
+    const selectedChannel = ref<Prop | null>(null);
+    const selectChannel = (channel: Prop) => {
+      selectedChannel.value = channel;
+    };
 
     const formatDataForForceLayout = (originalData: VueComponent[]) => {
       const nodes: VueComponent[] = [];
@@ -82,6 +91,8 @@ export default defineComponent({
 
     return {
       data,
+      selectChannel,
+      selectedChannel,
       selectComponent,
       selectedComponent,
       isLoading,

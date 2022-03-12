@@ -25,10 +25,15 @@ export default defineComponent({
 
     &__main {
         width: 75vw;
+        overflow-y: hidden;
     }
 
     &__aside {
         width: 25vw;
+        background: white;
+        padding: var(--spacing--l) var(--spacing--xl);
+        box-shadow: var(--box-shadow--s);
+        overflow-y: scroll;
     }
 }
 </style>
