@@ -6,6 +6,7 @@
           v-for="prop in component.props"
           :key="prop.name"
           :channel="prop"
+          @click="$emit('channelSelected', prop);"
       />
   </div>
 </template>
@@ -35,8 +36,5 @@ export default defineComponent({
     flex-direction: column;
     gap: var(--spacing--m);
     height: 100%;
-    background: white;
-    padding: var(--spacing--l) var(--spacing--xl);
-    box-shadow: var(--box-shadow--s);
 }
 </style>

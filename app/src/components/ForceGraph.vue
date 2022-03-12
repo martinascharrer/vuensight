@@ -3,7 +3,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue';
+import {
+  defineComponent, ref, onMounted, watch,
+} from 'vue';
 import * as d3 from 'd3';
 import * as cola from 'webcola';
 
@@ -18,6 +20,14 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    selectedComponent: {
+      type: Object,
+      default: null,
+    },
+    selectedChannel: {
+      type: Object,
+      default: null,
+    },
     width: {
       type: Number,
       default: 500,
@@ -31,7 +41,12 @@ export default defineComponent({
     const graphRef = ref(null);
     const selectedNode = ref('');
 
-    const unselectAllNodes = () => {
+    const resetChannelSelection = () => {
+      d3.selectAll('.node--uses-channel').classed('node--uses-channel', false);
+      d3.selectAll('.circle--small-selected').classed('circle--small-selected', false);
+    };
+
+    const resetNodeSelection = () => {
       emit('unselected');
       d3.selectAll('.node--selected').classed('node--selected', false);
       d3.selectAll('.node--selected-dependent').classed('node--selected-dependent', false);
@@ -39,6 +54,7 @@ export default defineComponent({
       d3.selectAll('.node--greyed-out').classed('node--greyed-out', false);
       d3.selectAll('.link--greyed-out').classed('link--greyed-out', false);
       d3.selectAll('.circle--small').remove();
+      resetChannelSelection();
     };
 
     const getCirclePositionFactor = (index) => (index / NODE_SIZE)
@@ -71,7 +87,7 @@ export default defineComponent({
         .attr('viewBox', [0, 0, props.width, props.height])
         .attr('class', 'svg')
         .on('click', () => {
-          unselectAllNodes();
+          resetNodeSelection();
         });
 
       const g = svg.append('g');
@@ -103,7 +119,7 @@ export default defineComponent({
         .call(layout.drag)
         .on('click', function (data) {
           d3.event.stopPropagation();
-          unselectAllNodes();
+          resetNodeSelection();
 
           selectedNode.value = data.fullPath;
 
@@ -179,6 +195,26 @@ export default defineComponent({
       svg.call(zoom);
     });
 
+    const highlightChannelUsage = (channel) => {
+      d3.selectAll('.node--selected-dependent')
+        .classed('node--uses-channel', (d) => {
+          const dependency = d.dependencies.find(
+            (dep) => dep.fullPath === channel.fullPath,
+          );
+          return dependency.usedProps.some(
+            (prop) => props.selectedComponent.props[prop].name === channel.name,
+          );
+        });
+
+      d3.selectAll('.node--selected-dependent .circle--small')
+        .classed('circle--small-selected', (d) => props.selectedComponent.props[d].name === channel.name);
+    };
+
+    watch(() => props.selectedChannel, () => {
+      resetChannelSelection();
+      highlightChannelUsage(props.selectedChannel);
+    });
+
     return {
       graphRef,
     };
@@ -211,6 +247,17 @@ export default defineComponent({
     &--selected-dependent {
         .circle {
             stroke: var(--grey-50);
+        }
+    }
+
+    &--uses-channel {
+        .circle,
+        .label__background {
+            fill: var(--mint-30);
+        }
+
+        .circle {
+            stroke: var(--mint-50);
         }
     }
 
@@ -249,6 +296,11 @@ export default defineComponent({
     &--small {
         fill: var(--mint-grey);
         stroke: var(--mint-50);
+    }
+
+    &--small-selected {
+        fill: var(--mint-50);
+        stroke: var(--mint-70);
     }
 }
 

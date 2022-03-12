@@ -29,6 +29,9 @@ export default defineComponent({
 
     &__aside {
         width: 25vw;
+        background: white;
+        padding: var(--spacing--l) var(--spacing--xl);
+        box-shadow: var(--box-shadow--s);
     }
 }
 </style>
