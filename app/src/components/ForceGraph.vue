@@ -42,18 +42,18 @@ export default defineComponent({
     const selectedNode = ref('');
 
     const resetChannelSelection = () => {
-      d3.selectAll('.node--uses-channel').classed('node--uses-channel', false);
-      d3.selectAll('.circle--small-selected').classed('circle--small-selected', false);
+      d3.selectAll('.node--usesChannel').classed('node--usesChannel', false);
+      d3.selectAll('.node__channel--selected').classed('node__channel--selected', false);
     };
 
     const resetNodeSelection = () => {
       emit('unselected');
       d3.selectAll('.node--selected').classed('node--selected', false);
-      d3.selectAll('.node--selected-dependent').classed('node--selected-dependent', false);
+      d3.selectAll('.node--selectedDependent').classed('node--selectedDependent', false);
       d3.selectAll('.link--selected').classed('link--selected', false);
-      d3.selectAll('.node--greyed-out').classed('node--greyed-out', false);
-      d3.selectAll('.link--greyed-out').classed('link--greyed-out', false);
-      d3.selectAll('.circle--small').remove();
+      d3.selectAll('.node--greyedOut').classed('node--greyedOut', false);
+      d3.selectAll('.link--greyedOut').classed('link--greyedOut', false);
+      d3.selectAll('.node__channel').remove();
       resetChannelSelection();
     };
 
@@ -61,9 +61,9 @@ export default defineComponent({
         * (SMALL_CIRCLE_RADIUS / 2) * DISTANCE_BETWEEN_SMALL_CIRCLES;
 
     const drawCommunicationChannelCircles = () => {
-      d3.selectAll('.node--selected-dependent')
+      d3.selectAll('.node--selectedDependent')
         .append('g')
-        .selectAll('.circle--small')
+        .selectAll('.node__channel')
         .data((data) => data.dependencies.find(
           (dependency) => dependency.fullPath === selectedNode.value,
         ).usedProps)
@@ -72,7 +72,7 @@ export default defineComponent({
         .attr('r', SMALL_CIRCLE_RADIUS)
         .attr('cx', (d, i) => NODE_SIZE * Math.cos(getCirclePositionFactor(i) - Math.PI * 0.5))
         .attr('cy', (d, i) => NODE_SIZE * Math.sin(getCirclePositionFactor(i) - Math.PI * 0.5))
-        .attr('class', 'circle--small');
+        .attr('class', 'node__channel');
     };
 
     onMounted(() => {
@@ -127,52 +127,52 @@ export default defineComponent({
           d3.select(this).classed('node--selected', true);
           const dependents = links.filter((l) => l.target.index === data.index);
           dependents.forEach((dependent) => {
-            d3.select(`#node-${dependent.source.index}`).classed('node--selected-dependent', true);
+            d3.select(`#node-${dependent.source.index}`).classed('node--selectedDependent', true);
             d3.select(`#link-${dependent.source.index}-${dependent.target.index}`).classed('link--selected', true);
           });
           drawCommunicationChannelCircles();
 
           // grey out everything else
-          d3.selectAll('.node:not(.node--selected, .node--selected-dependent)').classed('node--greyed-out', true);
-          d3.selectAll('.link:not(.link--selected').classed('link--greyed-out', true);
+          d3.selectAll('.node:not(.node--selected, .node--selectedDependent)').classed('node--greyedOut', true);
+          d3.selectAll('.link:not(.link--selected').classed('link--greyedOut', true);
 
           emit('selected', data.fullPath);
         });
 
       node.append('circle')
         .attr('r', 20)
-        .attr('class', 'circle');
+        .attr('class', 'node__circle');
 
       const label = node.append('g')
         .attr('dy', 2)
         .attr('dx', 0)
-        .attr('class', 'label');
+        .attr('class', 'node__label');
 
       label.append('text')
         .attr('dy', 2)
         .attr('dx', 0)
-        .attr('class', 'label__text')
+        .attr('class', 'node__labelText')
         .text((d) => d.name);
 
-      label.insert('rect', '.label__text')
+      label.insert('rect', '.node__labelText')
         .attr('fill', 'white')
         .attr('width', function () {
-          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.width + 2;
         })
         .attr('height', function () {
-          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.height;
         })
         .attr('x', function () {
-          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.x - 1;
         })
         .attr('y', function () {
-          const bbox = d3.select(this.parentNode).select('.label__text').node().getBBox();
+          const bbox = d3.select(this.parentNode).select('.node__labelText').node().getBBox();
           return bbox.y;
         })
-        .attr('class', 'label__background');
+        .attr('class', 'node__labelBackground');
 
       layout.on('tick', () => {
         link
@@ -196,18 +196,18 @@ export default defineComponent({
     });
 
     const highlightChannelUsage = (channel) => {
-      d3.selectAll('.node--selected-dependent')
-        .classed('node--uses-channel', (d) => {
+      d3.selectAll('.node--selectedDependent')
+        .classed('node--usesChannel', (d) => {
           const dependency = d.dependencies.find(
-            (dep) => dep.fullPath === channel.fullPath,
+            (dep) => dep.fullPath === props.selectedComponent.fullPath,
           );
           return dependency.usedProps.some(
             (prop) => props.selectedComponent.props[prop].name === channel.name,
           );
         });
 
-      d3.selectAll('.node--selected-dependent .circle--small')
-        .classed('circle--small-selected', (d) => props.selectedComponent.props[d].name === channel.name);
+      d3.selectAll('.node--selectedDependent .node__channel')
+        .classed('node__channel--selected', (d) => props.selectedComponent.props[d].name === channel.name);
     };
 
     watch(() => props.selectedChannel, () => {
@@ -233,41 +233,83 @@ export default defineComponent({
 .node {
     text-anchor: middle;
 
+    &__circle {
+        fill: white;
+        stroke: var(--grey-20);
+    }
+
+    &__label {
+        cursor: pointer;
+    }
+
+    &__labelText {
+        font-size: var(--font-size--xs);
+        fill: var(--navy-90);
+    }
+
+    &__labelBackground {
+        fill: white;
+        rx: var(--border-radius--xs);
+    }
+
+    &__channel {
+        fill: var(--mint-grey);
+        stroke: var(--mint-50);
+
+        &--selected {
+            fill: var(--mint-50);
+            stroke: var(--mint-70);
+        }
+    }
+
+    &__circle,
+    &__channel {
+        stroke-width: 1px;
+        cursor: pointer;
+    }
+
+    &__circle,
+    &__channel,
+    &__labelText,
+    &__labelBackground {
+        transition: fill 200ms;
+    }
+
     &--selected {
-        .circle,
-        .label__background {
+        .node__circle,
+        .node__labelBackground {
             fill: var(--yellow-30);
         }
 
-        .circle {
+        .node__circle {
             stroke: var(--yellow-50);
         }
     }
 
-    &--selected-dependent {
-        .circle {
+    &--selectedDependent {
+        .node__circle {
             stroke: var(--grey-50);
         }
     }
 
-    &--uses-channel {
-        .circle,
-        .label__background {
+    &--usesChannel {
+        .node__circle,
+        .node__labelBackground {
             fill: var(--mint-30);
         }
 
-        .circle {
+        .node__circle {
             stroke: var(--mint-50);
         }
     }
 
-    &--greyed-out {
+    &--greyedOut {
         opacity: 50%;
-        .circle {
+        .node__circle {
             stroke: none;
         }
 
-        .label__text {
+        .node__labelText {
             fill: var(--grey-20);
         }
     }
@@ -280,43 +322,8 @@ export default defineComponent({
         stroke: var(--grey-50);
     }
 
-    &--greyed-out {
+    &--greyedOut {
        stroke: var(--grey-15);
-    }
-}
-
-.circle {
-    fill: white;
-    stroke: var(--grey-20);
-    stroke-width: 1px;
-    cursor: pointer;
-
-    transition: fill 200ms;
-
-    &--small {
-        fill: var(--mint-grey);
-        stroke: var(--mint-50);
-    }
-
-    &--small-selected {
-        fill: var(--mint-50);
-        stroke: var(--mint-70);
-    }
-}
-
-.label {
-    cursor: pointer;
-
-    &__text {
-        font-size: var(--font-size--xs);
-        fill: var(--navy-90);
-        transition: fill 200ms;
-    }
-
-    &__background {
-        fill: white;
-        rx: var(--border-radius--xs);
-        transition: fill 200ms;
     }
 }
 </style>
