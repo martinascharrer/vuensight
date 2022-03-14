@@ -10,9 +10,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'page-communication',
     component: PageCommunication,
     children: [
-      { path: '', name: 'page-communication-props', component: SidebarCommunicationPropsTab },
-      { path: 'events', name: 'page-communication-events', component: SidebarCommunicationEventsTab },
-      { path: 'slots', name: 'page-communication-slots', component: SidebarCommunicationSlotsTab },
+      {
+        path: '',
+        name: 'Props',
+        component: SidebarCommunicationPropsTab,
+      },
+      {
+        path: 'events',
+        name: 'Events',
+        component: SidebarCommunicationEventsTab,
+      },
+      {
+        path: 'slots',
+        name: 'Slots',
+        component: SidebarCommunicationSlotsTab,
+      },
     ],
   },
 ];

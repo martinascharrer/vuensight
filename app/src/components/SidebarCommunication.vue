@@ -26,7 +26,6 @@
                   disabled: component.slots.length > 0
               }
           ]"
-          @navChanged="$emit('channelTypeSelected', $event)"
       />
       <router-view
           :component="component"
