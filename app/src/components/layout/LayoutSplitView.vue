@@ -26,6 +26,7 @@ export default defineComponent({
     &__main {
         width: 75vw;
         overflow-y: hidden;
+        background-color: var(--grey-10);
     }
 
     &__aside {

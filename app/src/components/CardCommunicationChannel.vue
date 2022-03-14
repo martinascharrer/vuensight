@@ -1,12 +1,15 @@
 <template>
     <base-card
         class="cardCommunicationChannel"
-        :class="{ 'cardCommunicationChannel--selected': isSelected }"
+        :class="{
+            [`cardCommunicationChannel--${color}`]: color,
+            'cardCommunicationChannel--selected': isSelected
+        }"
     >
         <template #header>
             <div class="cardCommunicationChannel__header">
                 <base-check-icon
-                    color="mint"
+                    :color="color"
                     :is-checked="isSelected"
                 > </base-check-icon>
                 <p>{{ channel.name }}</p>
@@ -33,7 +36,7 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseCheckIcon from '@/components/base/BaseCheckIcon.vue';
 import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
 
-import { Prop } from '@/types/index.d';
+import { Color, Prop } from '@/types/index.d';
 
 export default defineComponent({
   name: 'CardCommunicationChannel',
@@ -41,6 +44,10 @@ export default defineComponent({
     channel: {
       type: Object as PropType<Prop>,
       required: true,
+    },
+    color: {
+      type: String as PropType<Color>,
+      default: 'mint',
     },
     isSelected: {
       type: Boolean,
@@ -60,8 +67,16 @@ export default defineComponent({
 .cardCommunicationChannel {
     cursor: pointer;
 
-    &--selected {
+    &--mint.cardCommunicationChannel--selected {
         outline: 2px solid var(--mint-50);
+    }
+
+    &--red.cardCommunicationChannel--selected {
+        outline: 2px solid var(--red-50);
+    }
+
+    &--purple.cardCommunicationChannel--selected {
+        outline: 2px solid var(--purple-50);
     }
 
     &:hover {

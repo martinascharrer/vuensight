@@ -1,21 +1,28 @@
 <template>
     <span
         class="baseBadge"
-        :class="{ 'baseBadge--mint': mint }"
+        :class="`baseBadge--${color} ${isRound ? 'baseBade--round' : ''}`"
     >
         <slot />
     </span>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+
+import { Color } from '@/types/index.d';
+
+type BadgeColor = Color | 'lightMint';
 
 export default defineComponent({
   name: 'BaseBadge',
   props: {
-    mint: {
+    color: {
+      type: String as PropType<BadgeColor>,
+    },
+    isRound: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
 });
@@ -30,7 +37,26 @@ export default defineComponent({
     padding: var(--spacing--2xs) var(--spacing--s);
     border-radius: var(--border-radius--s);
 
+    &--round {
+        border-radius: var(--border-radius--l);
+    }
+
     &--mint {
+        background: var(--mint-50);
+        color: white;
+    }
+
+    &--red {
+        background: var(--red-50);
+        color: white;
+    }
+
+    &--purple {
+        background: var(--purple-50);
+        color: white;
+    }
+
+    &--lightMint {
         background: var(--mint-10);
         color: var(--mint-70);
     }

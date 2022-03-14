@@ -20,6 +20,10 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    selectedChannelType: {
+      type: String,
+      default: null,
+    },
     selectedComponent: {
       type: Object,
       default: null,
@@ -42,8 +46,17 @@ export default defineComponent({
     const selectedNode = ref('');
 
     const resetChannelSelection = () => {
-      d3.selectAll('.node--usesChannel').classed('node--usesChannel', false);
+      d3.selectAll('.node--usesProps').classed('node--usesProps', false);
+      d3.selectAll('.node--usesEvents').classed('node--usesEvents', false);
+      d3.selectAll('.node--usesSlots').classed('node--usesSlots', false);
       d3.selectAll('.node__channel--selected').classed('node__channel--selected', false);
+    };
+
+    const removeNodeChannels = () => {
+      d3.selectAll('.node__channel').remove();
+      d3.selectAll('.node__channel--props').remove();
+      d3.selectAll('.node__channel--slots').remove();
+      d3.selectAll('.node__channel--events').remove();
     };
 
     const resetNodeSelection = () => {
@@ -53,7 +66,7 @@ export default defineComponent({
       d3.selectAll('.link--selected').classed('link--selected', false);
       d3.selectAll('.node--greyedOut').classed('node--greyedOut', false);
       d3.selectAll('.link--greyedOut').classed('link--greyedOut', false);
-      d3.selectAll('.node__channel').remove();
+      removeNodeChannels();
       resetChannelSelection();
     };
 
@@ -66,13 +79,14 @@ export default defineComponent({
         .selectAll('.node__channel')
         .data((data) => data.dependencies.find(
           (dependency) => dependency.fullPath === selectedNode.value,
-        ).usedProps)
+        )[`used${props.selectedChannelType}`])
         .enter()
         .append('circle')
         .attr('r', SMALL_CIRCLE_RADIUS)
         .attr('cx', (d, i) => NODE_SIZE * Math.cos(getCirclePositionFactor(i) - Math.PI * 0.5))
         .attr('cy', (d, i) => NODE_SIZE * Math.sin(getCirclePositionFactor(i) - Math.PI * 0.5))
-        .attr('class', 'node__channel');
+        .attr('class', 'node__channel')
+        .attr('class', `node__channel--${props.selectedChannelType.toLowerCase()}`);
     };
 
     onMounted(() => {
@@ -202,22 +216,28 @@ export default defineComponent({
 
     const highlightChannelUsage = (channel) => {
       d3.selectAll('.node--selectedDependent')
-        .classed('node--usesChannel', (d) => {
+        .classed(`node--uses${props.selectedChannelType}`, (d) => {
           const dependency = d.dependencies.find(
             (dep) => dep.fullPath === props.selectedComponent.fullPath,
           );
-          return dependency.usedProps.some(
-            (prop) => props.selectedComponent.props[prop].name === channel.name,
-          );
+          const channels = props.selectedComponent[props.selectedChannelType.toLowerCase()];
+          return dependency[`used${props.selectedChannelType}`].some((prop) => channels[prop].name === channel.name);
         });
 
-      d3.selectAll('.node--selectedDependent .node__channel')
-        .classed('node__channel--selected', (d) => props.selectedComponent.props[d].name === channel.name);
+      d3.selectAll(`.node--selectedDependent .node__channel--${props.selectedChannelType.toLowerCase()}`)
+        .classed('node__channel--selected',
+          (d) => props.selectedComponent[props.selectedChannelType.toLowerCase()][d].name === channel.name);
     };
 
     watch(() => props.selectedChannel, () => {
       resetChannelSelection();
       highlightChannelUsage(props.selectedChannel);
+    });
+
+    watch(() => props.selectedChannelType, () => {
+      removeNodeChannels();
+      resetChannelSelection();
+      drawCommunicationChannelCircles();
     });
 
     return {
@@ -231,7 +251,6 @@ export default defineComponent({
 .svg {
     height: 100%;
     width: 100%;
-    background: var(--grey-10);
     cursor: grab;
 }
 
@@ -258,12 +277,20 @@ export default defineComponent({
     }
 
     &__channel {
-        fill: var(--mint-grey);
-        stroke: var(--mint-50);
 
-        &--selected {
-            fill: var(--mint-50);
-            stroke: var(--mint-70);
+        &--props {
+            fill: var(--mint-grey);
+            stroke: var(--mint-50);
+        }
+
+        &--events {
+            fill: var(--red-grey);
+            stroke: var(--red-50);
+        }
+
+        &--slots {
+            fill: var(--purple-grey);
+            stroke: var(--purple-50);
         }
     }
 
@@ -297,7 +324,7 @@ export default defineComponent({
         }
     }
 
-    &--usesChannel {
+    &--usesProps {
         .node__circle,
         .node__labelBackground {
             fill: var(--mint-30);
@@ -305,6 +332,43 @@ export default defineComponent({
 
         .node__circle {
             stroke: var(--mint-50);
+        }
+
+        .node__channel--selected {
+            fill: var(--mint-50);
+            stroke: var(--mint-70);
+        }
+    }
+
+    &--usesSlots {
+        .node__circle,
+        .node__labelBackground {
+            fill: var(--purple-30);
+        }
+
+        .node__circle {
+            stroke: var(--purple-50);
+        }
+
+        .node__channel--selected {
+            fill: var(--purple-50);
+            stroke: var(--purple-70);
+        }
+    }
+
+    &--usesEvents {
+        .node__circle,
+        .node__labelBackground {
+            fill: var(--red-30);
+        }
+
+        .node__circle {
+            stroke: var(--red-50);
+        }
+
+        .node__channel--selected {
+            fill: var(--red-50);
+            stroke: var(--red-70);
         }
     }
 

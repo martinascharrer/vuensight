@@ -2,12 +2,34 @@
   <div class="sidebarCommunication">
       <h2>{{ component.name }}</h2>
       <p>some info about this component</p>
-      <card-communication-channel
-          v-for="prop in component.props"
-          :key="prop.name"
-          :channel="prop"
-          :is-selected="selectedChannel ? selectedChannel.name === prop.name : null"
-          @click="selectChannel(prop)"
+      <base-sub-nav
+          :items="[
+              {
+                  to: '/',
+                  name: 'Props',
+                  color: 'mint',
+                  counter: component.props.length,
+                  disabled: component.props.length > 0
+              },
+              {
+                  to: '/events',
+                  name: 'Events',
+                  color: 'red',
+                  counter: component.events.length,
+                  disabled: component.events.length > 0
+              },
+              {
+                  to: '/slots',
+                  name: 'Slots',
+                  color: 'purple',
+                  counter: component.slots.length,
+                  disabled: component.slots.length > 0
+              }
+          ]"
+      />
+      <router-view
+          :component="component"
+          @channelSelected="selectChannel"
       />
   </div>
 </template>
@@ -15,14 +37,13 @@
 <script lang="ts">
 import { defineComponent, ref, PropType } from 'vue';
 
-import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
+import BaseSubNav from '@/components/base/BaseSubNav.vue';
 
 import { Prop, VueComponent } from '@/types/index.d';
 
 export default defineComponent({
-  name: 'SidebarCommunication',
   components: {
-    CardCommunicationChannel,
+    BaseSubNav,
   },
   props: {
     component: {

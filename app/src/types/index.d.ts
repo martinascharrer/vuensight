@@ -1,3 +1,5 @@
+export type Color = 'mint' | 'red' | 'purple';
+
 export type Prop = {
   name: string,
   type?: { name: string; func?: boolean | undefined; } | undefined,

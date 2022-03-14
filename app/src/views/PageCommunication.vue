@@ -6,6 +6,7 @@
             v-else-if="forceGraphData"
             :selected-component="selectedComponent"
             :selected-channel="selectedChannel"
+            :selected-channel-type="selectedChannelType"
             :data="forceGraphData"
             @selected="selectComponent"
             @unselected="selectedComponent = null"
@@ -14,7 +15,7 @@
             <sidebar-communication
                 v-if="selectedComponent"
                 :component="selectedComponent"
-                @channelSelected="selectChannel"
+                @channelSelected="selectedChannel = $event"
             />
             <p v-else>Select a component!</p>
         </template>
@@ -28,6 +29,8 @@ import {
   computed,
   ref,
 } from 'vue';
+import { useRoute } from 'vue-router';
+
 import * as parserService from '@/services/parser';
 
 import ForceGraph from '@/components/ForceGraph.vue';
@@ -63,9 +66,9 @@ export default defineComponent({
     };
 
     const selectedChannel = ref<Prop | null>(null);
-    const selectChannel = (channel: Prop) => {
-      selectedChannel.value = channel;
-    };
+
+    const route = useRoute().name;
+    const selectedChannelType = ref<string>(route && typeof route === 'string' ? route : 'Props');
 
     const formatDataForForceLayout = (originalData: VueComponent[]) => {
       const nodes: VueComponent[] = [];
@@ -91,8 +94,8 @@ export default defineComponent({
 
     return {
       data,
-      selectChannel,
       selectedChannel,
+      selectedChannelType,
       selectComponent,
       selectedComponent,
       isLoading,
