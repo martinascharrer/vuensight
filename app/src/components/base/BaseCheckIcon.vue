@@ -1,7 +1,10 @@
 <template>
     <svg
         class="baseCheckIcon"
-        :class="{ 'baseCheckIcon--selected': isChecked }"
+        :class="{
+            [`baseCheckIcon--${color}`]: color,
+            'baseCheckIcon--selected': isChecked
+        }"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 12.19 18"
     >
@@ -15,7 +18,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+
+import { Color } from '@/types/index.d';
 
 export default defineComponent({
   name: 'BaseCheckIcon',
@@ -23,6 +28,10 @@ export default defineComponent({
     isChecked: {
       type: Boolean,
       default: false,
+    },
+    color: {
+      type: String as PropType<Color>,
+      default: 'mint',
     },
   },
 });
@@ -40,11 +49,21 @@ export default defineComponent({
     }
 
     &--selected {
-        background: var(--mint-50);
-
         .baseCheckIcon__check {
             fill: white;
         }
+    }
+
+    &--mint.baseCheckIcon--selected {
+        background: var(--mint-50);
+    }
+
+    &--red.baseCheckIcon--selected {
+        background: var(--red-50);
+    }
+
+    &--purple.baseCheckIcon--selected {
+        background: var(--purple-50);
     }
 }
 </style>

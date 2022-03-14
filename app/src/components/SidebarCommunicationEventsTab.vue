@@ -5,6 +5,7 @@
           :key="event.name"
           :channel="event"
           :is-selected="selectedChannel ? selectedChannel.name === event.name : null"
+          color="red"
           @click="selectChannel(event)"
       />
   </div>

@@ -5,6 +5,7 @@
           :key="prop.name"
           :channel="prop"
           :is-selected="selectedChannel ? selectedChannel.name === prop.name : null"
+          color="mint"
           @click="selectChannel(prop)"
       />
   </div>

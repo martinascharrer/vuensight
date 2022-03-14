@@ -5,6 +5,7 @@
           :key="slot.name"
           :channel="slot"
           :is-selected="selectedChannel ? selectedChannel.name === slot.name : null"
+          color="purple"
           @click="selectChannel(slot)"
       />
   </div>

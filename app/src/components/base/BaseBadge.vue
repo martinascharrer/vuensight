@@ -10,7 +10,9 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-type BadgeColor = 'mint' | 'lightMint' | 'red' | 'purple';
+import { Color } from '@/types/index.d';
+
+type BadgeColor = Color | 'lightMint';
 
 export default defineComponent({
   name: 'BaseBadge',
