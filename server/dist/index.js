@@ -37,21 +37,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.startServer = void 0;
-var express = require('express');
-var path = require('path');
+var history = require("connect-history-api-fallback");
+var express = require("express");
+var path_1 = require("path");
 var dist_1 = require("@vue-component-insight/parser/dist");
 var startServer = function (dir) { return __awaiter(void 0, void 0, void 0, function () {
     var app;
     return __generator(this, function (_a) {
         app = express();
-        app.use(express.static(path.join(__dirname, '../../app/dist')));
-        app.get('/test', function (req, res) {
-            console.log('hello');
-            res.sendFile(__dirname, '../../app/dist/index.html');
-        });
-        app.listen(4444, function () {
-            console.log('server is listening on port 4444');
-        });
         app.get('/parse-result', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
             var parseResult;
             return __generator(this, function (_a) {
@@ -64,6 +57,11 @@ var startServer = function (dir) { return __awaiter(void 0, void 0, void 0, func
                 }
             });
         }); });
+        app.use(history());
+        app.use(express.static((0, path_1.join)(__dirname, '../../app/dist')));
+        app.listen(4444, function () {
+            console.log('server is listening on port 4444');
+        });
         return [2 /*return*/];
     });
 }); };
