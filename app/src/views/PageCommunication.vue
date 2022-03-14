@@ -67,8 +67,10 @@ export default defineComponent({
 
     const selectedChannel = ref<Prop | null>(null);
 
-    const route = useRoute().name;
-    const selectedChannelType = ref<string>(route && typeof route === 'string' ? route : 'Props');
+    const route = useRoute();
+    const selectedChannelType = computed<string>(
+      () => (route && typeof route.name === 'string' ? route.name : 'Props'),
+    );
 
     const formatDataForForceLayout = (originalData: VueComponent[]) => {
       const nodes: VueComponent[] = [];
