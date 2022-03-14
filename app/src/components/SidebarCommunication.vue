@@ -2,7 +2,8 @@
   <div class="sidebarCommunication">
       <h2>{{ component.name }}</h2>
       <p>some info about this component</p>
-      <base-sub-nav :items="[
+      <base-sub-nav
+          :items="[
               {
                   to: '/',
                   name: 'Props',
@@ -14,7 +15,7 @@
                   to: '/events',
                   name: 'Events',
                   color: 'red',
-                  counter: 0,
+                  counter: component.events.length,
                   disabled: component.events.length > 0
               },
               {
@@ -25,6 +26,7 @@
                   disabled: component.slots.length > 0
               }
           ]"
+          @navChanged="$emit('channelTypeSelected', $event)"
       />
       <router-view
           :component="component"

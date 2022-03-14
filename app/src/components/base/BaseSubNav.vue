@@ -8,6 +8,7 @@
             :to="item.to"
             :disabled="item.disabled"
             :class="`baseSubNav__item baseSubNav__item--${item.color}`"
+            @click="$emit('navChanged', item.name)"
         >
             <span class="baseSubNav__itemText">
                 <base-badge

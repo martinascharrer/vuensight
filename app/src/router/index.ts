@@ -7,12 +7,12 @@ import SidebarCommunicationSlotsTab from '../components/SidebarCommunicationSlot
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'PageCommunication',
+    name: 'page-communication',
     component: PageCommunication,
     children: [
-      { path: '', component: SidebarCommunicationPropsTab },
-      { path: 'events', component: SidebarCommunicationEventsTab },
-      { path: 'slots', component: SidebarCommunicationSlotsTab },
+      { path: '', name: 'page-communication-props', component: SidebarCommunicationPropsTab },
+      { path: 'events', name: 'page-communication-events', component: SidebarCommunicationEventsTab },
+      { path: 'slots', name: 'page-communication-slots', component: SidebarCommunicationSlotsTab },
     ],
   },
 ];
