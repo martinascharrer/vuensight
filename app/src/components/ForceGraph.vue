@@ -4,14 +4,14 @@
 
 <script>
 import {
-  defineComponent, ref, onMounted, watch,
+  defineComponent, ref, onMounted, watch, computed,
 } from 'vue';
 import * as d3 from 'd3';
 import * as cola from 'webcola';
 
-const NODE_SIZE = 25;
 const SMALL_CIRCLE_RADIUS = 3;
-const DISTANCE_BETWEEN_SMALL_CIRCLES = 5;
+const DISTANCE_BETWEEN_SMALL_CIRCLES = 6;
+const NODE_SIZE_NO_FILTER = 15;
 
 export default defineComponent({
   name: 'ForceGraph',
@@ -32,6 +32,10 @@ export default defineComponent({
       type: Object,
       default: null,
     },
+    nodeSizeAttribute: {
+      type: String,
+      default: 'props',
+    },
     width: {
       type: Number,
       default: 500,
@@ -44,6 +48,71 @@ export default defineComponent({
   setup(props, { emit }) {
     const graphRef = ref(null);
     const selectedNode = ref('');
+    const transitionTime = null;
+
+    const nodes = props.data.nodes.map((d) => ({ ...d, id: d.fullPath }));
+    const indices = new Map(nodes.map((d) => [d.fullPath, d]));
+    const links = props.data.links.map((d) => Object.assign(Object.create(d), {
+      source: indices.get(d.source),
+      target: indices.get(d.target),
+    }));
+
+    const nodeSizeAttributeScale = computed(() => {
+      if (props.nodeSizeAttribute === 'none') return (d) => d;
+
+      const numbersOfAttribute = props.nodeSizeAttribute === 'all'
+        ? nodes.map((d) => d.props.length + d.events.length + d.slots.length)
+        : nodes.map((d) => d[props.nodeSizeAttribute].length);
+      return d3.scaleLinear(d3.extent(numbersOfAttribute), [10, 30]);
+    });
+
+    const calculateNodeSize = (d) => {
+      if (props.nodeSizeAttribute === 'none') return NODE_SIZE_NO_FILTER;
+
+      const value = props.nodeSizeAttribute === 'all'
+        ? d.props.length + d.events.length + d.slots.length : d[props.nodeSizeAttribute].length;
+      return nodeSizeAttributeScale.value(value);
+    };
+
+    const updateNodeSize = () => {
+      d3.selectAll('.node__circle')
+        .transition(transitionTime)
+        .attr('r', (d) => calculateNodeSize(d));
+    };
+
+    const getCirclePositionFactor = (index, nodeSize) => (index / nodeSize)
+          * (SMALL_CIRCLE_RADIUS / 2) * DISTANCE_BETWEEN_SMALL_CIRCLES;
+
+    const updateCommunicationChannelPositions = () => {
+      const nodeSize = d3.local();
+      d3.selectAll('.node--selectedDependent')
+        .each((d, i, currentNodes) => nodeSize.set(currentNodes[i], calculateNodeSize(d)))
+        .selectAll('.node__channel')
+        .transition(transitionTime)
+        .attr('cx', (d, i, currentNodes) => {
+          const channelCircleRadius = nodeSize.get(currentNodes[i]) + 5;
+          return channelCircleRadius * Math.cos(getCirclePositionFactor(i, channelCircleRadius) - Math.PI * 0.5);
+        })
+        .attr('cy', (d, i, currentNodes) => {
+          const channelCircleRadius = nodeSize.get(currentNodes[i]) + 5;
+          return channelCircleRadius * Math.sin(getCirclePositionFactor(i, channelCircleRadius) - Math.PI * 0.5);
+        });
+    };
+
+    const drawCommunicationChannelCircles = () => {
+      d3.selectAll('.node--selectedDependent')
+        .append('g')
+        .selectAll('.node__channel')
+        .data((data) => data.dependencies.find(
+          (dependency) => dependency.fullPath === selectedNode.value,
+        )[`used${props.selectedChannelType}`])
+        .enter()
+        .append('circle')
+        .attr('r', SMALL_CIRCLE_RADIUS)
+        .attr('class', `node__channel node__channel--${props.selectedChannelType.toLowerCase()}`);
+
+      updateCommunicationChannelPositions();
+    };
 
     const resetChannelSelection = () => {
       d3.selectAll('.node--usesProps').classed('node--usesProps', false);
@@ -70,39 +139,15 @@ export default defineComponent({
       resetChannelSelection();
     };
 
-    const getCirclePositionFactor = (index) => (index / NODE_SIZE)
-        * (SMALL_CIRCLE_RADIUS / 2) * DISTANCE_BETWEEN_SMALL_CIRCLES;
-
-    const drawCommunicationChannelCircles = () => {
-      d3.selectAll('.node--selectedDependent')
-        .append('g')
-        .selectAll('.node__channel')
-        .data((data) => data.dependencies.find(
-          (dependency) => dependency.fullPath === selectedNode.value,
-        )[`used${props.selectedChannelType}`])
-        .enter()
-        .append('circle')
-        .attr('r', SMALL_CIRCLE_RADIUS)
-        .attr('cx', (d, i) => NODE_SIZE * Math.cos(getCirclePositionFactor(i) - Math.PI * 0.5))
-        .attr('cy', (d, i) => NODE_SIZE * Math.sin(getCirclePositionFactor(i) - Math.PI * 0.5))
-        .attr('class', 'node__channel')
-        .attr('class', `node__channel--${props.selectedChannelType.toLowerCase()}`);
-    };
-
     onMounted(() => {
-      const nodes = props.data.nodes.map((d) => ({ ...d, id: d.fullPath }));
-      const index = new Map(nodes.map((d) => [d.fullPath, d]));
-      const links = props.data.links.map((d) => Object.assign(Object.create(d), {
-        source: index.get(d.source),
-        target: index.get(d.target),
-      }));
-
       const svg = d3.select(graphRef.value)
         .attr('viewBox', [0, 0, props.width, props.height])
         .attr('class', 'svg')
         .on('click', () => {
           resetNodeSelection();
         });
+
+      svg.transition().duration(500);
 
       const g = svg.append('g');
 
@@ -155,8 +200,9 @@ export default defineComponent({
         });
 
       node.append('circle')
-        .attr('r', 20)
         .attr('class', 'node__circle');
+
+      updateNodeSize();
 
       const label = node.append('g')
         .attr('dy', 2)
@@ -228,6 +274,11 @@ export default defineComponent({
         .classed('node__channel--selected',
           (d) => props.selectedComponent[props.selectedChannelType.toLowerCase()][d].name === channel.name);
     };
+
+    watch(() => props.nodeSizeAttribute, () => {
+      updateNodeSize();
+      updateCommunicationChannelPositions();
+    });
 
     watch(() => props.selectedChannel, () => {
       resetChannelSelection();

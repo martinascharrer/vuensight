@@ -1,16 +1,21 @@
 <template>
-    <layout-split-view>
+    <layout-split-view class="pageCommunication__filter">
         <p v-if="isLoading">... loading</p>
         <p v-else-if="isError">Something went wrong parsing your project.</p>
-        <force-graph
-            v-else-if="forceGraphData"
-            :selected-component="selectedComponent"
-            :selected-channel="selectedChannel"
-            :selected-channel-type="selectedChannelType"
-            :data="forceGraphData"
-            @selected="selectComponent"
-            @unselected="selectedComponent = null"
-        />
+        <template v-else-if="forceGraphData">
+            <div class="pageCommunication__menu">
+                <communication-menu-filter v-model="nodeSizeFilter" />
+            </div>
+            <force-graph
+                :selected-component="selectedComponent"
+                :selected-channel="selectedChannel"
+                :selected-channel-type="selectedChannelType"
+                :data="forceGraphData"
+                :node-size-attribute="nodeSizeFilter"
+                @selected="selectComponent"
+                @unselected="selectedComponent = null"
+            />
+        </template>
         <template #aside>
             <sidebar-communication
                 v-if="selectedComponent"
@@ -33,6 +38,7 @@ import { useRoute } from 'vue-router';
 
 import * as parserService from '@/services/parser';
 
+import CommunicationMenuFilter from '@/components/CommunicationMenuFilter.vue';
 import ForceGraph from '@/components/ForceGraph.vue';
 import LayoutSplitView from '@/components/layout/LayoutSplitView.vue';
 import SidebarCommunication from '@/components/SidebarCommunication.vue';
@@ -46,6 +52,7 @@ import {
 export default defineComponent({
   name: 'PageCommunication',
   components: {
+    CommunicationMenuFilter,
     ForceGraph,
     LayoutSplitView,
     SidebarCommunication,
@@ -72,6 +79,8 @@ export default defineComponent({
       () => (route && typeof route.name === 'string' ? route.name : 'Props'),
     );
 
+    const nodeSizeFilter = ref<string>('props');
+
     const formatDataForForceLayout = (originalData: VueComponent[]) => {
       const nodes: VueComponent[] = [];
       const links: Link[] = [];
@@ -96,6 +105,7 @@ export default defineComponent({
 
     return {
       data,
+      nodeSizeFilter,
       selectedChannel,
       selectedChannelType,
       selectComponent,
@@ -107,3 +117,13 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.pageCommunication {
+    &__menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: var(--spacing--m);
+    }
+}
+</style>
