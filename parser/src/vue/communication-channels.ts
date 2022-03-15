@@ -6,9 +6,10 @@ import { Dependency, Event, Prop, Slot, VueComponent } from '../../types';
 import { kebabize } from '../utils/kababize';
 
 export const findDependencyInstancesInTemplate = (template: string, name: string): Element[] => {
-  const { document } = new JSDOM(template).window;
-  const dependencyUsagesCamelCase = Array.from(document.querySelectorAll(name));
-  const dependencyUsagesKebabCase = Array.from(document.querySelectorAll(kebabize(name)));
+  const templateWithoutTemplateTags = template.replace(/template/g, 'temp-tag');
+  const fragment = JSDOM.fragment(templateWithoutTemplateTags);
+  const dependencyUsagesCamelCase = Array.from(fragment.querySelectorAll(name));
+  const dependencyUsagesKebabCase = Array.from(fragment.querySelectorAll(kebabize(name)));
   return [...dependencyUsagesCamelCase, ...dependencyUsagesKebabCase];
 };
 

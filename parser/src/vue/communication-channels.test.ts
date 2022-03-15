@@ -1,13 +1,41 @@
 import { JSDOM } from 'jsdom';
 
-import { isPropUsed, isEventUsed, isSlotUsed, getUsedChannels } from './communication-channels';
+import {
+    findDependencyInstancesInTemplate,
+    isPropUsed,
+    isEventUsed,
+    isSlotUsed,
+    getUsedChannels
+} from './communication-channels';
 
 const createComponent = (template: string) => {
-    const { document } = new JSDOM(template).window;
-    return document.querySelector('ComponentName');
+    const fragment = JSDOM.fragment(template);
+    return fragment.querySelector('ComponentName');
 };
 
 describe('parser', () => {
+    describe('findDependencyInstancesInTemplate', () => {
+        it('should find a component usage in camel case', function () {
+            const template = '<div><TestComponent>test</TestComponent></div>';
+            expect(findDependencyInstancesInTemplate(template, 'TestComponent')).toHaveLength(1);
+        });
+
+        it('should find a component usage in kebab case', function () {
+            const template = '<div><test-component>test</test-component></div>';
+            expect(findDependencyInstancesInTemplate(template, 'TestComponent')).toHaveLength(1);
+        });
+
+        it('should find multiple usages of a component', function () {
+            const template = '<div><test-component>test</test-component><TestComponent>test</TestComponent></div>';
+            expect(findDependencyInstancesInTemplate(template, 'TestComponent')).toHaveLength(2);
+        });
+
+        it('should find a component usage inside of a template tag', function () {
+            const template = '<template><template v-if="true"><test-component>test</test-component></template></template>';
+            expect(findDependencyInstancesInTemplate(template, 'TestComponent')).toHaveLength(1);
+        });
+    });
+    
     describe('isPropUsed', () => {
         it('should find the prop in kebab syntax', () => {
             const prop = { name: 'TestProp', type: { name: 'String' }, default: 'Test', required: false };
