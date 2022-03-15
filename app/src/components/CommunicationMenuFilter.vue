@@ -1,14 +1,15 @@
 <template>
-    <base-dropdown class="pageCommunication__filter">
+    <base-dropdown class="communicationMenuFilter">
         <template #trigger>
             Filter
             <base-arrow-icon />
         </template>
-        <h4>Component size</h4>
-        <base-radio-button-group
-            v-model="nodeSizeFilter"
-            name="nodeSizeFilter"
-            :options="[
+        <div class="communicationMenuFilter__form">
+            <h4>Component size</h4>
+            <base-radio-button-group
+                v-model="nodeSizeFilter"
+                name="nodeSizeFilter"
+                :options="[
                 {
                     label: 'Number of Props',
                     value: 'props',
@@ -21,8 +22,17 @@
                     label: 'Number of Slots',
                     value: 'slots',
                 },
+                {
+                    label: 'Number of Props, Events & Slots',
+                    value: 'all',
+                },
+                {
+                    label: 'No filter',
+                    value: 'none',
+                },
             ]"
-        />
+            />
+        </div>
     </base-dropdown>
 </template>
 
@@ -58,4 +68,11 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+.communicationMenuFilter {
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing--m);
+    }
+}
 </style>
