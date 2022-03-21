@@ -17,18 +17,20 @@
                 <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
         </template>
-        <template v-if="channel.type">
-            type: {{ channel.type.name }}
+        <template v-if="channel.type || channel.default || channel.required || channel.mixin" #body>
+            <template v-if="channel.type">
+                type: {{ channel.type.name }}
+            </template>
+            <template v-if="channel.default">
+                <base-delimiter /> default: {{ channel.default }}
+            </template>
+            <template v-if="channel.required">
+                <base-delimiter /> required: {{ channel.required }}
+            </template>
+            <template v-if="channel.mixin">
+                mixin: {{ channel.mixin.name }}
+            </template>
         </template>
-        <template v-if="channel.default">
-            <base-delimiter /> default: {{ channel.default }}
-        </template>
-        <template v-if="channel.required">
-            <base-delimiter /> required: {{ channel.required }}
-        </template>
-        <div v-if="channel.mixin">
-            mixin: {{ channel.mixin.name }}
-        </div>
     </base-card>
 </template>
 
