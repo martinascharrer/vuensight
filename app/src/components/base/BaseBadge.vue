@@ -12,13 +12,11 @@ import { defineComponent, PropType } from 'vue';
 
 import { Color } from '@/types/index.d';
 
-type BadgeColor = Color | 'lightMint';
-
 export default defineComponent({
   name: 'BaseBadge',
   props: {
     color: {
-      type: String as PropType<BadgeColor>,
+      type: String as PropType<Color>,
     },
     isRound: {
       type: Boolean,
@@ -56,9 +54,14 @@ export default defineComponent({
         color: white;
     }
 
-    &--lightMint {
+    &--light-mint {
         background: var(--mint-10);
         color: var(--mint-70);
+    }
+
+    &--light-red {
+        background: var(--red-10);
+        color: var(--red-70);
     }
 }
 </style>

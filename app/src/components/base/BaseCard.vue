@@ -1,12 +1,12 @@
 <template>
     <button class="baseCard">
-        <span class="baseCard__header" :class="{'baseCard__header--expanded': isExpanded}">
+        <span class="baseCard__header" :class="{'baseCard__header--expanded': isExpanded && $slots.default}">
             <slot name="header"/>
-            <base-arrow-icon :is-flipped="isExpanded" @click.stop="isExpanded = !isExpanded"/>
+            <base-arrow-icon v-if="$slots.body" :is-flipped="isExpanded" @click.stop="isExpanded = !isExpanded"/>
         </span>
         <transition>
-            <span v-if="isExpanded" class="baseCard__body">
-                <slot />
+            <span v-if="isExpanded && $slots.body" class="baseCard__body">
+                <slot name="body" />
             </span>
         </transition>
     </button>
