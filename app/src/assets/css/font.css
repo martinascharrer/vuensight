@@ -1,6 +1,7 @@
 :root {
     font-size: 16px;
 
+    --font-size--3xs: 0.35em;
     --font-size--2xs: 0.5em;
     --font-size--xs: 0.75em;
     --font-size--s: 0.875em;
