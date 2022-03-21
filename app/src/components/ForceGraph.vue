@@ -133,6 +133,7 @@ export default defineComponent({
       d3.selectAll('.node--selected').classed('node--selected', false);
       d3.selectAll('.node--selectedDependent').classed('node--selectedDependent', false);
       d3.selectAll('.link--selected').classed('link--selected', false);
+      d3.selectAll('.arrow--selected').classed('arrow--selected', false);
       d3.selectAll('.node--greyedOut').classed('node--greyedOut', false);
       d3.selectAll('.link--greyedOut').classed('link--greyedOut', false);
       removeNodeChannels();
@@ -160,13 +161,38 @@ export default defineComponent({
         .symmetricDiffLinkLengths(20)
         .start(20, 20, 20);
 
+      const LINK_ARROW_SIZE = 6;
+      svg.append('defs').selectAll('.arrow')
+        .data(links)
+        .enter()
+        .append('marker')
+        .attr('class', 'arrow')
+        .attr('id', (d) => `arrow-${d.source.index}-${d.target.index}`)
+        .attr('viewBox', `0 -${LINK_ARROW_SIZE / 2} ${LINK_ARROW_SIZE} ${LINK_ARROW_SIZE}`)
+        .attr('refX', (d) => {
+          const targetNode = nodes.find((node) => node.id === d.target.id);
+          return calculateNodeSize(targetNode) + LINK_ARROW_SIZE;
+        })
+        .attr('refY', 0)
+        .attr('markerWidth', LINK_ARROW_SIZE)
+        .attr('markerHeight', LINK_ARROW_SIZE)
+        .attr('orient', 'auto')
+        .append('path')
+        .attr('d',
+          `M${LINK_ARROW_SIZE / 2},-${(LINK_ARROW_SIZE / 2) - 1}
+          L${LINK_ARROW_SIZE - 1},0
+          L${LINK_ARROW_SIZE / 2},${(LINK_ARROW_SIZE / 2) - 1}
+          L${LINK_ARROW_SIZE / 2},-${(LINK_ARROW_SIZE / 2) - 1} Z`)
+        .style('opacity', '1');
+
       const link = g.append('g')
         .selectAll('line')
         .data(links)
         .enter()
         .append('line')
         .attr('id', (d) => `link-${d.source.index}-${d.target.index}`)
-        .attr('class', 'link');
+        .attr('class', 'link')
+        .attr('marker-end', (d) => `url(#arrow-${d.source.index}-${d.target.index})`);
 
       const node = g.append('g')
         .selectAll('g')
@@ -189,6 +215,7 @@ export default defineComponent({
           dependents.forEach((dependent) => {
             d3.select(`#node-${dependent.source.index}`).classed('node--selectedDependent', true);
             d3.select(`#link-${dependent.source.index}-${dependent.target.index}`).classed('link--selected', true);
+            d3.select(`#arrow-${dependent.source.index}-${dependent.target.index}`).classed('arrow--selected', true);
           });
           drawCommunicationChannelCircles();
 
@@ -318,7 +345,7 @@ export default defineComponent({
     }
 
     &__labelText {
-        font-size: var(--font-size--2xs);
+        font-size: var(--font-size--3xs);
         fill: var(--navy-90);
     }
 
@@ -444,6 +471,16 @@ export default defineComponent({
 
     &--greyedOut {
        stroke: var(--grey-15);
+    }
+}
+
+.arrow {
+    stroke: var(--grey-20);
+    fill: var(--grey-20);
+
+    &--selected {
+        stroke: var(--grey-50);
+        fill: var(--grey-50);
     }
 }
 </style>
