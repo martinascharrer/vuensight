@@ -14,6 +14,7 @@
                 > </base-check-icon>
                 <p>{{ channel.name }}</p>
                 <base-badge>3</base-badge>
+                <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
         </template>
         <template v-if="channel.type">
@@ -25,6 +26,9 @@
         <template v-if="channel.required">
             <base-delimiter /> required: {{ channel.required }}
         </template>
+        <div v-if="channel.mixin">
+            mixin: {{ channel.mixin.name }}
+        </div>
     </base-card>
 </template>
 

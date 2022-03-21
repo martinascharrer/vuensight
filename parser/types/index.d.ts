@@ -1,13 +1,20 @@
+export interface Mixin {
+  name: string
+  path: string
+}
+
 export type Prop = {
   name: string,
   type?: { name: string; func?: boolean | undefined; } | undefined,
   required?: boolean,
   default?: string,
+  mixin?: Mixin,
 }
 
 export type Event = {
   name: string,
   isSync?: boolean,
+  mixin?: Mixin,
 }
 
 export type Slot = {
