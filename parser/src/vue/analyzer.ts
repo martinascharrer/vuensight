@@ -40,6 +40,7 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
       events: parsedComponentData?.events ?? [],
       slots: parsedComponentData?.slots ?? [],
       dependencies,
+      dependents: module.dependents,
     };
   }));
 };

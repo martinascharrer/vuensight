@@ -26,6 +26,7 @@ export const findDependencies = (directory = 'src', fileType: string):IModule[] 
                 'npm-no-pkg',
              ],
           },
+          forceDeriveDependents: true,
         },
     );
   } catch (error) {

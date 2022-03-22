@@ -38,4 +38,5 @@ export type VueComponent = {
   events: Event[],
   slots: Slot[],
   dependencies: Dependency[],
+  dependents: string[],
 }
