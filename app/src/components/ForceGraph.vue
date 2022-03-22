@@ -9,8 +9,8 @@ import {
 import * as d3 from 'd3';
 import * as cola from 'webcola';
 
-const SMALL_CIRCLE_RADIUS = 3;
-const DISTANCE_BETWEEN_SMALL_CIRCLES = 6;
+const SMALL_CIRCLE_RADIUS = 2;
+const DISTANCE_BETWEEN_SMALL_CIRCLES = 5;
 const NODE_SIZE_NO_FILTER = 15;
 
 export default defineComponent({
@@ -90,11 +90,11 @@ export default defineComponent({
         .selectAll('.node__channel')
         .transition(transitionTime)
         .attr('cx', (d, i, currentNodes) => {
-          const channelCircleRadius = nodeSize.get(currentNodes[i]) + 5;
+          const channelCircleRadius = nodeSize.get(currentNodes[i]) + 3;
           return channelCircleRadius * Math.cos(getCirclePositionFactor(i, channelCircleRadius) - Math.PI * 0.5);
         })
         .attr('cy', (d, i, currentNodes) => {
-          const channelCircleRadius = nodeSize.get(currentNodes[i]) + 5;
+          const channelCircleRadius = nodeSize.get(currentNodes[i]) + 3;
           return channelCircleRadius * Math.sin(getCirclePositionFactor(i, channelCircleRadius) - Math.PI * 0.5);
         });
     };
@@ -161,7 +161,7 @@ export default defineComponent({
         .symmetricDiffLinkLengths(20)
         .start(20, 20, 20);
 
-      const LINK_ARROW_SIZE = 6;
+      const LINK_ARROW_SIZE = 4;
       svg.append('defs').selectAll('.arrow')
         .data(links)
         .enter()
@@ -179,10 +179,10 @@ export default defineComponent({
         .attr('orient', 'auto')
         .append('path')
         .attr('d',
-          `M${LINK_ARROW_SIZE / 2},-${(LINK_ARROW_SIZE / 2) - 1}
+          `M1,-${(LINK_ARROW_SIZE / 2) - 1}
           L${LINK_ARROW_SIZE - 1},0
-          L${LINK_ARROW_SIZE / 2},${(LINK_ARROW_SIZE / 2) - 1}
-          L${LINK_ARROW_SIZE / 2},-${(LINK_ARROW_SIZE / 2) - 1} Z`)
+          L1,${(LINK_ARROW_SIZE / 2) - 1}
+          L1,-${(LINK_ARROW_SIZE / 2) - 1} Z`)
         .style('opacity', '1');
 
       const link = g.append('g')

@@ -1,6 +1,6 @@
 <template>
     <button class="baseCard">
-        <span class="baseCard__header" :class="{'baseCard__header--expanded': isExpanded && $slots.default}">
+        <span class="baseCard__header" :class="{'baseCard__header--expanded': isExpanded && $slots.body}">
             <slot name="header"/>
             <base-arrow-icon v-if="$slots.body" :is-flipped="isExpanded" @click.stop="isExpanded = !isExpanded"/>
         </span>
