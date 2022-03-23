@@ -1,0 +1,23 @@
+{
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.stub.ts",
+    "node_modules",
+    "dist"
+  ],
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es2019",
+    "module": "commonjs",
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@vue-component-insight/*": ["./packages/*/"]
+    }
+  },
+}

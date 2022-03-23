@@ -1,0 +1,34 @@
+{
+  "name": "vue-component-insight",
+  "version": "0.1.0",
+  "description": "`vue-component-insight` is a cli tool for parsing and visualizing Vue.js projects. The ultimate goal is to visualize the components  communication e.g. their props, events and slots in an interactive web app. **This project is currently a work in progress!**",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspaces"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+  },
+  "author": "Martina Scharrer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+  },
+  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^17.0.22",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "eslint": "^8.11.0",
+    "jest": "^27.5.1",
+    "jest-cli": "^27.5.1",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.6.2"
+  }
+}

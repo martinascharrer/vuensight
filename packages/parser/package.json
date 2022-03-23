@@ -1,0 +1,40 @@
+{
+  "name": "@vue-component-insight/parser",
+  "version": "0.1.0",
+  "description": "@vue-component-insight/parser extracts information regarding the dependencies and their used props,events and slots of a given Vue project.",
+  "scripts": {
+    "build": "rm -rf dist/* && tsc -p tsconfig.pkg.json",
+    "build:watch": "tsc -w -p tsconfig.pkg.json",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint  --ext ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+  },
+  "keywords": [
+    "TypeScript",
+    "Vue.js",
+    "node.js"
+  ],
+  "author": "Martina Scharrer",
+  "license": "(MIT)",
+  "bugs": {
+    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+  },
+  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "dependency-cruiser": "^11.4.1",
+    "fs": "^0.0.1-security",
+    "jsdom": "^16.7.0",
+    "vue-docgen-api": "^4.44.22"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^16.2.14"
+  }
+}
