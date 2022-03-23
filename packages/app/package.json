@@ -1,0 +1,36 @@
+{
+  "name": "@vue-component-insight/app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build:watch": "vue-cli-service build --watch",
+    "test": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.21.1",
+    "d3": "^5.16.0",
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.14",
+    "webcola": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.1.0",
+    "@vue/cli-plugin-babel": "^5.0.4",
+    "@vue/cli-plugin-eslint": "^5.0.4",
+    "@vue/cli-plugin-router": "^5.0.4",
+    "@vue/cli-plugin-typescript": "^5.0.4",
+    "@vue/cli-plugin-unit-jest": "^5.0.4",
+    "@vue/cli-service": "^5.0.4",
+    "@vue/compiler-sfc": "^3.2.31",
+    "@vue/eslint-config-airbnb": "^6.0.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@vue/test-utils": "^2.0.0-rc.17",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-vue": "^8.5.0",
+    "sass": "^1.49.9",
+    "sass-loader": "^12.6.0"
+  }
+}
