@@ -1,5 +1,5 @@
-import * as history from 'connect-history-api-fallback';
-import * as express from 'express';
+import history from 'connect-history-api-fallback';
+import express from 'express';
 import { join } from 'path';
 
 import { parse } from '@vue-component-insight/parser/dist';
