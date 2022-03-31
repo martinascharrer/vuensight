@@ -25,6 +25,19 @@ input, button, textarea, select {
     font: inherit;
 }
 
+input, textarea, .input {
+    background: white;
+    border: none;
+    border-radius: var(--border-radius--s);
+    box-shadow: var(--box-shadow--s);
+    padding: var(--spacing--xs) var(--spacing--m);
+
+    &:hover,
+    &:focus {
+        outline: 2px solid var(--yellow-30);
+    }
+}
+
 p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
 }
