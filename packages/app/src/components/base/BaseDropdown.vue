@@ -1,17 +1,17 @@
 <template>
     <div
         class="baseDropdown"
-        :class="{'c-appDropdown--open': open}"
+        :class="{'c-appDropdown--open': isOpen}"
     >
         <button
-            class="baseDropdown__trigger"
+            class="input baseDropdown__trigger"
             @click="toggle"
         >
-            <slot name="trigger"/>
+            <slot :isOpen="isOpen" name="trigger"/>
         </button>
         <div
-            v-if="open"
-            class="baseDropdown__content"
+            v-if="isOpen"
+            class="input baseDropdown__content"
         >
             <slot :close="close"/>
         </div>
@@ -23,19 +23,19 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   setup() {
-    const open = ref<boolean>(false);
+    const isOpen = ref<boolean>(false);
 
     const toggle = () => {
-      open.value = !open.value;
+      isOpen.value = !isOpen.value;
     };
 
     const close = () => {
-      open.value = false;
+      isOpen.value = false;
     };
 
     return {
       close,
-      open,
+      isOpen,
       toggle,
     };
   },
@@ -49,23 +49,11 @@ export default defineComponent({
     gap: var(--spacing--m);
     cursor: pointer;
 
-    &__trigger,
-    &__content {
-        background: white;
-        border-radius: var(--border-radius--s);
-        box-shadow: var(--box-shadow--s);
-    }
-
     &__trigger {
         display: flex;
         gap: var(--spacing--m);
         min-width: var(--spacing--2xl);
         padding: var(--spacing--xs) var(--spacing--m);
-
-        &:hover,
-        &:focus {
-            outline: 2px solid var(--yellow-30);
-        }
     }
 
     &__content {

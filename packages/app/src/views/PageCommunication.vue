@@ -4,7 +4,7 @@
         <p v-else-if="isError">Something went wrong parsing your project.</p>
         <template v-else-if="forceGraphData">
             <div class="pageCommunication__menu">
-                <communication-menu-filter v-model="nodeSizeFilter" />
+                <menu-communication-filter v-model="nodeSizeFilter" />
             </div>
             <force-graph
                 :selected-component="selectedComponent"
@@ -38,7 +38,7 @@ import { useRoute } from 'vue-router';
 
 import * as parserService from '@/services/parser';
 
-import CommunicationMenuFilter from '@/components/CommunicationMenuFilter.vue';
+import MenuCommunicationFilter from '@/components/MenuCommunicationFilter.vue';
 import ForceGraph from '@/components/ForceGraph.vue';
 import LayoutSplitView from '@/components/layout/LayoutSplitView.vue';
 import SidebarCommunication from '@/components/SidebarCommunication.vue';
@@ -52,7 +52,7 @@ import {
 export default defineComponent({
   name: 'PageCommunication',
   components: {
-    CommunicationMenuFilter,
+    MenuCommunicationFilter,
     ForceGraph,
     LayoutSplitView,
     SidebarCommunication,

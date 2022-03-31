@@ -1,19 +1,16 @@
 <template>
-    <button
-        class="baseArrowIcon"
+    <svg
         :class="{ 'baseArrowIcon--flipped': isFlipped }"
+        class="baseArrowIcon"
+        viewBox="0 0 15 16"
+        xmlns="http://www.w3.org/2000/svg"
     >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 15 16"
-        >
-            <path
-                class="baseArrowIcon__arrow"
-                d="M7.5 12.58a.66.66 0 0 1-.46-.19L1.18 6.53c-.25-.25-.25-.67 0-.92s.67-.25.92
+        <path
+            class="baseArrowIcon__arrow"
+            d="M7.5 12.58a.66.66 0 0 1-.46-.19L1.18 6.53c-.25-.25-.25-.67 0-.92s.67-.25.92
                 0l5.4 5.4 5.4-5.4c.25-.25.67-.25.92 0s.25.67 0 .92l-5.86 5.86a.66.66 0 0 1-.46.19z"
-            />
-        </svg>
-    </button>
+        />
+    </svg>
 </template>
 
 <script lang="ts">

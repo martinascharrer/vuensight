@@ -1,10 +1,10 @@
 <template>
-    <base-dropdown class="communicationMenuFilter">
-        <template #trigger>
+    <base-dropdown class="menuCommunicationFilter">
+        <template #trigger="{ isOpen }">
             Filter
-            <base-arrow-icon />
+            <base-arrow-icon :is-flipped="isOpen" />
         </template>
-        <div class="communicationMenuFilter__form">
+        <div class="menuCommunicationFilter__form">
             <h4>Component size</h4>
             <base-radio-button-group
                 v-model="nodeSizeFilter"
@@ -68,7 +68,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
-.communicationMenuFilter {
+.menuCommunicationFilter {
     &__form {
         display: flex;
         flex-direction: column;
