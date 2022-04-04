@@ -3,7 +3,7 @@ import {
   cruise, IDependency, IReporterOutput, IModule
 } from 'dependency-cruiser';
 
-import { Dependency, VueComponent } from '../../types';
+import { Dependency, VueComponent } from  '@vue-component-insight/types';
 
 import { findComponentDataByString } from './analyzer';
 

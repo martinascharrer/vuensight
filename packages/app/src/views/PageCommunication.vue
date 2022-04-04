@@ -49,7 +49,10 @@ import SidebarCommunication from '@/components/SidebarCommunication.vue';
 import { useFetch } from '@/composables/fetch';
 
 import {
-  ForceLayout, VueComponent, Dependency, Link, Prop,
+  VueComponent, Dependency, Prop,
+} from '@vue-component-insight/types';
+import {
+  ForceLayout, Link,
 } from '@/types';
 
 export default defineComponent({

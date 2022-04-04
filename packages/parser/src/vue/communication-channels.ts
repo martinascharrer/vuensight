@@ -1,7 +1,7 @@
 import { parse } from 'vue-docgen-api';
 import { JSDOM } from 'jsdom';
 
-import { Dependency, Event, Prop, Slot, VueComponent } from '../../types';
+import { Dependency, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
 
 import { kebabize } from '../utils/kababize';
 

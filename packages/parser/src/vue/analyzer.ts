@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { normalize } from 'path';
 import { IModule } from 'dependency-cruiser';
 
-import { VueComponent } from '../../types';
+import { VueComponent } from '@vue-component-insight/types';
 
 import { getFileNameFromPath } from '../utils/files';
 import { getTemplateContent } from '../utils/template';

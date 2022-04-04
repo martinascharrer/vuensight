@@ -23,7 +23,6 @@ import { defineComponent, PropType } from 'vue';
 import { Color } from '@/types';
 
 export default defineComponent({
-  name: 'BaseCheckIcon',
   props: {
     isChecked: {
       type: Boolean,

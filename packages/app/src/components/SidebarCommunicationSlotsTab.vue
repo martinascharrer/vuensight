@@ -16,7 +16,7 @@ import { defineComponent, ref, PropType } from 'vue';
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
 
-import { Prop, VueComponent } from '@/types';
+import { Prop, VueComponent } from '@vue-component-insight/types';
 
 export default defineComponent({
   components: {

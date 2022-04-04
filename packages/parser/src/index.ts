@@ -1,4 +1,4 @@
-import { VueComponent } from '../types';
+import { VueComponent } from  '@vue-component-insight/types';
 
 import { findDependencies, sanitizeUnresolvedDependencyPaths } from './vue/dependencies';
 import { analyzeComponents, analyzeCommunicationChannelUsage } from './vue/analyzer';

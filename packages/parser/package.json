@@ -35,6 +35,7 @@
     "vue-docgen-api": "^4.44.22"
   },
   "devDependencies": {
-    "@types/jsdom": "^16.2.14"
+    "@types/jsdom": "^16.2.14",
+    "@vue-component-insight/types": "^0.1.0"
   }
 }

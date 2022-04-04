@@ -42,7 +42,8 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseCheckIcon from '@/components/base/BaseCheckIcon.vue';
 import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
 
-import { Color, Prop } from '@/types';
+import { Prop } from '@vue-component-insight/types';
+import { Color } from '@/types';
 
 export default defineComponent({
   name: 'CardCommunicationChannel',
