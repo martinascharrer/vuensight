@@ -23,6 +23,36 @@ html, body {
 
 input, button, textarea, select {
     font: inherit;
+    border: none;
+    background: transparent;
+    text-align: inherit;
+    padding: 0;
+
+    &:hover {
+        border: none;
+        outline: none;
+    }
+}
+
+button {
+    cursor: pointer;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing--m);
+    background: white;
+    border: none;
+    border-radius: var(--border-radius--s);
+    box-shadow: var(--box-shadow--s);
+    padding: var(--spacing--xs) var(--spacing--m);
+    min-width: var(--spacing--2xl);
+    height: var(--spacing--3xl);
+
+    &:hover {
+        outline: 2px solid var(--yellow-30);
+    }
 }
 
 p, h1, h2, h3, h4, h5, h6 {
@@ -40,12 +70,5 @@ body {
     -moz-osx-font-smoothing: grayscale;
     color: var(--navy-90);
     line-height: 1.5;
-}
-
-button {
-    border: none;
-    background: transparent;
-    text-align: inherit;
-    padding: 0;
 }
 </style>

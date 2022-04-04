@@ -1,16 +1,13 @@
 <template>
     <div
         class="baseDropdown"
-        :class="{'c-appDropdown--open': open}"
+        :class="{'c-appDropdown--open': isOpen}"
     >
-        <button
-            class="baseDropdown__trigger"
-            @click="toggle"
-        >
-            <slot name="trigger"/>
+        <button class="input" @click="toggle">
+            <slot :isOpen="isOpen" name="trigger"/>
         </button>
         <div
-            v-if="open"
+            v-if="isOpen"
             class="baseDropdown__content"
         >
             <slot :close="close"/>
@@ -23,19 +20,19 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   setup() {
-    const open = ref<boolean>(false);
+    const isOpen = ref<boolean>(false);
 
     const toggle = () => {
-      open.value = !open.value;
+      isOpen.value = !isOpen.value;
     };
 
     const close = () => {
-      open.value = false;
+      isOpen.value = false;
     };
 
     return {
       close,
-      open,
+      isOpen,
       toggle,
     };
   },
@@ -47,29 +44,16 @@ export default defineComponent({
     flex-direction: column;
     align-items: start;
     gap: var(--spacing--m);
-    cursor: pointer;
-
-    &__trigger,
-    &__content {
-        background: white;
-        border-radius: var(--border-radius--s);
-        box-shadow: var(--box-shadow--s);
-    }
-
-    &__trigger {
-        display: flex;
-        gap: var(--spacing--m);
-        min-width: var(--spacing--2xl);
-        padding: var(--spacing--xs) var(--spacing--m);
-
-        &:hover,
-        &:focus {
-            outline: 2px solid var(--yellow-30);
-        }
-    }
 
     &__content {
         padding: var(--spacing--m);
+        position: absolute;
+        top: calc(var(--spacing--3xl) + var(--spacing--m));
+        margin-top: var(--spacing--m);
+        background: white;
+        border: none;
+        border-radius: var(--border-radius--s);
+        box-shadow: var(--box-shadow--s);
     }
 }
 </style>

@@ -1,17 +1,20 @@
 <template>
-    <layout-split-view class="pageCommunication__filter">
+    <layout-split-view>
         <p v-if="isLoading">... loading</p>
         <p v-else-if="isError">Something went wrong parsing your project.</p>
         <template v-else-if="forceGraphData">
-            <div class="pageCommunication__menu">
-                <communication-menu-filter v-model="nodeSizeFilter" />
-            </div>
+            <menu-communication
+                v-model:node-size-filter="nodeSizeFilter"
+                v-model:search="componentSearch"
+                class="pageCommunication__menu"
+            />
             <force-graph
                 :selected-component="selectedComponent"
                 :selected-channel="selectedChannel"
                 :selected-channel-type="selectedChannelType"
                 :data="forceGraphData"
                 :node-size-attribute="nodeSizeFilter"
+                :search-string="componentSearch"
                 @selected="selectComponent"
                 @unselected="selectedComponent = null"
             />
@@ -38,9 +41,9 @@ import { useRoute } from 'vue-router';
 
 import * as parserService from '@/services/parser';
 
-import CommunicationMenuFilter from '@/components/CommunicationMenuFilter.vue';
 import ForceGraph from '@/components/ForceGraph.vue';
 import LayoutSplitView from '@/components/layout/LayoutSplitView.vue';
+import MenuCommunication from '@/components/MenuCommunication.vue';
 import SidebarCommunication from '@/components/SidebarCommunication.vue';
 
 import { useFetch } from '@/composables/fetch';
@@ -52,9 +55,9 @@ import {
 export default defineComponent({
   name: 'PageCommunication',
   components: {
-    CommunicationMenuFilter,
     ForceGraph,
     LayoutSplitView,
+    MenuCommunication,
     SidebarCommunication,
   },
   setup() {
@@ -80,6 +83,7 @@ export default defineComponent({
     );
 
     const nodeSizeFilter = ref<string>('props');
+    const componentSearch = ref<string>('');
 
     const formatDataForForceLayout = (originalData: VueComponent[]) => {
       const nodes: VueComponent[] = [];
@@ -104,15 +108,16 @@ export default defineComponent({
     });
 
     return {
+      componentSearch,
       data,
+      forceGraphData,
+      isLoading,
+      isError,
       nodeSizeFilter,
       selectedChannel,
       selectedChannelType,
       selectComponent,
       selectedComponent,
-      isLoading,
-      isError,
-      forceGraphData,
     };
   },
 });
@@ -123,7 +128,6 @@ export default defineComponent({
         position: fixed;
         top: 0;
         left: 0;
-        padding: var(--spacing--m);
     }
 }
 </style>

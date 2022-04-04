@@ -36,6 +36,10 @@ export default defineComponent({
       type: String,
       default: 'props',
     },
+    searchString: {
+      type: String,
+      default: '',
+    },
     width: {
       type: Number,
       default: 500,
@@ -308,6 +312,12 @@ export default defineComponent({
       updateCommunicationChannelPositions();
     });
 
+    watch(() => props.searchString, () => {
+      d3.selectAll('.node')
+        .classed('node--searchMatches', (d) => props.searchString.length > 0
+          && d.name.toLowerCase().includes(props.searchString.toLowerCase()));
+    });
+
     watch(() => props.selectedChannel, () => {
       resetChannelSelection();
       highlightChannelUsage(props.selectedChannel);
@@ -384,6 +394,12 @@ export default defineComponent({
     &__labelText,
     &__labelBackground {
         transition: fill 200ms;
+    }
+
+    &--searchMatches {
+        .node__labelBackground {
+            fill: var(--yellow-30);
+        }
     }
 
     &--selected {
