@@ -2,7 +2,14 @@
     <button class="baseCard">
         <span class="baseCard__header" :class="{'baseCard__header--expanded': isExpanded && $slots.body}">
             <slot name="header"/>
-            <base-arrow-icon v-if="$slots.body" :is-flipped="isExpanded" @click.stop="isExpanded = !isExpanded"/>
+            <button
+                v-if="$slots.body"
+                @click.stop="isExpanded = !isExpanded"
+            >
+                <base-arrow-icon
+                    :is-flipped="isExpanded"
+                />
+            </button>
         </span>
         <transition>
             <span v-if="isExpanded && $slots.body" class="baseCard__body">

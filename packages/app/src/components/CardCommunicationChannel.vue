@@ -3,21 +3,28 @@
         class="cardCommunicationChannel"
         :class="{
             [`cardCommunicationChannel--${color}`]: color,
-            'cardCommunicationChannel--selected': isSelected
+            'cardCommunicationChannel--selected': isSelected,
+            'cardCommunicationChannel--disabled': dependents.length === 0
         }"
+        :disabled="dependents.length === 0"
     >
         <template #header>
             <div class="cardCommunicationChannel__header">
                 <base-check-icon
                     :color="color"
                     :is-checked="isSelected"
-                > </base-check-icon>
+                    :is-disabled="dependents.length === 0"
+                />
                 <p>{{ channel.name }}</p>
                 <base-badge>{{ dependents.length }}</base-badge>
                 <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
         </template>
-        <template v-if="channel.type || channel.default || channel.required || channel.mixin" #body>
+        <template
+            v-if=" channel.type || channel.default || channel.required
+                || channel.mixin || dependents.length > 0"
+            #body
+        >
             <template v-if="channel.type">
                 type: {{ channel.type.name }}
             </template>
@@ -98,6 +105,16 @@ export default defineComponent({
 
     &:hover {
         box-shadow: var(--box-shadow--m);
+    }
+
+    &--disabled {
+        color: var(--grey-30);
+        cursor: default;
+        box-shadow: var(--box-shadow--xs);
+
+        &:hover {
+            box-shadow: var(--box-shadow--xs);
+        }
     }
 
     &__header {
