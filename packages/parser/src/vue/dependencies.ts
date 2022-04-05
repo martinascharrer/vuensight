@@ -39,9 +39,6 @@ export const findDependencies = (directory = 'src', fileType: string):IModule[] 
 export const formatDependencies = (dependencies: IDependency[]): Dependency[] => {
   return dependencies.map((dependency) => ({
       fullPath: normalize(dependency.resolved),
-      usedEvents: [],
-      usedProps: [],
-      usedSlots: [],
   }));
 };
 

@@ -7,7 +7,7 @@ import { VueComponent } from '@vue-component-insight/types';
 import { getFileNameFromPath } from '../utils/files';
 import { getTemplateContent } from '../utils/template';
 import { formatDependencies } from './dependencies';
-import { parseComponentFile, getDependencyWithUsedChannelsAnalysis } from './communication-channels';
+import { parseComponentFile, getDependentWithUsedChannelsAnalysis } from './communication-channels';
 
 export const findComponentData = (components: VueComponent[], fullPath: string)
   : VueComponent | undefined => components.find((component) => component.fullPath === fullPath);
@@ -40,24 +40,30 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
       events: parsedComponentData?.events ?? [],
       slots: parsedComponentData?.slots ?? [],
       dependencies,
-      dependents: module.dependents,
+      dependents: module.dependents.map(dependent => ({
+        fullPath: dependent,
+        name: '',
+        usedProps: [],
+        usedSlots: [],
+        usedEvents: [],
+      })),
     };
   }));
 };
 
 export const analyzeCommunicationChannelUsage = (components: VueComponent[]): VueComponent[] => {
   return components.map((component) => {
-    const dependencies = component.dependencies.map((dependency) => {
-      const dependencyData = findComponentData(components, dependency.fullPath);
-      if (dependencyData && dependencyData.fileType === 'vue') {
-        const template = getTemplateContent(component.fileContent);
-        if (template) return getDependencyWithUsedChannelsAnalysis(template, dependencyData);
+    const dependents = component.dependents.map((dependent) => {
+      const dependentData = findComponentData(components, dependent.fullPath);
+      if (dependentData && dependentData.fileType === 'vue') {
+        const template = getTemplateContent(dependentData.fileContent);
+        if (template) return getDependentWithUsedChannelsAnalysis(dependentData, template, component);
       }
-      return dependency;
+      return dependent;
     });
     return {
       ...component,
-      dependencies,
+      dependents,
     };
   });
 };

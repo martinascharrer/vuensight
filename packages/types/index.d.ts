@@ -23,6 +23,11 @@ export type Slot = {
 
 export type Dependency = {
   fullPath: string,
+}
+
+export type Dependent = {
+  fullPath: string,
+  name: string,
   usedProps: number[], // indexOf used prop
   usedEvents: number[], // indexOf used event
   usedSlots: number[], // indexOf used event
@@ -38,5 +43,5 @@ export type VueComponent = {
   events: Event[],
   slots: Slot[],
   dependencies: Dependency[],
-  dependents: string[],
+  dependents: Dependent[],
 }

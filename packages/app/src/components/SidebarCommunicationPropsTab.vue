@@ -1,9 +1,10 @@
 <template>
   <div class="sidebarCommunicationPropsTab">
       <card-communication-channel
-          v-for="prop in component.props"
+          v-for="(prop, index) in component.props"
           :key="prop.name"
           :channel="prop"
+          :dependents="component.dependents.filter(dependent => dependent.usedProps.includes(index))"
           :is-selected="selectedChannel ? selectedChannel.name === prop.name : null"
           color="mint"
           @click="selectChannel(prop)"

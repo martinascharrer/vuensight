@@ -1,9 +1,10 @@
 <template>
   <div class="sidebarCommunicationSlotsTab">
       <card-communication-channel
-          v-for="slot in component.slots"
+          v-for="(slot, index) in component.slots"
           :key="slot.name"
           :channel="slot"
+          :dependents="component.dependents.filter(dependent => dependent.usedSlots.includes(index))"
           :is-selected="selectedChannel ? selectedChannel.name === slot.name : null"
           color="purple"
           @click="selectChannel(slot)"

@@ -13,7 +13,7 @@
                     :is-checked="isSelected"
                 > </base-check-icon>
                 <p>{{ channel.name }}</p>
-                <base-badge>3</base-badge>
+                <base-badge>{{ dependents.length }}</base-badge>
                 <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
         </template>
@@ -30,6 +30,12 @@
             <template v-if="channel.mixin">
                 mixin: {{ channel.mixin.name }}
             </template>
+            <template v-if="dependents.length > 0">
+                used in:
+                <ul>
+                    <li v-for="dependent in dependents" :key="dependent.fullPath">{{ dependent.name }}</li>
+                </ul>
+            </template>
         </template>
     </base-card>
 </template>
@@ -42,7 +48,7 @@ import BaseCard from '@/components/base/BaseCard.vue';
 import BaseCheckIcon from '@/components/base/BaseCheckIcon.vue';
 import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
 
-import { Prop } from '@vue-component-insight/types';
+import { Prop, Dependent } from '@vue-component-insight/types';
 import { Color } from '@/types';
 
 export default defineComponent({
@@ -50,6 +56,10 @@ export default defineComponent({
   props: {
     channel: {
       type: Object as PropType<Prop>,
+      required: true,
+    },
+    dependents: {
+      type: Array as PropType<Array<Dependent>>,
       required: true,
     },
     color: {

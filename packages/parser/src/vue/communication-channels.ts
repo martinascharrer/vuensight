@@ -1,7 +1,7 @@
 import { parse } from 'vue-docgen-api';
 import { JSDOM } from 'jsdom';
 
-import { Dependency, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
+import { Dependent, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
 
 import { kebabize } from '../utils/kababize';
 
@@ -59,13 +59,15 @@ export const getUsedChannels = <Channel>(
   return [...usedChannels];
 };
 
-export const getDependencyWithUsedChannelsAnalysis = (
+export const getDependentWithUsedChannelsAnalysis = (
+    { fullPath: dependentFullPath, name: dependentName }: VueComponent,
     template: string,
-    { name, fullPath, props, events, slots }: VueComponent
-): Dependency => {
+    { name, props, events, slots }: VueComponent
+): Dependent => {
   const dependencyInstances = findDependencyInstancesInTemplate(template, name);
   return {
-    fullPath,
+    fullPath: dependentFullPath,
+    name: dependentName,
     usedProps: getUsedChannels(dependencyInstances, props, isPropUsed),
     usedEvents: getUsedChannels(dependencyInstances, events, isEventUsed),
     usedSlots: getUsedChannels(dependencyInstances, slots, isSlotUsed)

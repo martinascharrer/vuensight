@@ -1,7 +1,7 @@
 <template>
   <div class="sidebarCommunication">
       <h2>{{ component.name }}</h2>
-      <p>some info about this component</p>
+      <p>{{ component.fullPath }}</p>
       <base-sub-nav
           :items="[
               {

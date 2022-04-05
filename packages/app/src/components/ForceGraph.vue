@@ -24,10 +24,6 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    selectedComponent: {
-      type: Object,
-      default: null,
-    },
     selectedChannel: {
       type: Object,
       default: null,
@@ -107,9 +103,10 @@ export default defineComponent({
       d3.selectAll('.node--selectedDependent')
         .append('g')
         .selectAll('.node__channel')
-        .data((data) => data.dependencies.find(
-          (dependency) => dependency.fullPath === selectedNode.value,
-        )[`used${props.selectedChannelType}`])
+        .data((data) => {
+          const dependent = selectedNode?.value.dependents.find((dep) => dep.fullPath === data.fullPath);
+          return dependent ? dependent[`used${props.selectedChannelType}`] : [];
+        })
         .enter()
         .append('circle')
         .attr('r', SMALL_CIRCLE_RADIUS)
@@ -210,7 +207,7 @@ export default defineComponent({
           d3.event.stopPropagation();
           resetNodeSelection();
 
-          selectedNode.value = data.fullPath;
+          selectedNode.value = data;
 
           // highlight selected node + dependents
           d3.select(this).classed('node--selected', true);
@@ -226,7 +223,7 @@ export default defineComponent({
           d3.selectAll('.node:not(.node--selected, .node--selectedDependent)').classed('node--greyedOut', true);
           d3.selectAll('.link:not(.link--selected').classed('link--greyedOut', true);
 
-          emit('selected', data.fullPath);
+          emit('selected', data);
         });
 
       node.append('circle')
@@ -293,17 +290,15 @@ export default defineComponent({
     const highlightChannelUsage = (channel) => {
       d3.selectAll('.node--selectedDependent')
         .classed(`node--uses${props.selectedChannelType}`, (d) => {
-          const dependency = d.dependencies.find(
-            (dep) => dep.fullPath === props.selectedComponent.fullPath,
-          );
-          const channels = props.selectedComponent[props.selectedChannelType.toLowerCase()];
-          return dependency[`used${props.selectedChannelType}`].some((prop) => channels[prop].name === channel.name);
+          const dependent = selectedNode.value.dependents.find((dep) => dep.fullPath === d.fullPath);
+          const channels = selectedNode.value[props.selectedChannelType.toLowerCase()];
+          return dependent[`used${props.selectedChannelType}`].some((prop) => channels[prop].name === channel.name);
         });
 
       d3.selectAll(`.node--selectedDependent .node__channel--${props.selectedChannelType.toLowerCase()}`)
         .classed(
           'node__channel--selected',
-          (d) => props.selectedComponent[props.selectedChannelType.toLowerCase()][d].name === channel.name,
+          (d) => selectedNode.value[props.selectedChannelType.toLowerCase()][d].name === channel.name,
         );
     };
 
