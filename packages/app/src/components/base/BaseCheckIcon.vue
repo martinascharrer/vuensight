@@ -3,7 +3,8 @@
         class="baseCheckIcon"
         :class="{
             [`baseCheckIcon--${color}`]: color,
-            'baseCheckIcon--selected': isChecked
+            'baseCheckIcon--selected': isChecked,
+            'baseCheckIcon--disabled': isDisabled
         }"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 12.19 18"
@@ -32,6 +33,10 @@ export default defineComponent({
       type: String as PropType<Color>,
       default: 'mint',
     },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 </script>
@@ -45,6 +50,10 @@ export default defineComponent({
 
     &__check {
         fill: var(--grey-50);
+    }
+
+    &--disabled .baseCheckIcon__check {
+        fill: var(--grey-20);
     }
 
     &--selected {

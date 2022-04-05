@@ -2,11 +2,23 @@
     <button class="baseCard">
         <span class="baseCard__header" :class="{'baseCard__header--expanded': isExpanded && $slots.body}">
             <slot name="header"/>
-            <base-arrow-icon v-if="$slots.body" :is-flipped="isExpanded" @click.stop="isExpanded = !isExpanded"/>
+            <button
+                v-if="$slots.body || $slots.footer"
+                @click.stop="isExpanded = !isExpanded"
+            >
+                <base-arrow-icon
+                    :is-flipped="isExpanded"
+                />
+            </button>
         </span>
         <transition>
             <span v-if="isExpanded && $slots.body" class="baseCard__body">
                 <slot name="body" />
+            </span>
+        </transition>
+        <transition>
+            <span v-if="isExpanded && $slots.footer" class="baseCard__footer">
+                <slot name="footer" />
             </span>
         </transition>
     </button>
@@ -50,9 +62,15 @@ export default defineComponent({
         }
     }
 
-    &__body {
+    &__body,
+    &__footer {
         padding: var(--spacing--m) var(--spacing--l);
         font-size: var(--font-size--m);
+    }
+
+    &__footer {
+        border-top: 1px solid var(--grey-10);
+        width: 100%;
     }
 
     .v-enter-active,

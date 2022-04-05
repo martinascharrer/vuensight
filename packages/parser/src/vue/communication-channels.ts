@@ -1,8 +1,9 @@
-import { parse } from 'vue-docgen-api';
+import { parse, PropDescriptor } from 'vue-docgen-api';
 import { JSDOM } from 'jsdom';
 
-import { Dependency, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
+import { Dependent, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
 
+import { getTemplateContent } from '../utils/template';
 import { kebabize } from '../utils/kababize';
 
 export const findDependencyInstancesInTemplate = (template: string, name: string): Element[] => {
@@ -16,11 +17,18 @@ export const findDependencyInstancesInTemplate = (template: string, name: string
 export const parseComponentFile = async (filePath: string): Promise<Partial<VueComponent> | null> => {
  try {
     const { displayName: name, props, events, slots } = await parse(filePath);
-    return { name, props, events, slots };
+    return { name, props: props && formatProps(props), events, slots };
   } catch (e) {
     console.error('Something went wrong while parsing the components.', e);
   }
   return null;
+};
+
+const formatProps = (props: PropDescriptor[]):Prop[] => {
+  return props.map((prop) => ({
+    ...prop,
+    default: prop?.defaultValue?.value,
+  }));
 };
 
 export const isPropUsed = (template: Element, prop: Prop): boolean => {
@@ -59,13 +67,22 @@ export const getUsedChannels = <Channel>(
   return [...usedChannels];
 };
 
-export const getDependencyWithUsedChannelsAnalysis = (
-    template: string,
-    { name, fullPath, props, events, slots }: VueComponent
-): Dependency => {
+export const getDependentWithUsedChannelsAnalysis = (
+    { fullPath: dependentFullPath, name: dependentName, fileContent: dependentFilecontent }: VueComponent,
+    { name, props, events, slots }: VueComponent
+): Dependent => {
+  const template = getTemplateContent(dependentFilecontent);
+  if (!template) return {
+    fullPath: dependentFullPath,
+    name: dependentName,
+    usedProps: [],
+    usedEvents: [],
+    usedSlots: []
+  };
   const dependencyInstances = findDependencyInstancesInTemplate(template, name);
   return {
-    fullPath,
+    fullPath: dependentFullPath,
+    name: dependentName,
     usedProps: getUsedChannels(dependencyInstances, props, isPropUsed),
     usedEvents: getUsedChannels(dependencyInstances, events, isEventUsed),
     usedSlots: getUsedChannels(dependencyInstances, slots, isSlotUsed)

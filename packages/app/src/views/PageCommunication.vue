@@ -9,13 +9,12 @@
                 class="pageCommunication__menu"
             />
             <force-graph
-                :selected-component="selectedComponent"
                 :selected-channel="selectedChannel"
                 :selected-channel-type="selectedChannelType"
                 :data="forceGraphData"
                 :node-size-attribute="nodeSizeFilter"
                 :search-string="componentSearch"
-                @selected="selectComponent"
+                @selected="selectedComponent = $event"
                 @unselected="selectedComponent = null"
             />
         </template>
@@ -73,11 +72,6 @@ export default defineComponent({
     getParserData();
 
     const selectedComponent = ref<VueComponent | null>(null);
-    const selectComponent = (fullPath: string) => {
-      const copy = data.value as unknown as VueComponent[];
-      selectedComponent.value = copy.find((component) => component.fullPath === fullPath) ?? null;
-    };
-
     const selectedChannel = ref<Prop | null>(null);
 
     const route = useRoute();
@@ -119,7 +113,6 @@ export default defineComponent({
       nodeSizeFilter,
       selectedChannel,
       selectedChannelType,
-      selectComponent,
       selectedComponent,
     };
   },

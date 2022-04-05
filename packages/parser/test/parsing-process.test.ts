@@ -22,6 +22,13 @@ describe('parse', () => {
             }],
             slots: [{ name: 'header' }],
             dependencies: [],
+            dependents: [{
+                fullPath: normalize('test/project/Parent.vue'),
+                name: "Parent",
+                usedProps: [0],
+                usedEvents: [0],
+                usedSlots: [0],
+            }],
         }, {
             name: 'Parent',
             fullPath: normalize('test/project/Parent.vue'),
@@ -33,10 +40,9 @@ describe('parse', () => {
             fileContent: expect.any(String),
             dependencies: [{
                 fullPath: normalize('test/project/Child.vue'),
-                usedProps: [0],
-                usedEvents: [0],
-                usedSlots: [0],
+
             }],
+            dependents: [],
         }];
         const parseResult = await parse('test/project');
 

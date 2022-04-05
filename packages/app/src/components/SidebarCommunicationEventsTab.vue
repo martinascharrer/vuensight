@@ -1,18 +1,21 @@
 <template>
   <div class="sidebarCommunicationPropsTab">
       <card-communication-channel
-          v-for="event in component.events"
+          v-for="event in eventsWithDependents"
           :key="event.name"
           :channel="event"
-          :is-selected="selectedChannel ? selectedChannel.name === event.name : null"
+          :dependents="event.dependents"
+          :is-selected="event.dependents.length > 0 && selectedChannel && selectedChannel.name === event.name"
           color="red"
-          @click="selectChannel(event)"
+          @click="event.dependents.length > 0 && selectChannel(event)"
       />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from 'vue';
+import {
+  computed, defineComponent, ref, PropType,
+} from 'vue';
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
 
@@ -31,10 +34,17 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedChannel = ref<Prop | null>(null);
     const selectChannel = (channel: Prop) => {
-      selectedChannel.value = channel;
+      selectedChannel.value = selectedChannel.value !== channel ? channel : null;
       emit('channelSelected', selectedChannel.value);
     };
+
+    const eventsWithDependents = computed(() => props.component.events.map((event, index) => ({
+      ...event,
+      dependents: props.component.dependents.filter((dependent) => dependent.usedEvents.includes(index)),
+    })));
+
     return {
+      eventsWithDependents,
       selectChannel,
       selectedChannel,
     };
