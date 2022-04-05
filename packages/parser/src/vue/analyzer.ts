@@ -5,7 +5,6 @@ import { IModule } from 'dependency-cruiser';
 import { VueComponent } from '@vue-component-insight/types';
 
 import { getFileNameFromPath } from '../utils/files';
-import { getTemplateContent } from '../utils/template';
 import { formatDependencies } from './dependencies';
 import { parseComponentFile, getDependentWithUsedChannelsAnalysis } from './communication-channels';
 
@@ -56,8 +55,7 @@ export const analyzeCommunicationChannelUsage = (components: VueComponent[]): Vu
     const dependents = component.dependents.map((dependent) => {
       const dependentData = findComponentData(components, dependent.fullPath);
       if (dependentData && dependentData.fileType === 'vue') {
-        const template = getTemplateContent(dependentData.fileContent);
-        if (template) return getDependentWithUsedChannelsAnalysis(dependentData, template, component);
+          return getDependentWithUsedChannelsAnalysis(dependentData, component);
       }
       return dependent;
     });

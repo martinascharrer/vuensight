@@ -3,6 +3,7 @@ import { JSDOM } from 'jsdom';
 
 import { Dependent, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
 
+import { getTemplateContent } from '../utils/template';
 import { kebabize } from '../utils/kababize';
 
 export const findDependencyInstancesInTemplate = (template: string, name: string): Element[] => {
@@ -60,10 +61,17 @@ export const getUsedChannels = <Channel>(
 };
 
 export const getDependentWithUsedChannelsAnalysis = (
-    { fullPath: dependentFullPath, name: dependentName }: VueComponent,
-    template: string,
+    { fullPath: dependentFullPath, name: dependentName, fileContent: dependentFilecontent }: VueComponent,
     { name, props, events, slots }: VueComponent
 ): Dependent => {
+  const template = getTemplateContent(dependentFilecontent);
+  if (!template) return {
+    fullPath: dependentFullPath,
+    name: dependentName,
+    usedProps: [],
+    usedEvents: [],
+    usedSlots: []
+  };
   const dependencyInstances = findDependencyInstancesInTemplate(template, name);
   return {
     fullPath: dependentFullPath,
