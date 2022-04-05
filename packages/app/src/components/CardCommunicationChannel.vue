@@ -21,28 +21,28 @@
             </div>
         </template>
         <template
-            v-if=" channel.type || channel.default || channel.required
-                || channel.mixin || dependents.length > 0"
+            v-if="channel.type || channel.default || channel.required || channel.mixin"
             #body
         >
             <template v-if="channel.type">
                 type: {{ channel.type.name }}
             </template>
             <template v-if="channel.default">
-                <base-delimiter /> default: {{ channel.default }}
+                <base-delimiter :color="color" /> default: {{ channel.default }}
             </template>
             <template v-if="channel.required">
-                <base-delimiter /> required: {{ channel.required }}
+                <base-delimiter :color="color" /> required: {{ channel.required }}
             </template>
             <template v-if="channel.mixin">
-                mixin: {{ channel.mixin.name }}
+                <base-delimiter :color="color" /> mixin: {{ channel.mixin.name }}
             </template>
-            <template v-if="dependents.length > 0">
-                used in:
-                <ul>
-                    <li v-for="dependent in dependents" :key="dependent.fullPath">{{ dependent.name }}</li>
-                </ul>
-            </template>
+        </template>
+        <template v-if="dependents.length > 0" #footer>
+            used in:
+            <base-list
+                v-if="dependents.length > 0" :color="color"
+                :items="dependents.map(dep => dep.name)"
+            />
         </template>
     </base-card>
 </template>
@@ -54,6 +54,7 @@ import BaseBadge from '@/components/base/BaseBadge.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
 import BaseCheckIcon from '@/components/base/BaseCheckIcon.vue';
 import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
+import BaseList from '@/components/base/BaseList.vue';
 
 import { Prop, Dependent } from '@vue-component-insight/types';
 import { Color } from '@/types';
@@ -83,6 +84,7 @@ export default defineComponent({
     BaseCard,
     BaseCheckIcon,
     BaseDelimiter,
+    BaseList,
   },
 });
 </script>

@@ -1,25 +1,44 @@
 <template>
-    <span class="baseDelimiter">
-       &#9679;
+    <span
+        :class="{
+            [`baseDelimiter--${color}`]: color,
+        }"
+        class="baseDelimiter"
+    >
+       &bull;
     </span>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
+
+import { Color } from '@/types';
 
 export default defineComponent({
   name: 'BaseDelimiter',
-  setup() {
-    const isExpanded = ref(false);
-    return {
-      isExpanded,
-    };
+  props: {
+    color: {
+      type: String as PropType<Color>,
+    },
   },
 });
 </script>
 
 <style lang="scss">
 .baseDelimiter {
-    color: var(--mint-50);
+    font-weight: bold;
+    color: var(--navy-90);
+
+    &--mint {
+        color: var(--mint-50);
+    }
+
+    &--red {
+        color: var(--red-50);
+    }
+
+    &--purple {
+        color: var(--purple-50);
+    }
 }
 </style>

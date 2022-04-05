@@ -1,4 +1,4 @@
-import { parse } from 'vue-docgen-api';
+import { parse, PropDescriptor } from 'vue-docgen-api';
 import { JSDOM } from 'jsdom';
 
 import { Dependent, Event, Prop, Slot, VueComponent } from  '@vue-component-insight/types';
@@ -17,11 +17,18 @@ export const findDependencyInstancesInTemplate = (template: string, name: string
 export const parseComponentFile = async (filePath: string): Promise<Partial<VueComponent> | null> => {
  try {
     const { displayName: name, props, events, slots } = await parse(filePath);
-    return { name, props, events, slots };
+    return { name, props: props && formatProps(props), events, slots };
   } catch (e) {
     console.error('Something went wrong while parsing the components.', e);
   }
   return null;
+};
+
+const formatProps = (props: PropDescriptor[]):Prop[] => {
+  return props.map((prop) => ({
+    ...prop,
+    default: prop?.defaultValue?.value,
+  }));
 };
 
 export const isPropUsed = (template: Element, prop: Prop): boolean => {
