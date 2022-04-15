@@ -99,6 +99,16 @@ export default defineComponent({
         });
     };
 
+    const updateArrowTips = () => {
+      const LINK_ARROW_SIZE = 4;
+      d3.selectAll('.arrow')
+        .transition(transitionTime)
+        .attr('refX', (d) => {
+          const targetNode = nodes.find((node) => node.id === d.target.id);
+          return calculateNodeSize(targetNode) + LINK_ARROW_SIZE;
+        });
+    };
+
     const drawCommunicationChannelCircles = () => {
       d3.selectAll('.node--selectedDependent')
         .append('g')
@@ -304,6 +314,7 @@ export default defineComponent({
     watch(() => props.nodeSizeAttribute, () => {
       updateNodeSize();
       updateCommunicationChannelPositions();
+      updateArrowTips();
     });
 
     watch(() => props.searchString, () => {
