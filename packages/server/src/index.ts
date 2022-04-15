@@ -4,11 +4,11 @@ import { join } from 'path';
 
 import { parse } from '@vue-component-insight/parser/dist';
 
-export const startServer = async (directory: string) => {
+export const startServer = async (directory: string, webpackConfigPath?: string,  tsConfigPath?: string) => {
     const app = express();
 
     app.get('/parse-result', async (request, response) => {
-        const parseResult = await parse(directory);
+        const parseResult = await parse(directory, 'vue', webpackConfigPath, tsConfigPath);
         response.json(parseResult);
     });
 

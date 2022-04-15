@@ -15,6 +15,7 @@ describe('parse', () => {
                 type: {
                     name: 'string'
                 },
+                default: "'Hello'",
                 defaultValue: {
                     func: false,
                     value: "'Hello'"

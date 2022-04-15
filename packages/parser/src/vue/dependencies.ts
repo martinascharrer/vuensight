@@ -3,12 +3,27 @@ import {
   cruise, IDependency, IReporterOutput, IModule
 } from 'dependency-cruiser';
 
-import { Dependency, VueComponent } from  '@vue-component-insight/types';
+// extract features of dependency-cruiser are still experimental and therefore not exported by default.
+// See: https://github.com/sverweij/dependency-cruiser/blob/develop/doc/api.md#utility-functions
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import extractTSConfig from '../../../../node_modules/dependency-cruiser/src/config-utl/extract-ts-config';
+import extractWebpackResolveConfig
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+    from '../../../../node_modules/dependency-cruiser/src/config-utl/extract-webpack-resolve-config';
 
-import { findComponentDataByString } from './analyzer';
+import { Dependency } from  '@vue-component-insight/types';
 
-export const findDependencies = (directory = 'src', fileType: string):IModule[] | null => {
+export const findDependencies = (
+    directory = 'src',
+    fileType?: string,
+    webpackConfigPath?: string,
+    tsConfigPath?: string
+):IModule[] | null => {
   let cruiseResult: IReporterOutput | null = null;
+  const webpackResolveConfig = webpackConfigPath ? extractWebpackResolveConfig(webpackConfigPath) : null;
+  const tsConfig = tsConfigPath ? extractTSConfig(tsConfigPath) : null;
   try {
     cruiseResult = cruise(
         [directory],
@@ -28,6 +43,8 @@ export const findDependencies = (directory = 'src', fileType: string):IModule[] 
           },
           forceDeriveDependents: true,
         },
+        webpackResolveConfig,
+        tsConfig
     );
   } catch (error) {
     console.error('Something went wrong cruising the project ', error);
@@ -41,27 +58,3 @@ export const formatDependencies = (dependencies: IDependency[]): Dependency[] =>
       fullPath: normalize(dependency.resolved),
   }));
 };
-
-// temporal (!) workaround for sanitizing path aliases with '@' that cannot be resolved by dependency-cruiser
-export const sanitizeUnresolvedDependencyPaths = (components: VueComponent[]): VueComponent[] => {
-    return components.map((component) => {
-        const newDependencies = component.dependencies.map((dependency) => {
-            const isWebPackAlias = dependency.fullPath.includes('@/');
-            let path = dependency.fullPath;
-            if (isWebPackAlias) {
-                const slicedPath = dependency.fullPath.slice(2, dependency.fullPath.length);
-                const dependencyComponent = findComponentDataByString(components, slicedPath);
-                path = dependencyComponent?.fullPath || dependency.fullPath;
-            }
-            return {
-                ...dependency,
-                fullPath: path,
-            };
-        });
-        return {
-            ...component,
-            dependencies: newDependencies,
-        };
-    });
-};
-
