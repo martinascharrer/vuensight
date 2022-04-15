@@ -149,6 +149,7 @@ export default defineComponent({
       d3.selectAll('.link--greyedOut').classed('link--greyedOut', false);
       removeNodeChannels();
       resetChannelSelection();
+      d3.selectAll('.node').raise();
     };
 
     onMounted(() => {
@@ -194,8 +195,7 @@ export default defineComponent({
           L1,-${(LINK_ARROW_SIZE / 2) - 1} Z`)
         .style('opacity', '1');
 
-      const link = g.append('g')
-        .selectAll('line')
+      const link = g.selectAll('line')
         .data(links)
         .enter()
         .append('line')
@@ -203,8 +203,7 @@ export default defineComponent({
         .attr('class', 'link')
         .attr('marker-end', (d) => `url(#arrow-${d.source.index}-${d.target.index})`);
 
-      const node = g.append('g')
-        .selectAll('g')
+      const node = g.selectAll('g')
         .data(nodes)
         .enter()
         .append('g')
@@ -219,13 +218,18 @@ export default defineComponent({
           selectedNode.value = data;
 
           // highlight selected node + dependents
-          d3.select(this).classed('node--selected', true);
           const dependents = links.filter((l) => l.target.index === data.index);
           dependents.forEach((dependent) => {
+            d3.select(`#link-${dependent.source.index}-${dependent.target.index}`)
+              .classed('link--selected', true)
+              .raise();
+            d3.select(`#arrow-${dependent.source.index}-${dependent.target.index}`)
+              .classed('arrow--selected', true)
+              .raise();
             d3.select(`#node-${dependent.source.index}`).classed('node--selectedDependent', true);
-            d3.select(`#link-${dependent.source.index}-${dependent.target.index}`).classed('link--selected', true);
-            d3.select(`#arrow-${dependent.source.index}-${dependent.target.index}`).classed('arrow--selected', true);
           });
+          d3.selectAll('.node--selectedDependent').raise();
+          d3.select(this).classed('node--selected', true).raise();
           drawCommunicationChannelCircles();
 
           // grey out everything else
@@ -473,9 +477,13 @@ export default defineComponent({
     }
 
     &--greyedOut {
-        opacity: 50%;
         .node__circle {
             stroke: none;
+            fill: var(--grey-5);
+        }
+
+        .node__labelBackground {
+            fill: var(--grey-5);
         }
 
         .node__labelText {
