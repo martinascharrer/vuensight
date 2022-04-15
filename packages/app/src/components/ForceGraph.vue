@@ -157,10 +157,9 @@ export default defineComponent({
         .size([props.width, props.height])
         .nodes(nodes)
         .links(links)
-        .flowLayout('y', 30)
         .avoidOverlaps(true)
         .symmetricDiffLinkLengths(20)
-        .start(20, 20, 20);
+        .start(10, 15, 20);
 
       const LINK_ARROW_SIZE = 4;
       svg.append('defs').selectAll('.arrow')
