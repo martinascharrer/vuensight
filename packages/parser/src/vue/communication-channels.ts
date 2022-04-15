@@ -19,7 +19,7 @@ export const parseComponentFile = async (filePath: string): Promise<Partial<VueC
     const { displayName: name, props, events, slots } = await parse(filePath);
     return { name, props: props && formatProps(props), events, slots };
   } catch (e) {
-    console.error('Something went wrong while parsing the components.', e);
+    console.error(`Something went wrong while parsing the component: ${filePath}`, e);
   }
   return null;
 };

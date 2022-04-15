@@ -78,7 +78,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const nodeSizeFilterLocal = ref(props.nodeSizeFilter);
     watch(nodeSizeFilterLocal, () => {
-      emit('update:nodeSizeFilter', nodeSizeFilterLocal);
+      emit('update:nodeSizeFilter', nodeSizeFilterLocal.value);
     });
 
     return {
