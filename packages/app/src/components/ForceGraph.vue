@@ -9,6 +9,8 @@ import {
 import * as d3 from 'd3';
 import * as cola from 'webcola';
 
+import nodeSizeAttributeType from '@/types/nodeSizeAttributeType';
+
 const SMALL_CIRCLE_RADIUS = 2;
 const DISTANCE_BETWEEN_SMALL_CIRCLES = 5;
 const NODE_SIZE_NO_FILTER = 15;
@@ -58,18 +60,17 @@ export default defineComponent({
     }));
 
     const nodeSizeAttributeScale = computed(() => {
-      if (props.nodeSizeAttribute === 'none') return (d) => d;
-
-      const numbersOfAttribute = props.nodeSizeAttribute === 'all'
-        ? nodes.map((d) => d.props.length + d.events.length + d.slots.length)
-        : nodes.map((d) => d[props.nodeSizeAttribute].length);
-      return d3.scaleLinear(d3.extent(numbersOfAttribute), [10, 30]);
+      if (props.nodeSizeAttribute === nodeSizeAttributeType.NONE) return (d) => d;
+      let attributeCounts = props.nodeSizeAttribute === nodeSizeAttributeType.CHANNELS
+          ? nodes.map((node) => node.props.length + node.events.length + node.slots.length)
+          : nodes.map((node) => node[props.nodeSizeAttribute].length);
+      return d3.scaleLinear(d3.extent(attributeCounts), [8, 30]);
     });
 
     const calculateNodeSize = (d) => {
-      if (props.nodeSizeAttribute === 'none') return NODE_SIZE_NO_FILTER;
+      if (props.nodeSizeAttribute === nodeSizeAttributeType.NONE) return NODE_SIZE_NO_FILTER;
 
-      const value = props.nodeSizeAttribute === 'all'
+      const value = props.nodeSizeAttribute === nodeSizeAttributeType.CHANNELS
         ? d.props.length + d.events.length + d.slots.length : d[props.nodeSizeAttribute].length;
       return nodeSizeAttributeScale.value(value);
     };

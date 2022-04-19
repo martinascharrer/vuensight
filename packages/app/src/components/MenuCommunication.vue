@@ -11,24 +11,32 @@
                         v-model="nodeSizeFilterLocal"
                         :options="[
                         {
-                            label: 'Number of Props',
-                            value: 'props',
+                            label: 'Props',
+                            value: nodeSizeAttributeType.PROP,
                         },
                         {
-                            label: 'Number of Events',
-                            value: 'events',
+                            label: 'Events',
+                            value: nodeSizeAttributeType.EVENT,
                         },
                         {
-                            label: 'Number of Slots',
-                            value: 'slots',
+                            label: 'Slots',
+                            value: nodeSizeAttributeType.SLOT,
                         },
                         {
-                            label: 'Number of Props, Events & Slots',
-                            value: 'all',
+                            label: 'Props, Events & Slots',
+                            value: nodeSizeAttributeType.CHANNELS,
+                        },
+                        {
+                            label: 'Dependencies',
+                            value: nodeSizeAttributeType.DEPENDENCIES,
+                        },
+                        {
+                            label: 'Dependents',
+                            value: nodeSizeAttributeType.DEPENDENTS,
                         },
                         {
                             label: 'No filter',
-                            value: 'none',
+                            value: nodeSizeAttributeType.NONE,
                         },
                     ]"
                         name="nodeSizeFilter"
@@ -58,6 +66,8 @@ import BaseCrossIcon from '@/components/base/BaseCrossIcon.vue';
 import BaseDropdown from '@/components/base/BaseDropdown.vue';
 import BaseRadioButtonGroup from '@/components/base/BaseRadioButtonGroup.vue';
 
+import nodeSizeAttributeType from '@/types/nodeSizeAttributeType';
+
 export default defineComponent({
   components: {
     BaseArrowIcon,
@@ -83,6 +93,7 @@ export default defineComponent({
 
     return {
       nodeSizeFilterLocal,
+      nodeSizeAttributeType,
     };
   },
 });

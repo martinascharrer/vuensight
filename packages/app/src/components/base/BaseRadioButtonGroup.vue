@@ -1,6 +1,11 @@
 <template>
     <form class="baseRadioButtonGroup">
-        <label :for="option.value" v-for="option in options" :key="option.value">
+        <label
+            v-for="option in options"
+            :key="option.value"
+            :for="option.value"
+            class="baseRadioButtonGroup__label"
+        >
             <input
                 type="radio"
                 :name="name"
@@ -50,6 +55,11 @@ export default defineComponent({
 
     &__input {
         accent-color: var(--mint-70);
+    }
+
+    &__label {
+        width: 100%;
+        cursor: pointer;
     }
 }
 </style>
