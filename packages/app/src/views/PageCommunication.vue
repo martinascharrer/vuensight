@@ -49,7 +49,7 @@ import { useFetch } from '@/composables/fetch';
 
 import {
   VueComponent, Dependency, Prop,
-} from '@vue-component-insight/types';
+} from '@vuensight/types';
 import {
   ForceLayout, Link,
 } from '@/types';

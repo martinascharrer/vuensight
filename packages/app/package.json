@@ -22,7 +22,7 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "@vue-component-insight/types": "^0.1.0",
+    "@vuensight/types": "^0.1.0",
     "core-js": "^3.21.1",
     "d3": "^5.16.0",
     "vue": "^3.2.31",

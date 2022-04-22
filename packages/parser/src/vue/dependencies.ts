@@ -13,7 +13,7 @@ import extractWebpackResolveConfig
 // @ts-ignore
     from '../../../../node_modules/dependency-cruiser/src/config-utl/extract-webpack-resolve-config';
 
-import { Dependency } from  '@vue-component-insight/types';
+import { Dependency } from  '@vuensight/types';
 
 export const findDependencies = (
     directory = 'src',

@@ -37,6 +37,6 @@
   },
   "devDependencies": {
     "@types/jsdom": "^16.2.14",
-    "@vue-component-insight/types": "^0.1.0"
+    "@vuensight/types": "^0.1.0"
   }
 }

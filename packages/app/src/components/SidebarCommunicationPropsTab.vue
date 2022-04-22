@@ -19,7 +19,7 @@ import {
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
 
-import { Prop, VueComponent } from '@vue-component-insight/types';
+import { Prop, VueComponent } from '@vuensight/types';
 
 export default defineComponent({
   components: {

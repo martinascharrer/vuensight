@@ -56,7 +56,7 @@ import BaseCheckIcon from '@/components/base/BaseCheckIcon.vue';
 import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
 import BaseList from '@/components/base/BaseList.vue';
 
-import { Prop, Dependent } from '@vue-component-insight/types';
+import { Prop, Dependent } from '@vuensight/types';
 import { Color } from '@/types';
 
 export default defineComponent({
