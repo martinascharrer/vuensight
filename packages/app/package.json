@@ -1,7 +1,18 @@
 {
-  "name": "@vue-component-insight/app",
+  "name": "@vuensight/app",
   "version": "0.1.0",
-  "private": true,
+  "main": "dist/index.html",
+  "description": "The front-end of @vuensight that visualizes Vue.js projects.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinascharrer/vuensight.git"
+  },
+  "author": "Martina Scharrer",
+  "license": "(MIT)",
+  "bugs": {
+    "url": "https://github.com/martinascharrer/vuensight/issues"
+  },
+  "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

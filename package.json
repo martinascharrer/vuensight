@@ -1,8 +1,7 @@
 {
-  "name": "vue-component-insight",
+  "name": "vuensight",
   "version": "0.1.0",
-  "description": "`vue-component-insight` is a cli tool for parsing and visualizing Vue.js projects. The ultimate goal is to visualize the components  communication e.g. their props, events and slots in an interactive web app. **This project is currently a work in progress!**",
-  "main": "index.js",
+  "description": "`vuensight` is a cli tool for parsing and visualizing Vue.js projects. The ultimate goal is to visualize the components communication e.g. their props, events and slots in an interactive web app. **This project is currently a work in progress!**",
   "scripts": {
     "build": "npm run build --workspaces",
     "lint": "npm run lint --workspaces",
@@ -13,7 +12,7 @@
     "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
   },
   "author": "Martina Scharrer",
-  "license": "ISC",
+  "license": "(MIT)",
   "bugs": {
     "url": "https://github.com/martinascharrer/vue-component-insight/issues"
   },

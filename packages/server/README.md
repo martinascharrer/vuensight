@@ -1,5 +1,5 @@
-# @vue-component-insight/server
-**@vue-component-insight/server** starts an express server at port 4444.
+# @vuensight/server
+**@vuensight/server** starts an the parsing processes and 
 
 ## Usage
 Compile typescript files to `dist` folder
@@ -12,3 +12,6 @@ Run eslint
 ```
 npm run lint
 ```
+
+## Licencse
+[MIT](LICENSE.txt)

@@ -1,5 +1,5 @@
 {
-  "name": "@vue-component-insight/cli",
+  "name": "@vuensight/cli",
   "version": "0.1.0",
   "description": "Vue component insight cli.",
   "main": "bin/index.js",
@@ -23,9 +23,9 @@
   "author": "Martina Scharrer",
   "license": "(MIT)",
   "bugs": {
-    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+    "url": "https://github.com/martinascharrer/vuensight/issues"
   },
-  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
+  "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "dependencies": {
     "@vue-component-insight/server": "^0.1.0",
     "commander": "^9.1.0"

@@ -1,4 +1,5 @@
 *
 !dist/*
+!dist/**/*
 !package.json
 !readme.md

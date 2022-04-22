@@ -1,8 +1,8 @@
 {
-  "name": "@vue-component-insight/server",
+  "name": "@vuensight/server",
   "version": "0.1.0",
-  "description": "This is the Server of vue-component-insight.",
-  "main": "index.js",
+  "description": "This is the server package of @vuensight.",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist/* && tsc -p tsconfig.pkg.json",
     "build:watch": "tsc -w -p tsconfig.pkg.json",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+    "url": "git+https://github.com/martinascharrer/vuensight.git"
   },
   "keywords": [
     "Vue.js"
@@ -19,9 +19,9 @@
   "author": "Martina Scharrer",
   "license": "(MIT)",
   "bugs": {
-    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+    "url": "https://github.com/martinascharrer/vuensight/issues"
   },
-  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
+  "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "dependencies": {
     "@vue-component-insight/parser": "^0.1.0",
     "connect-history-api-fallback": "^1.6.0",
