@@ -8,7 +8,8 @@
     "build:watch": "tsc -w -p tsconfig.pkg.json",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint --ext ts"
+    "lint": "eslint --ext ts",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

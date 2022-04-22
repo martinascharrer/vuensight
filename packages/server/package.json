@@ -7,7 +7,8 @@
     "build": "rm -rf dist/* && tsc -p tsconfig.pkg.json",
     "build:watch": "tsc -w -p tsconfig.pkg.json",
     "lint": "eslint  --ext ts",
-    "test": "echo 'no tests yet in server'"
+    "test": "echo 'no tests yet in server'",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

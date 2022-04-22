@@ -18,7 +18,8 @@
     "build": "vue-cli-service build",
     "build:watch": "vue-cli-service build --watch",
     "test": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "@vue-component-insight/types": "^0.1.0",
