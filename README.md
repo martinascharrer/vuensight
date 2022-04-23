@@ -1,4 +1,4 @@
-# vuensight
+# vuensight 👀
 Visualize Vue.js **component relationships** and **communication channels**, i.e. props, events and slots. This tool operates on the 
 command line and is made for developers. The aim of vuensight is to provide visual insight into the components of a 
 Vue.js project and to support developers before and during refactoring, e.g. by visually analyzing which prop is used 
@@ -11,7 +11,7 @@ This tool is built on top of the two awesome packages:
 - [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) for building the dependency tree 
 - [vue-docgen-api](https://github.com/vue-styleguidist/vue-styleguidist/tree/dev/packages/vue-docgen-api) for parsing the Vue files
 
-## Getting started
+## Getting started 🚀
 ### Install
 First install the cli tool locally in the project you want to visualize:
 ```
