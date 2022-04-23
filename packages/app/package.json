@@ -15,7 +15,7 @@
   "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "rm -rf dist/ && vue-cli-service build --dest dist/app && cd server && tsc -p tsconfig.pkg.json",
+    "build": "rm -rf dist/ && echo 'Building app...' && vue-cli-service build --dest dist/app && echo 'Building server...' && cd server && tsc -p tsconfig.pkg.json",
     "build:watch": "vue-cli-service build --watch",
     "test": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",

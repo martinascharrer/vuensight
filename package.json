@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "workspaces": [
-    "./packages/*"
+    "./packages/types",
+    "./packages/parser",
+    "./packages/app",
+    "./packages/cli"
   ],
   "devDependencies": {
     "@types/node": "^17.0.22",
