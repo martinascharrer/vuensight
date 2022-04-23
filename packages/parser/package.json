@@ -1,29 +1,30 @@
 {
-  "name": "@vue-component-insight/parser",
-  "version": "0.1.0",
-  "description": "@vue-component-insight/parser extracts information regarding the dependencies and their used props,events and slots of a given Vue project.",
+  "name": "@vuensight/parser",
+  "version": "0.1.3",
+  "main": "dist/index.js",
+  "description": "This parser extracts information regarding the dependencies and their used props, events and slots of a given Vue.js project.",
   "scripts": {
     "build": "rm -rf dist/* && tsc -p tsconfig.pkg.json",
     "build:watch": "tsc -w -p tsconfig.pkg.json",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint  --ext ts"
+    "lint": "eslint --ext ts",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+    "url": "git+https://github.com/martinascharrer/vuensight.git"
   },
   "keywords": [
-    "TypeScript",
-    "Vue.js",
-    "node.js"
+    "parser",
+    "vue"
   ],
   "author": "Martina Scharrer",
   "license": "(MIT)",
   "bugs": {
-    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+    "url": "https://github.com/martinascharrer/vuensight/issues"
   },
-  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme",
+  "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node"
@@ -36,6 +37,6 @@
   },
   "devDependencies": {
     "@types/jsdom": "^16.2.14",
-    "@vue-component-insight/types": "^0.1.0"
+    "@vuensight/types": "^0.1.0"
   }
 }

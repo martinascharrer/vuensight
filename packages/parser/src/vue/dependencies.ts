@@ -7,13 +7,12 @@ import {
 // See: https://github.com/sverweij/dependency-cruiser/blob/develop/doc/api.md#utility-functions
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import extractTSConfig from '../../../../node_modules/dependency-cruiser/src/config-utl/extract-ts-config';
-import extractWebpackResolveConfig
+import extractTSConfig from 'dependency-cruiser/config-utl/extract-ts-config';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-    from '../../../../node_modules/dependency-cruiser/src/config-utl/extract-webpack-resolve-config';
+import extractWebpackResolveConfig from 'dependency-cruiser/config-utl/extract-webpack-resolve-config';
 
-import { Dependency } from  '@vue-component-insight/types';
+import { Dependency } from  '@vuensight/types';
 
 export const findDependencies = (
     directory = 'src',

@@ -61,9 +61,9 @@ export default defineComponent({
 
     const nodeSizeAttributeScale = computed(() => {
       if (props.nodeSizeAttribute === nodeSizeAttributeType.NONE) return (d) => d;
-      let attributeCounts = props.nodeSizeAttribute === nodeSizeAttributeType.CHANNELS
-          ? nodes.map((node) => node.props.length + node.events.length + node.slots.length)
-          : nodes.map((node) => node[props.nodeSizeAttribute].length);
+      const attributeCounts = props.nodeSizeAttribute === nodeSizeAttributeType.CHANNELS
+        ? nodes.map((node) => node.props.length + node.events.length + node.slots.length)
+        : nodes.map((node) => node[props.nodeSizeAttribute].length);
       return d3.scaleLinear(d3.extent(attributeCounts), [8, 30]);
     });
 

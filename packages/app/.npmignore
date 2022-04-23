@@ -1,4 +1,7 @@
 *
-!dist/*
+
+!dist/app/**/*
+dist/app/**/*.js.map
+!dist/server/*.js
 !package.json
 !readme.md

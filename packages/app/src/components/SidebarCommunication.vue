@@ -39,7 +39,7 @@ import { defineComponent, ref, PropType } from 'vue';
 
 import BaseSubNav from '@/components/base/BaseSubNav.vue';
 
-import { Prop, VueComponent } from '@vue-component-insight/types';
+import { Prop, VueComponent } from '@vuensight/types';
 
 export default defineComponent({
   components: {

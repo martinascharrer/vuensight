@@ -1,4 +1,5 @@
 *
-!dist/*
+!dist/**/*.js
+dist/tsconfig.pkg.tsbuildinfo
 !package.json
 !readme.md

@@ -1,14 +1,14 @@
 {
-  "name": "@vue-component-insight/types",
+  "name": "@vuensight/types",
   "version": "0.1.0",
-  "description": "The types of vue-component-insight.",
+  "description": "The shared types package for @vuensight.",
   "main": "index.d.ts",
   "scripts": {
     "build": "echo 'no build for types package'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+    "url": "git+https://github.com/martinascharrer/vuensight.git"
   },
   "keywords": [
     "Vue.js",
@@ -18,7 +18,7 @@
   "author": "Martina Scharrer",
   "license": "(MIT)",
   "bugs": {
-    "url": "https://github.com/martinascharrer/vue-component-insight/issues"
+    "url": "https://github.com/martinascharrer/vuensight/issues"
   },
-  "homepage": "https://github.com/martinascharrer/vue-component-insight#readme"
+  "homepage": "https://github.com/martinascharrer/vuensight#readme"
 }

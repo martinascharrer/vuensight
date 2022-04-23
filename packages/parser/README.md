@@ -1,14 +1,13 @@
-# @vue-component-insight/parser
-**@vue-component-insight/parser** extracts information about component dependencies as well as their used props/events/slots of a
+# @vuensight/parser
+The parser extracts information about component dependencies as well as their used props/events/slots of a
 given Vue.js project.
 
-## Usage
+## Development
 Compile typescript files to `dist` folder
 ```
 npm run build
 ```
 
-## Development
 Run eslint
 ```
 npm run lint
@@ -23,3 +22,6 @@ Run unit test watcher
 ```
 npm run test:watch
 ```
+
+## Licencse
+[MIT](LICENSE.txt)
