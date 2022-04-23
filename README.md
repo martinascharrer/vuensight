@@ -1,12 +1,18 @@
 # vuensight
-This tool is for parsing and visualizing Vue.js projects. The ultimate goal is to visualize the components 
-communication e.g. their props, events and slots in an interactive web app.
+Visualize Vue.js **component relationships** and **communication channels**, i.e. props, events and slots. This tool operates on the 
+command line and is made for developers. The aim of vuensight is to provide visual insight into the components of a 
+Vue.js project and to support developers before and during refactoring, e.g. by visually analyzing which prop is used 
+in which parent component or by highlighting unused components or channels.
 
-This tool is built on top of two awesome packages:
+An example visualization of vuensight itself:
+![demo image of vuensight](docs/vuensight-demo.png)
+
+This tool is built on top of the two awesome packages:
 - [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) for building the dependency tree 
 - [vue-docgen-api](https://github.com/vue-styleguidist/vue-styleguidist/tree/dev/packages/vue-docgen-api) for parsing the Vue files
 
 ## Getting started
+### Install
 First install the cli tool locally in the project you want to visualize:
 ```
 npm i -D @vue-dependency-insight/cli
@@ -17,13 +23,14 @@ Or globally on your machine if you plan to visualize multiple projects:
 npm i -g @vue-dependency-insight/cli
 ```
 
-Then run the tool in your project folder:
-```
-vuensight
-```
-or:
+### Run in project
+Then run the tool in your project folder (local install):
 ```
 npx vuensight
+```
+or if you installed vuensight globally:
+```
+vuensight
 ```
 
 
@@ -32,9 +39,9 @@ npx vuensight
 - `--webpack-config` or `-wpc` (optional): Specify the path to your webpack-config (from your current working directory). This is particularly important if you use aliases.
 - `--ts-config` or `-tsc` (optional): Specify the path to your TypeScript config file (from your current working directory).
 
-An example:
+An example usage:
 ```
-vuensight --dir resources/js --webpack-config ./webpack-config.json --ts-config ./tsconfig.json
+npx vuensight --dir resources/js --webpack-config ./webpack-config.json --ts-config ./tsconfig.json
 ```
 
 ## Licencse
