@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { startServer } from '@vue-component-insight/server/dist';
+import startServer from '@vuensight/app';
 
 program
     .description('Vue Component Insight CLI')

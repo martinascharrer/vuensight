@@ -1,5 +1,5 @@
 *
-!dist/*
-!dist/**/*
+!dist/app/**/*
+!dist/server/*.js
 !package.json
 !readme.md

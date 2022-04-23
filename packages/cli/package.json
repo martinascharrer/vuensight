@@ -1,11 +1,11 @@
 {
   "name": "@vuensight/cli",
   "version": "0.1.0",
-  "description": "Vue component insight cli.",
+  "description": "Command line interface of @vuensight.",
   "main": "bin/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martinascharrer/vue-component-insight.git"
+    "url": "git+https://github.com/martinascharrer/vuensight.git"
   },
   "scripts": {
     "build": "rm -rf dist/* && tsc -p tsconfig.pkg.json",
@@ -15,7 +15,7 @@
     "prepublish": "npm run build"
   },
   "bin": {
-    "vue-insight": "bin/index.js"
+    "vuensight": "dist/index.js"
   },
   "keywords": [
     "cli",
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "dependencies": {
-    "@vue-component-insight/server": "^0.1.0",
+    "@vuensight/app": "^0.2.1",
     "commander": "^9.1.0"
   }
 }
