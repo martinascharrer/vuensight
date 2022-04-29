@@ -3,11 +3,14 @@
 </template>
 
 <style lang="scss">
-@import 'assets/css/color.css';
-@import 'assets/css/font.css';
-@import 'assets/css/spacing.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+
 @import 'assets/css/border-radius.css';
 @import 'assets/css/box-shadow.css';
+@import 'assets/css/color.css';
+@import 'assets/css/font.css';
+@import 'assets/css/icon.css';
+@import 'assets/css/spacing.css';
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -41,7 +44,7 @@ button {
 .input {
     display: flex;
     align-items: center;
-    gap: var(--spacing--m);
+    gap: var(--spacing--s);
     background: white;
     border: none;
     border-radius: var(--border-radius--s);

@@ -3,5 +3,6 @@
 !dist/app/**/*
 dist/app/**/*.js.map
 !dist/server/*.js
+!dist/server/*.d.ts
 !package.json
 !readme.md

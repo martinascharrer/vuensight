@@ -13,14 +13,3 @@
     --font-size--4xl: 2.75em;
 
 }
-
-@font-face {
-    font-family: NotoSans;
-    src: url('../fonts/NotoSans-Regular.ttf');
-}
-
-@font-face {
-    font-family: NotoSans;
-    font-weight: bold;
-    src: url('../fonts/NotoSans-Bold.ttf');
-}

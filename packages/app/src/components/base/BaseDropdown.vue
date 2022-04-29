@@ -1,5 +1,6 @@
 <template>
     <div
+        ref="dropdown"
         class="baseDropdown"
         :class="{'c-appDropdown--open': isOpen}"
     >
@@ -18,6 +19,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
+import { onClickOutside } from '@vueuse/core';
+
 export default defineComponent({
   setup() {
     const isOpen = ref<boolean>(false);
@@ -30,10 +33,14 @@ export default defineComponent({
       isOpen.value = false;
     };
 
+    const dropdown = ref(null);
+    onClickOutside(dropdown, () => close());
+
     return {
       close,
       isOpen,
       toggle,
+      dropdown,
     };
   },
 });
