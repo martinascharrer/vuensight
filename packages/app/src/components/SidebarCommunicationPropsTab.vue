@@ -34,7 +34,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedChannel = ref<Prop | null>(null);
     const selectChannel = (channel: Prop) => {
-      selectedChannel.value = channel;
+      selectedChannel.value = selectedChannel.value?.name !== channel.name ? channel : null;
       emit('channelSelected', selectedChannel.value);
     };
 

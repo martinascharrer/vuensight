@@ -330,7 +330,7 @@ export default defineComponent({
 
     watch(() => props.selectedChannel, () => {
       resetChannelSelection();
-      highlightChannelUsage(props.selectedChannel);
+      if (props.selectedChannel) highlightChannelUsage(props.selectedChannel);
     });
 
     watch(() => props.selectedChannelType, () => {

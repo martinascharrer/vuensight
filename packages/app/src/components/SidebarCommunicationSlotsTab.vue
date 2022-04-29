@@ -19,7 +19,7 @@ import {
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
 
-import { Prop, VueComponent } from '@vuensight/types';
+import { Slot, VueComponent } from '@vuensight/types';
 
 export default defineComponent({
   components: {
@@ -32,9 +32,9 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const selectedChannel = ref<Prop | null>(null);
-    const selectChannel = (channel: Prop) => {
-      selectedChannel.value = channel;
+    const selectedChannel = ref<Slot | null>(null);
+    const selectChannel = (channel: Slot) => {
+      selectedChannel.value = selectedChannel.value?.name !== channel.name ? channel : null;
       emit('channelSelected', selectedChannel.value);
     };
 
