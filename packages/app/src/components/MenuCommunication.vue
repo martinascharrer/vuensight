@@ -12,36 +12,7 @@
                     <h4>Component size</h4>
                     <base-radio-button-group
                         v-model="nodeSizeFilterLocal"
-                        :options="[
-                        {
-                            label: 'Props',
-                            value: nodeSizeAttributeType.PROP,
-                        },
-                        {
-                            label: 'Events',
-                            value: nodeSizeAttributeType.EVENT,
-                        },
-                        {
-                            label: 'Slots',
-                            value: nodeSizeAttributeType.SLOT,
-                        },
-                        {
-                            label: 'Props, Events & Slots',
-                            value: nodeSizeAttributeType.CHANNELS,
-                        },
-                        {
-                            label: 'Dependencies',
-                            value: nodeSizeAttributeType.DEPENDENCIES,
-                        },
-                        {
-                            label: 'Dependents',
-                            value: nodeSizeAttributeType.DEPENDENTS,
-                        },
-                        {
-                            label: 'No filter',
-                            value: nodeSizeAttributeType.NONE,
-                        },
-                    ]"
+                        :options="nodeSizeFilterOptions"
                         name="nodeSizeFilter"
                     />
                 </div>
@@ -84,6 +55,37 @@ import IconFilter from '@/components/icons/IconFilter.vue';
 
 import nodeSizeAttributeType from '@/types/nodeSizeAttributeType';
 
+const nodeSizeFilterOptions = [
+  {
+    label: 'Props',
+    value: nodeSizeAttributeType.PROP,
+  },
+  {
+    label: 'Events',
+    value: nodeSizeAttributeType.EVENT,
+  },
+  {
+    label: 'Slots',
+    value: nodeSizeAttributeType.SLOT,
+  },
+  {
+    label: 'Props, Events & Slots',
+    value: nodeSizeAttributeType.CHANNELS,
+  },
+  {
+    label: 'Dependencies',
+    value: nodeSizeAttributeType.DEPENDENCIES,
+  },
+  {
+    label: 'Dependents',
+    value: nodeSizeAttributeType.DEPENDENTS,
+  },
+  {
+    label: 'No filter',
+    value: nodeSizeAttributeType.NONE,
+  },
+];
+
 export default defineComponent({
   components: {
     BaseArrowIcon,
@@ -106,14 +108,15 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const nodeSizeFilterLocal = ref({ label: 'asdf', value: props.nodeSizeFilter });
+    const nodeSizeFilterLocal = ref(nodeSizeFilterOptions.find((option) => option.value === props.nodeSizeFilter));
     watch(nodeSizeFilterLocal, () => {
-      emit('update:nodeSizeFilter', nodeSizeFilterLocal.value.value);
+      emit('update:nodeSizeFilter', nodeSizeFilterLocal?.value?.value);
     });
 
     return {
-      nodeSizeFilterLocal,
       nodeSizeAttributeType,
+      nodeSizeFilterLocal,
+      nodeSizeFilterOptions,
     };
   },
 });
