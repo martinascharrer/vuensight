@@ -1,13 +1,29 @@
 <template>
     <layout-split-view>
-        <menu-communication
-            v-model:node-size-filter="nodeSizeFilter"
-            v-model:search="componentSearch"
-            class="pageCommunication__menu"
-        />
-        <p v-if="true">... loading</p>
-        <p v-else-if="isError">Something went wrong parsing your project.</p>
-        <template v-else-if="forceGraphData">
+        <div
+            v-if="isLoading"
+            class="pageCommunication__loading"
+        >
+            <base-loading-spinner />
+            <p>... analyzing your components</p>
+        </div>
+        <div
+            v-else-if="isError"
+            class="pageCommunication__error"
+        >
+            <h2>Oh no!</h2>
+            <p>Something went wrong while parsing your project.</p>
+        </div>
+        <div
+            v-else-if="forceGraphData && forceGraphData.nodes.length === 0"
+            class="pageCommunication__empty"
+        >
+            <h2>No components found.</h2>
+            <p>Sorry, we could not find any Vue components. Did you specify the correct folder?</p>
+        </div>
+        <template
+            v-else-if="forceGraphData && forceGraphData.nodes.length > 0"
+        >
             <menu-communication
                 v-model:node-size-filter="nodeSizeFilter"
                 v-model:search="componentSearch"
@@ -45,6 +61,7 @@ import { useRoute } from 'vue-router';
 
 import * as parserService from '@/services/parser';
 
+import BaseLoadingSpinner from '@/components/base/BaseLoadingSpinner.vue';
 import ForceGraph from '@/components/ForceGraph.vue';
 import LayoutSplitView from '@/components/layout/LayoutSplitView.vue';
 import MenuCommunication from '@/components/MenuCommunication.vue';
@@ -62,6 +79,7 @@ import {
 export default defineComponent({
   name: 'PageCommunication',
   components: {
+    BaseLoadingSpinner,
     ForceGraph,
     LayoutSplitView,
     MenuCommunication,
@@ -129,6 +147,17 @@ export default defineComponent({
         position: fixed;
         top: 0;
         left: 0;
+    }
+
+    &__loading,
+    &__error,
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--grey-50);
     }
 }
 </style>
