@@ -1,9 +1,9 @@
 import { parse, PropDescriptor } from 'vue-docgen-api';
 import { JSDOM } from 'jsdom';
-
 import { Dependent, Event, Prop, Slot, VueComponent } from  '@vuensight/types';
 
-import { getTemplateContent } from '../utils/template';
+import { getComponentImportName } from '../utils/vue';
+import { getTemplateContent } from '../utils/vue';
 import { kebabize } from '../utils/kababize';
 
 export const findDependencyInstancesInTemplate = (template: string, name: string): Element[] => {
@@ -79,7 +79,11 @@ export const getDependentWithUsedChannelsAnalysis = (
     usedEvents: [],
     usedSlots: []
   };
-  const dependencyInstances = findDependencyInstancesInTemplate(template, name);
+  let dependencyInstances = findDependencyInstancesInTemplate(template, name);
+  if (dependencyInstances.length === 0)  {
+    const importName = getComponentImportName(dependentFilecontent, name);
+    dependencyInstances = importName ? findDependencyInstancesInTemplate(template, importName) : dependencyInstances;
+  }
   return {
     fullPath: dependentFullPath,
     name: dependentName,
