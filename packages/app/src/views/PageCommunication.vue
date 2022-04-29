@@ -1,6 +1,11 @@
 <template>
     <layout-split-view>
-        <p v-if="isLoading">... loading</p>
+        <menu-communication
+            v-model:node-size-filter="nodeSizeFilter"
+            v-model:search="componentSearch"
+            class="pageCommunication__menu"
+        />
+        <p v-if="true">... loading</p>
         <p v-else-if="isError">Something went wrong parsing your project.</p>
         <template v-else-if="forceGraphData">
             <menu-communication

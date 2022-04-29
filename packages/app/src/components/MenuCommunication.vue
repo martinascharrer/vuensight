@@ -2,7 +2,10 @@
     <div class="menuCommunication">
             <base-dropdown>
                 <template #trigger="{ isOpen }">
-                    Filter
+                    <base-icon icon-name="node size filter">
+                        <icon-filter />
+                    </base-icon>
+                    {{ nodeSizeFilterLocal.label }}
                     <base-arrow-icon :is-flipped="isOpen" />
                 </template>
                 <div class="menuCommunication__filterForm">
@@ -44,6 +47,9 @@
                 </div>
             </base-dropdown>
         <label class="input" for="search">
+            <base-icon icon-name="search">
+                <icon-search />
+            </base-icon>
             <input
                 id="search"
                 :value="search"
@@ -51,7 +57,13 @@
                 placeholder="Search for a component"
                 @input="$emit('update:search', $event.target.value)"
             />
-            <button @click="$emit('update:search', '')"><base-cross-icon /></button>
+            <base-icon-button
+                icon-name="cross"
+                size="xs"
+                @click="$emit('update:search', '')"
+            >
+                    <icon-cross />
+            </base-icon-button>
         </label>
     </div>
 </template>
@@ -62,23 +74,31 @@ import {
 } from 'vue';
 
 import BaseArrowIcon from '@/components/base/BaseArrowIcon.vue';
-import BaseCrossIcon from '@/components/base/BaseCrossIcon.vue';
 import BaseDropdown from '@/components/base/BaseDropdown.vue';
+import BaseIcon from '@/components/base/BaseIcon.vue';
+import BaseIconButton from '@/components/base/BaseIconButton.vue';
 import BaseRadioButtonGroup from '@/components/base/BaseRadioButtonGroup.vue';
+import IconSearch from '@/components/icons/IconSearch.vue';
+import IconCross from '@/components/icons/IconCross.vue';
+import IconFilter from '@/components/icons/IconFilter.vue';
 
 import nodeSizeAttributeType from '@/types/nodeSizeAttributeType';
 
 export default defineComponent({
   components: {
     BaseArrowIcon,
-    BaseCrossIcon,
+    BaseIcon,
+    BaseIconButton,
     BaseDropdown,
     BaseRadioButtonGroup,
+    IconCross,
+    IconFilter,
+    IconSearch,
   },
   props: {
     nodeSizeFilter: {
       type: String,
-      default: 'props',
+      required: true,
     },
     search: {
       type: String,
@@ -86,9 +106,9 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const nodeSizeFilterLocal = ref(props.nodeSizeFilter);
+    const nodeSizeFilterLocal = ref({ label: 'asdf', value: props.nodeSizeFilter });
     watch(nodeSizeFilterLocal, () => {
-      emit('update:nodeSizeFilter', nodeSizeFilterLocal.value);
+      emit('update:nodeSizeFilter', nodeSizeFilterLocal.value.value);
     });
 
     return {

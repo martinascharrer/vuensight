@@ -9,11 +9,11 @@
             <input
                 type="radio"
                 :name="name"
-                :checked="modelValue === option.value"
+                :checked="modelValue.value === option.value"
                 :value="option.value"
                 :id="option.value"
                 class="baseRadioButtonGroup__input"
-                @change="$emit('update:modelValue', option.value)"
+                @change="$emit('update:modelValue', option)"
             />
             {{ option.label }}
         </label>
@@ -31,16 +31,16 @@ type RadioButtonItem = {
 export default defineComponent({
   props: {
     modelValue: {
-      type: String,
-      default: 'props',
-    },
-    name: {
-      type: String,
-      default: 'radio-button',
+      type: Object as PropType<RadioButtonItem>,
+      required: true,
     },
     options: {
       type: Array as PropType<RadioButtonItem[]>,
       required: true,
+    },
+    name: {
+      type: String,
+      default: 'radio-button',
     },
   },
 });
