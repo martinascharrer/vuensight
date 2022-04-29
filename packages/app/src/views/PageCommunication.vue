@@ -45,7 +45,16 @@
                 :component="selectedComponent"
                 @channelSelected="selectedChannel = $event"
             />
-            <p v-else>Select a component!</p>
+            <div v-else class="pageCommunication__noSelection">
+                <base-icon
+                    icon-color="yellow-50"
+                    icon-name="select"
+                    size="2xl"
+                >
+                    <icon-select/>
+                </base-icon>
+                <p>Select one of the components to get insight about its props, events and slots.</p>
+            </div>
         </template>
     </layout-split-view>
 </template>
@@ -61,8 +70,10 @@ import { useRoute } from 'vue-router';
 
 import * as parserService from '@/services/parser';
 
+import BaseIcon from '@/components/base/BaseIcon.vue';
 import BaseLoadingSpinner from '@/components/base/BaseLoadingSpinner.vue';
 import ForceGraph from '@/components/ForceGraph.vue';
+import IconSelect from '@/components/icons/IconSelect.vue';
 import LayoutSplitView from '@/components/layout/LayoutSplitView.vue';
 import MenuCommunication from '@/components/MenuCommunication.vue';
 import SidebarCommunication from '@/components/SidebarCommunication.vue';
@@ -79,8 +90,10 @@ import {
 export default defineComponent({
   name: 'PageCommunication',
   components: {
+    BaseIcon,
     BaseLoadingSpinner,
     ForceGraph,
+    IconSelect,
     LayoutSplitView,
     MenuCommunication,
     SidebarCommunication,
@@ -151,13 +164,23 @@ export default defineComponent({
 
     &__loading,
     &__error,
-    &__empty {
+    &__empty,
+    &__noSelection {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin-top: calc(var(--spacing--3xl) * -1);
         height: 100%;
         color: var(--grey-50);
+    }
+
+    &__noSelection {
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        gap: var(--spacing--s);
     }
 }
 </style>

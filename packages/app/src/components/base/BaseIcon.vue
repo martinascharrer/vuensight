@@ -63,5 +63,9 @@ export default defineComponent({
         height: var(--icon--xl);
     }
 
+    &--2xl {
+        width: var(--icon--2xl);
+        height: var(--icon--2xl);
+    }
 }
 </style>
