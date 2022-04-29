@@ -53,7 +53,7 @@
                 >
                     <icon-select/>
                 </base-icon>
-                <p>Select one of the components to get insight about its props, events and slots.</p>
+                <p>Select one of the components to get details about its props, events and slots.</p>
             </div>
         </template>
     </layout-split-view>
