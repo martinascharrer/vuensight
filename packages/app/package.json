@@ -1,6 +1,6 @@
 {
   "name": "@vuensight/app",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "dist/server/index.js",
   "description": "The front-end of @vuensight that visualizes Vue.js projects.",
   "repository": {
