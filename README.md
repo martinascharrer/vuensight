@@ -15,12 +15,12 @@ This tool is built on top of the two awesome packages:
 ### Install
 First install the cli tool locally in the project you want to visualize:
 ```
-npm i -D @vue-dependency-insight/cli
+npm i -D @vuensight/cli
 ```
 
 Or globally on your machine if you plan to visualize multiple projects:
 ```
-npm i -g @vue-dependency-insight/cli
+npm i -g @vuensight/cli
 ```
 
 ### Run in project
