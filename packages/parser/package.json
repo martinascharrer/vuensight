@@ -1,6 +1,6 @@
 {
   "name": "@vuensight/parser",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "dist/index.js",
   "description": "This parser extracts information regarding the dependencies and their used props, events and slots of a given Vue.js project.",
   "scripts": {
