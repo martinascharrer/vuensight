@@ -15,12 +15,12 @@ This tool is built on top of the two awesome packages:
 ### Install
 First install the cli tool locally in the project you want to visualize:
 ```
-npm i -D @vue-dependency-insight/cli
+npm i -D @vuensight/cli
 ```
 
 Or globally on your machine if you plan to visualize multiple projects:
 ```
-npm i -g @vue-dependency-insight/cli
+npm i -g @vuensight/cli
 ```
 
 ### Run in project
@@ -46,27 +46,3 @@ npx vuensight --dir resources/js --webpack-config ./webpack-config.json --ts-con
 
 ## Licencse
 [MIT](LICENSE.txt)
-
-
-## Development
-### Requirements
-- `npm version >= 7` (the project is a monorepo and uses npm workspaces which require at least npm version 7)
-
-### Installing dependencies
-- `npm i` (in root directory) to install all dependencies of all packages
-- `npm i <package-name>` to add a global dependency for all packages
-- `npm i <package-name> --workspace @vuensight/<vuensight-package-name>` to add a new dependency to a specific package
-
-### Build packages
-- `npm run build` in root folder (to build all packages at the same time)
-- `npm run build` in each package
-
-### Build watcher
-- `npm run build:watch` in every package separately
-
-### Unit tests
-- `npm run test` in root (to run tests for all packages)
-- `npm run test` in each package
-
-### Publish
-- `npm publish` in each package
