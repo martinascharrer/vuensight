@@ -27,7 +27,7 @@ export const findDependencies = (
     cruiseResult = cruise(
         [directory],
         {
-          includeOnly: `.${fileType}`,
+          includeOnly: `^.*.(${fileType})$`,
           exclude: ['node_modules'],
           doNotFollow: {
              path: 'node_modules',
