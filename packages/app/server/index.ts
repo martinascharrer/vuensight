@@ -17,6 +17,7 @@ export default async (directory: string, webpackConfigPath?: string, tsConfigPat
   app.use(express.static(join(__dirname, '../app')));
 
   app.listen(4444, () => {
+    console.log('👀 vuensight: http://localhost:4444');
     console.log('server is listening on port 4444');
   });
 };
