@@ -53,7 +53,7 @@ export const analyzeComponents = async (modules: IModule[]): Promise<VueComponen
 export const analyzeCommunicationChannelUsage = (components: VueComponent[]): VueComponent[] => {
   return components.map((component) => {
     const dependents = component.dependents.map((dependent) => {
-      const dependentData = findComponentData(components, dependent.fullPath);
+      const dependentData = findComponentData(components, normalize(dependent.fullPath));
       if (dependentData && dependentData.fileType === 'vue') {
           return getDependentWithUsedChannelsAnalysis(dependentData, component);
       }
