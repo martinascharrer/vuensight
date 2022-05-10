@@ -27,7 +27,11 @@
   "homepage": "https://github.com/martinascharrer/vuensight#readme",
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "dependency-cruiser/config-utl/extract-ts-config": "dependency-cruiser/src/config-utl/extract-ts-config",
+      "dependency-cruiser/config-utl/extract-webpack-resolve-config": "dependency-cruiser/src/config-utl/extract-webpack-resolve-config"
+    }
   },
   "dependencies": {
     "dependency-cruiser": "^11.4.1",

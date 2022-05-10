@@ -15,8 +15,8 @@
                     :is-checked="isSelected"
                     :is-disabled="dependents.length === 0"
                 />
-                <p>{{ channel.name }}</p>
-                <base-badge>{{ dependents.length }}</base-badge>
+                <p data-qa="name">{{ channel.name }}</p>
+                <base-badge data-qa="counter">{{ dependents.length }}</base-badge>
                 <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
         </template>
@@ -57,7 +57,7 @@ import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
 import BaseList from '@/components/base/BaseList.vue';
 
 import { Prop, Dependent } from '@vuensight/types';
-import { Color } from '@/types';
+import { Color } from '@/types/color';
 
 export default defineComponent({
   name: 'CardCommunicationChannel',

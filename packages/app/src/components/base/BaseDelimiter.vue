@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import { Color } from '@/types';
+import { Color } from '@/types/color';
 
 export default defineComponent({
   name: 'BaseDelimiter',
