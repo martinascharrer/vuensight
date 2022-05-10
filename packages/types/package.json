@@ -4,8 +4,7 @@
   "description": "The shared types package for @vuensight.",
   "main": "index.d.ts",
   "scripts": {
-    "build": "echo 'no build for types package'",
-    "test": "echo 'no tests for types package'"
+    "build": "echo 'no build for types package'"
   },
   "repository": {
     "type": "git",

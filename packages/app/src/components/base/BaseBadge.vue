@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import { Color } from '@/types/color';
+import { Color } from '@/types';
 
 export default defineComponent({
   name: 'BaseBadge',

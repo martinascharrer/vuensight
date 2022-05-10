@@ -85,7 +85,7 @@ import {
 } from '@vuensight/types';
 import {
   ForceLayout, Link,
-} from '@/types/force';
+} from '@/types';
 
 export default defineComponent({
   name: 'PageCommunication',
