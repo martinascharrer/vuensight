@@ -15,8 +15,8 @@
                     :is-checked="isSelected"
                     :is-disabled="dependents.length === 0"
                 />
-                <p>{{ channel.name }}</p>
-                <base-badge>{{ dependents.length }}</base-badge>
+                <p data-qa="name">{{ channel.name }}</p>
+                <base-badge data-qa="counter">{{ dependents.length }}</base-badge>
                 <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
         </template>
