@@ -57,7 +57,7 @@ import BaseDelimiter from '@/components/base/BaseDelimiter.vue';
 import BaseList from '@/components/base/BaseList.vue';
 
 import { Prop, Dependent } from '@vuensight/types';
-import { Color } from '@/types';
+import { Color } from '@/types/color';
 
 export default defineComponent({
   name: 'CardCommunicationChannel',

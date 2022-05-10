@@ -1,6 +1,6 @@
 import { ref, readonly } from 'vue';
 
-export const useFetch = (fetcher: () => Promise<any>) => {
+export const useFetch = (fetcher: () => Promise<any>) => { // eslint-disable-line @typescript-eslint/no-explicit-any
   const data = ref(null);
   const isLoading = ref(false);
   const isError = ref(false);
