@@ -61,8 +61,13 @@ npx vuensight --dir resources/js --webpack-config ./webpack-config.json --ts-con
 - `npm run build` in root folder (to build all packages at the same time)
 - `npm run build` in each package
 
-### Build watcher
+#### or use a watcher
 - `npm run build:watch` in every package separately 
+
+### Link locally
+For testing vuensight locally in a Vue project run `npm link` in the cli package and `npm link @vuensight/cli` in the 
+project you want to test it on. Make sure you use a correct node version and ran `npm i` in the root directory 
+beforehand as this links the packages together internally.
 
 ### Unit tests
 - `npm run test` in root (to run tests for all packages)
