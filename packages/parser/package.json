@@ -1,6 +1,6 @@
 {
   "name": "@vuensight/parser",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index.js",
   "description": "This parser extracts information regarding the dependencies and their used props, events and slots of a given Vue.js project.",
   "scripts": {
@@ -34,13 +34,13 @@
     }
   },
   "dependencies": {
-    "dependency-cruiser": "^11.4.1",
+    "dependency-cruiser": "^12.10.0",
     "fs": "^0.0.1-security",
-    "jsdom": "^16.7.0",
-    "vue-docgen-api": "^4.44.22"
+    "jsdom": "^21.1.0",
+    "vue-docgen-api": "^4.60.0"
   },
   "devDependencies": {
-    "@types/jsdom": "^16.2.14",
+    "@types/jsdom": "^21.1.0",
     "@vuensight/types": "^0.1.0"
   }
 }
