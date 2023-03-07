@@ -87,8 +87,8 @@ export const getDependentWithUsedChannelsAnalysis = (
   return {
     fullPath: dependentFullPath,
     name: dependentName,
-    usedProps: getUsedChannels(dependencyInstances, props, isPropUsed),
-    usedEvents: getUsedChannels(dependencyInstances, events, isEventUsed),
-    usedSlots: getUsedChannels(dependencyInstances, slots, isSlotUsed)
+    usedProps: dependencyInstances ? getUsedChannels(dependencyInstances, props, isPropUsed) : [],
+    usedEvents: dependencyInstances ? getUsedChannels(dependencyInstances, events, isEventUsed) : [],
+    usedSlots: dependencyInstances ?  getUsedChannels(dependencyInstances, slots, isSlotUsed) : []
   };
 };

@@ -20,7 +20,7 @@ export const getComponentImportName = (fileContent: string, fileName: string) =>
   const script = extractScriptContent(fileContent);
   let name: string | null = null;
   script.split(/\r?\n/).forEach((line: string) =>  {
-    if (line.includes('import') && line.includes(fileName)) name = line.split(' ')[1];
+    if (line.includes('import') && line.includes(`/${fileName}`)) name = line.split(' ')[1];
   });
   return name;
 };
