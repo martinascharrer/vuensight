@@ -4,8 +4,10 @@ import { join } from 'path';
 
 import { parse } from '@vuensight/parser';
 
-export default async (directory: string, webpackConfigPath?: string, tsConfigPath?: string) => {
+export default async (directory: string, port?: number, webpackConfigPath?: string, tsConfigPath?: string) => {
   const app = express();
+
+  const localPort = port || 4444;
 
   app.get('/parse-result', async (request, response) => {
     const parseResult = await parse(directory, 'vue', webpackConfigPath, tsConfigPath);
@@ -16,8 +18,7 @@ export default async (directory: string, webpackConfigPath?: string, tsConfigPat
 
   app.use(express.static(join(__dirname, '../app')));
 
-  app.listen(4444, () => {
-    console.log('👀 vuensight: http://localhost:4444');
-    console.log('server is listening on port 4444');
+  app.listen((+localPort), () => {
+    console.log(`👀 vuensight: http://localhost:${localPort}`);
   });
 };

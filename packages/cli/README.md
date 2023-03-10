@@ -13,7 +13,7 @@ This tool is built on top of the two awesome packages:
 
 ## Getting started 🚀
 ### Install
-First install the cli tool locally in the project you want to visualize:
+First, install the cli package either locally in the project you want to visualize:
 ```
 npm i -D @vuensight/cli
 ```
@@ -23,25 +23,21 @@ Or globally on your machine if you plan to visualize multiple projects:
 npm i -g @vuensight/cli
 ```
 
-### Run in project
-Then run the tool in your project folder (local install):
-```
-npx vuensight
-```
-or if you installed vuensight globally:
+### Run
+Then run the tool in your project folder:
 ```
 vuensight
 ```
 
-
-## Options
+#### Options
 - `--dir` or `-d` (optional): Specify the directory that should be parsed relative from your current working directory, default is `src`
+- `--port` or `-p` (optional): Start the application in a different port, default is 4444
 - `--webpack-config` or `-wpc` (optional): Specify the path to your webpack-config (from your current working directory). This is particularly important if you use aliases.
 - `--ts-config` or `-tsc` (optional): Specify the path to your TypeScript config file (from your current working directory).
 
 An example usage:
 ```
-npx vuensight --dir resources/js --webpack-config ./webpack-config.json --ts-config ./tsconfig.json
+vuensight --dir resources/js --port 9999 --webpack-config ./webpack-config.json --ts-config ./tsconfig.json
 ```
 
 ## Licencse
