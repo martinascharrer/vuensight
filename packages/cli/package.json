@@ -1,6 +1,6 @@
 {
   "name": "@vuensight/cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Command line interface of @vuensight.",
   "main": "bin/index.js",
   "repository": {
