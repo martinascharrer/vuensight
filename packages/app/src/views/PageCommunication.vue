@@ -30,20 +30,15 @@
                 class="pageCommunication__menu"
             />
             <force-graph
-                :selected-channel="selectedChannel"
-                :selected-channel-type="selectedChannelType"
                 :data="forceGraphData"
                 :node-size-attribute="nodeSizeFilter"
                 :search-string="componentSearch"
-                @selected="selectedComponent = $event"
-                @unselected="selectedComponent = null"
             />
         </template>
         <template #aside>
             <sidebar-communication
                 v-if="selectedComponent"
                 :component="selectedComponent"
-                @channelSelected="selectedChannel = $event"
             />
             <div v-else class="pageCommunication__noSelection">
                 <base-icon
@@ -66,7 +61,6 @@ import {
   computed,
   ref,
 } from 'vue';
-import { useRoute } from 'vue-router';
 
 import * as parserService from '@/services/parser';
 
@@ -81,11 +75,12 @@ import SidebarCommunication from '@/components/SidebarCommunication.vue';
 import { useFetch } from '@/composables/fetch';
 
 import {
-  VueComponent, Dependency, Prop,
+  VueComponent, Dependency,
 } from '@vuensight/types';
 import {
   ForceLayout, Link,
 } from '@/types/force';
+import useSelection from '@/hooks/useSelection';
 
 export default defineComponent({
   name: 'PageCommunication',
@@ -107,13 +102,12 @@ export default defineComponent({
     } = useFetch(parserService.get);
     getParserData();
 
-    const selectedComponent = ref<VueComponent | null>(null);
-    const selectedChannel = ref<Prop | null>(null);
+    const { selectedChannel, selectedComponent } = useSelection();
 
-    const route = useRoute();
-    const selectedChannelType = computed<string>(
-      () => (route && typeof route.name === 'string' ? route.name : 'Props'),
-    );
+    // const route = useRoute();
+    // const selectedChannelType = computed<string>(
+    //   () => (route && typeof route.name === 'string' ? route.name : 'Props'),
+    // );
 
     const nodeSizeFilter = ref<string>('props');
     const componentSearch = ref<string>('');
@@ -148,7 +142,6 @@ export default defineComponent({
       isError,
       nodeSizeFilter,
       selectedChannel,
-      selectedChannelType,
       selectedComponent,
     };
   },

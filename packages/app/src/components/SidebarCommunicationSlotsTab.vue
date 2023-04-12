@@ -12,44 +12,31 @@
   </div>
 </template>
 
-<script lang="ts">
-import {
-  computed, defineComponent, ref, PropType,
-} from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
 
-import { Slot, VueComponent } from '@vuensight/types';
+import { Slot } from '@vuensight/types';
+import useSelection from '@/hooks/useSelection';
 
-export default defineComponent({
-  components: {
-    CardCommunicationChannel,
-  },
-  props: {
-    component: {
-      type: Object as PropType<VueComponent>,
-      required: true,
-    },
-  },
-  setup(props, { emit }) {
-    const selectedChannel = ref<Slot | null>(null);
-    const selectChannel = (channel: Slot) => {
-      selectedChannel.value = selectedChannel.value?.name !== channel.name ? channel : null;
-      emit('channelSelected', selectedChannel.value);
-    };
+const {
+  selectedChannel,
+  selectedComponent,
+  updateSelectedChannel,
+  updateSelectedChannelType,
+} = useSelection();
 
-    const slotsWithDependents = computed(() => props.component.slots.map((slot, index) => ({
-      ...slot,
-      dependents: props.component.dependents.filter((dependent) => dependent.usedSlots.includes(index)),
-    })));
+updateSelectedChannelType('Slots');
 
-    return {
-      slotsWithDependents,
-      selectChannel,
-      selectedChannel,
-    };
-  },
-});
+const selectChannel = (channel: Slot) => {
+  if (selectedChannel.value?.name !== channel.name) updateSelectedChannel(channel);
+};
+
+const slotsWithDependents = computed(() => selectedComponent.value?.slots.map((slot, index) => ({
+  ...slot,
+  dependents: selectedComponent.value?.dependents.filter((dependent) => dependent.usedSlots.includes(index)),
+})));
 </script>
 
 <style lang="scss">

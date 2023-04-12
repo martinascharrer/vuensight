@@ -21,6 +21,9 @@ export type Slot = {
   name: string,
 }
 
+export type Channel = Prop | Event | Slot;
+export type ChannelType = 'Props' | 'Events' | 'Slots';
+
 export type Dependency = {
   fullPath: string,
 }

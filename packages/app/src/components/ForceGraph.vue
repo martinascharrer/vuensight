@@ -1,4 +1,13 @@
 <template>
+  <transition name="fade">
+    <BaseTooltip
+      v-if="showTooltip"
+      :position-x="tooltipPositionX"
+      :position-y="tooltipPositionY"
+    >
+      {{ tooltipContent }}
+    </BaseTooltip>
+  </transition>
   <svg ref="graphRef" class="forceGraph"></svg>
 </template>
 
@@ -8,7 +17,8 @@ import {
 } from 'vue';
 import * as d3 from 'd3';
 import * as cola from 'webcola';
-
+import BaseTooltip from '@/components/base/BaseTooltip.vue';
+import useSelection from '@/hooks/useSelection';
 import nodeSizeAttributeType from '@/types/nodeSizeAttributeType';
 
 const SMALL_CIRCLE_RADIUS = 2;
@@ -17,18 +27,11 @@ const NODE_SIZE_NO_FILTER = 15;
 
 export default defineComponent({
   name: 'ForceGraph',
+  components: { BaseTooltip },
   props: {
     data: {
       type: Object,
       required: true,
-    },
-    selectedChannelType: {
-      type: String,
-      default: null,
-    },
-    selectedChannel: {
-      type: Object,
-      default: null,
     },
     nodeSizeAttribute: {
       type: String,
@@ -47,9 +50,21 @@ export default defineComponent({
       default: 500,
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
+    const showTooltip = ref(false);
+    const tooltipContent = ref('test');
+    const tooltipPositionX = ref(0);
+    const tooltipPositionY = ref(0);
+
+    const {
+      selectedComponent,
+      selectedChannel,
+      selectedChannelType,
+      updateSelectedComponent,
+      updateSelectedChannel,
+    } = useSelection();
+
     const graphRef = ref(null);
-    const selectedNode = ref('');
     const transitionTime = null;
 
     const nodes = props.data.nodes.map((d) => ({ ...d, id: d.fullPath }));
@@ -115,14 +130,28 @@ export default defineComponent({
         .append('g')
         .selectAll('.node__channel')
         .data((data) => {
-          const dependent = selectedNode?.value.dependents.find((dep) => dep.fullPath === data.fullPath);
-          return dependent ? dependent[`used${props.selectedChannelType}`] : [];
+          const dependent = selectedComponent.value?.dependents.find((dep) => dep.fullPath === data.fullPath);
+          return dependent ? dependent[`used${selectedChannelType.value}`] : [];
         })
-        .enter()
-        .append('circle')
-        .attr('r', SMALL_CIRCLE_RADIUS)
-        .attr('class', `node__channel node__channel--${props.selectedChannelType.toLowerCase()}`);
-
+        .join(
+          (enter) => enter.append('circle')
+            // eslint-disable-next-line func-names, prefer-arrow-callback
+            .attr('r', SMALL_CIRCLE_RADIUS)
+            .attr('class', `node__channel node__channel--${selectedChannelType.value.toLowerCase()}`)
+            .on('mouseover', (d) => {
+              showTooltip.value = true;
+              tooltipContent.value = selectedComponent.value[selectedChannelType.value.toLowerCase()][d].name;
+              tooltipPositionX.value = d3.event.pageX;
+              tooltipPositionY.value = d3.event.pageY;
+            })
+            .on('mouseout', () => {
+              showTooltip.value = false;
+            })
+            .on('click', (d) => {
+              updateSelectedChannel(selectedComponent.value[selectedChannelType.value.toLowerCase()][d]);
+              d3.event.stopPropagation();
+            }),
+        );
       updateCommunicationChannelPositions();
     };
 
@@ -141,7 +170,7 @@ export default defineComponent({
     };
 
     const resetNodeSelection = () => {
-      emit('unselected');
+      updateSelectedComponent(null);
       d3.selectAll('.node--selected').classed('node--selected', false);
       d3.selectAll('.node--selectedDependent').classed('node--selectedDependent', false);
       d3.selectAll('.link--selected').classed('link--selected', false);
@@ -216,7 +245,7 @@ export default defineComponent({
           d3.event.stopPropagation();
           resetNodeSelection();
 
-          selectedNode.value = data;
+          selectedComponent.value = data;
 
           // highlight selected node + dependents
           const dependents = links.filter((l) => l.target.index === data.index);
@@ -237,7 +266,7 @@ export default defineComponent({
           d3.selectAll('.node:not(.node--selected, .node--selectedDependent)').classed('node--greyedOut', true);
           d3.selectAll('.link:not(.link--selected').classed('link--greyedOut', true);
 
-          emit('selected', data);
+          updateSelectedComponent(data);
         });
 
       node.append('circle')
@@ -303,16 +332,16 @@ export default defineComponent({
 
     const highlightChannelUsage = (channel) => {
       d3.selectAll('.node--selectedDependent')
-        .classed(`node--uses${props.selectedChannelType}`, (d) => {
-          const dependent = selectedNode.value.dependents.find((dep) => dep.fullPath === d.fullPath);
-          const channels = selectedNode.value[props.selectedChannelType.toLowerCase()];
-          return dependent[`used${props.selectedChannelType}`].some((prop) => channels[prop].name === channel.name);
+        .classed(`node--uses${selectedChannelType.value}`, (d) => {
+          const dependent = selectedComponent.value?.dependents.find((dep) => dep.fullPath === d.fullPath);
+          const channels = selectedComponent.value[selectedChannelType.value.toLowerCase()];
+          return dependent[`used${selectedChannelType.value}`].some((prop) => channels[prop].name === channel.name);
         });
 
-      d3.selectAll(`.node--selectedDependent .node__channel--${props.selectedChannelType.toLowerCase()}`)
+      d3.selectAll(`.node--selectedDependent .node__channel--${selectedChannelType.value.toLowerCase()}`)
         .classed(
           'node__channel--selected',
-          (d) => selectedNode.value[props.selectedChannelType.toLowerCase()][d].name === channel.name,
+          (d) => selectedComponent.value[selectedChannelType.value.toLowerCase()][d].name === channel.name,
         );
     };
 
@@ -328,18 +357,23 @@ export default defineComponent({
           && d.name.toLowerCase().includes(props.searchString.toLowerCase()));
     });
 
-    watch(() => props.selectedChannel, () => {
+    watch(() => selectedChannel.value, () => {
       resetChannelSelection();
-      if (props.selectedChannel) highlightChannelUsage(props.selectedChannel);
+      if (selectedChannel.value) highlightChannelUsage(selectedChannel.value);
     });
 
-    watch(() => props.selectedChannelType, () => {
+    watch(() => selectedChannelType.value, () => {
       removeNodeChannels();
       resetChannelSelection();
       drawCommunicationChannelCircles();
     });
 
     return {
+      selectedChannel,
+      showTooltip,
+      tooltipContent,
+      tooltipPositionX,
+      tooltipPositionY,
       graphRef,
     };
   },
@@ -361,6 +395,14 @@ export default defineComponent({
         stroke: var(--grey-20);
     }
 
+    &:hover &__circle {
+      stroke: var(--grey-30);
+    }
+
+    &:hover &__labelText {
+      fill: var(--navy-90);
+    }
+
     &__label {
         cursor: pointer;
     }
@@ -380,16 +422,31 @@ export default defineComponent({
         &--props {
             fill: var(--mint-grey);
             stroke: var(--mint-50);
+
+          &:hover {
+            fill: var(--mint-50);
+            stroke: var(--mint-70);
+          }
         }
 
         &--events {
             fill: var(--red-grey);
             stroke: var(--red-50);
+
+            &:hover {
+              fill: var(--red-50);
+              stroke: var(--red-70);
+            }
         }
 
         &--slots {
             fill: var(--purple-grey);
             stroke: var(--purple-50);
+
+            &:hover {
+              fill: var(--purple-50);
+              stroke: var(--purple-70);
+            }
         }
     }
 
@@ -408,7 +465,11 @@ export default defineComponent({
 
     &--searchMatches {
         .node__labelBackground {
-            fill: var(--yellow-30);
+            fill: var(--yellow-30) !important;
+        }
+
+        .node__labelText {
+          fill: var(--navy-90) !important;
         }
     }
 

@@ -12,45 +12,32 @@
   </div>
 </template>
 
-<script lang="ts">
-import {
-  computed, defineComponent, ref, PropType,
-} from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
 import CardCommunicationChannel from '@/components/CardCommunicationChannel.vue';
 
-import { Event, VueComponent } from '@vuensight/types';
+import {
+  Event,
+} from '@vuensight/types';
+import useSelection from '@/hooks/useSelection';
 
-export default defineComponent({
-  components: {
-    CardCommunicationChannel,
-  },
-  props: {
-    component: {
-      type: Object as PropType<VueComponent>,
-      required: true,
-    },
-  },
-  setup(props, { emit }) {
-    const selectedChannel = ref<Event | null>(null);
-    const selectChannel = (channel: Event) => {
-      console.log('event', selectedChannel.value?.name, channel.name);
-      selectedChannel.value = selectedChannel.value?.name !== channel.name ? channel : null;
-      emit('channelSelected', selectedChannel.value);
-    };
+const {
+  selectedChannel,
+  selectedComponent,
+  updateSelectedChannel,
+  updateSelectedChannelType,
+} = useSelection();
 
-    const eventsWithDependents = computed(() => props.component.events.map((event, index) => ({
-      ...event,
-      dependents: props.component.dependents.filter((dependent) => dependent.usedEvents.includes(index)),
-    })));
+updateSelectedChannelType('Events');
+const selectChannel = (channel: Event) => {
+  if (selectedChannel.value?.name !== channel.name) updateSelectedChannel(channel);
+};
 
-    return {
-      eventsWithDependents,
-      selectChannel,
-      selectedChannel,
-    };
-  },
-});
+const eventsWithDependents = computed(() => selectedComponent.value?.events.map((event, index) => ({
+  ...event,
+  dependents: selectedComponent.value?.dependents.filter((dependent) => dependent.usedEvents.includes(index)),
+})));
 </script>
 
 <style lang="scss">
