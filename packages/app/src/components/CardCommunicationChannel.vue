@@ -16,6 +16,7 @@
                     :is-disabled="dependents.length === 0"
                 />
                 <p data-qa="name">{{ channel.name }}</p>
+                <base-badge v-if="channel.isVModel">v-model</base-badge>
                 <base-badge data-qa="counter">{{ dependents.length }}</base-badge>
                 <base-badge :color="`light-${color}`" v-if="channel.mixin">mixin</base-badge>
             </div>
@@ -47,8 +48,8 @@
     </base-card>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
+<script setup lang="ts">
+import { defineProps, PropType } from 'vue';
 
 import BaseBadge from '@/components/base/BaseBadge.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
@@ -59,32 +60,22 @@ import BaseList from '@/components/base/BaseList.vue';
 import { Prop, Dependent } from '@vuensight/types';
 import { Color } from '@/types/color';
 
-export default defineComponent({
-  name: 'CardCommunicationChannel',
-  props: {
-    channel: {
-      type: Object as PropType<Prop>,
-      required: true,
-    },
-    dependents: {
-      type: Array as PropType<Array<Dependent>>,
-      required: true,
-    },
-    color: {
-      type: String as PropType<Color>,
-      default: 'mint',
-    },
-    isSelected: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  channel: {
+    type: Object as PropType<Prop>,
+    required: true,
   },
-  components: {
-    BaseBadge,
-    BaseCard,
-    BaseCheckIcon,
-    BaseDelimiter,
-    BaseList,
+  dependents: {
+    type: Array as PropType<Array<Dependent>>,
+    required: true,
+  },
+  color: {
+    type: String as PropType<Color>,
+    default: 'mint',
+  },
+  isSelected: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

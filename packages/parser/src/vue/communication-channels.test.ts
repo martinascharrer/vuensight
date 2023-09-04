@@ -39,7 +39,7 @@ describe('parser', () => {
             expect(findDependencyInstancesInTemplate(template, 'TestComponent')).toHaveLength(1);
         });
     });
-    
+
     describe('isPropUsed', () => {
         it('should find the prop in kebab syntax', () => {
             const prop = { name: 'TestProp', type: { name: 'String' }, default: 'Test', required: false };
@@ -72,6 +72,32 @@ describe('parser', () => {
             const isUsed = element ? isPropUsed(element, prop) : false;
             expect(isUsed).toBe(true);
         });
+
+        describe('v-model', () => {
+            it('should find the v-model attribute with default `modelValue` prop (Vue 3)', () => {
+                const prop = { name: 'modelValue', type: { name: 'String' }, default: 'Test', required: false };
+                const element = createComponent(`<ComponentName v-model="title"/>`);
+
+                const isUsed = element ? isPropUsed(element, prop) : false;
+                expect(isUsed).toBe(true);
+            });
+
+            it('should find the v-model attribute with customized prop (Vue 3)', () => {
+                const prop = { name: 'title', type: { name: 'String' }, default: 'Test', required: false };
+                const element = createComponent(`<ComponentName v-model:title="title"/>`);
+
+                const isUsed = element ? isPropUsed(element, prop) : false;
+                expect(isUsed).toBe(true);
+            });
+
+            it('should find the v-model attribute with default `value` prop (Vue 2)', () => {
+                const prop = { name: 'value', type: { name: 'String' }, default: 'Test', required: false };
+                const element = createComponent(`<ComponentName v-model="title"/>`);
+
+                const isUsed = element ? isPropUsed(element, prop) : false;
+                expect(isUsed).toBe(true);
+            });
+        });
     });
 
     describe('isEventUsed', () => {
@@ -97,6 +123,32 @@ describe('parser', () => {
 
             const isUsed = element ? isEventUsed(element, event) : false;
             expect(isUsed).toBe(false);
+        });
+
+        describe('v-model', () => {
+            it('should find the event when it is used for a customized v-model (Vue 2 default syntax)', () => {
+                const event = { name: 'input:value', isSync: false };
+                const element = createComponent(`<ComponentName v-model="foo"/>`);
+
+                const isUsed = element ? isEventUsed(element, event) : false;
+                expect(isUsed).toBe(true);
+            });
+
+            it('should find the event when it is used for a customized v-model (Vue 3 default syntax)', () => {
+                const event = { name: 'update:modelValue', isSync: false };
+                const element = createComponent(`<ComponentName v-model="foo"/>`);
+
+                const isUsed = element ? isEventUsed(element, event) : false;
+                expect(isUsed).toBe(true);
+            });
+
+            it('should find the event when it is used for a customized v-model (Vue 3 specific prop)', () => {
+                const event = { name: 'update:title', isSync: false };
+                const element = createComponent(`<ComponentName v-model:title="foo"/>`);
+
+                const isUsed = element ? isEventUsed(element, event) : false;
+                expect(isUsed).toBe(true);
+            });
         });
     });
 
@@ -144,7 +196,7 @@ describe('parser', () => {
         it('should return the index of the used events once when they are used multiple times', () => {
             const events = [{ name: 'test-event', isSync: false }, { name: 'TestEventTwo' }, ];
             const element = createComponent(
-        `<ComponentName @TestEventTwo="foo"/>
+                `<ComponentName @TestEventTwo="foo"/>
                  <ComponentName @TestEventTwo="foo"/>
                  <ComponentName @TestEventTwo="foo"/>`
             );

@@ -9,9 +9,9 @@ export const parse = async (
     webpackConfigPath?: string,
     tsConfigPath?: string
 ): Promise<VueComponent[]> => {
-  const modules = findDependencies(directory, fileType, webpackConfigPath, tsConfigPath);
-  if (!modules) return new Array<VueComponent>();
+    const modules = findDependencies(directory, fileType, webpackConfigPath, tsConfigPath);
+    if (!modules) return new Array<VueComponent>();
 
-  const components: VueComponent[] = await analyzeComponents(modules);
-  return analyzeCommunicationChannelUsage(components);
+    const components: VueComponent[] = await analyzeComponents(modules);
+    return analyzeCommunicationChannelUsage(components);
 };

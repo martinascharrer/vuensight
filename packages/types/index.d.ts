@@ -9,12 +9,14 @@ export type Prop = {
   required?: boolean,
   default?: string,
   mixin?: Mixin,
+  isVModel?: boolean
 }
 
 export type Event = {
   name: string,
   isSync?: boolean,
   mixin?: Mixin,
+  isVModel?: boolean
 }
 
 export type Slot = {

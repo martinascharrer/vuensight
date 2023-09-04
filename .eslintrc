@@ -11,6 +11,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "indent": ["error"],
     "semi": ["error", "always"],
     "max-len": ["error", 120]
   }
